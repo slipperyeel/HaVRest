@@ -15,6 +15,7 @@ namespace HVRTime
         /// <summary>
         /// Private Members
         /// </summary>
+        private int mHour;
         private int mDay;
         private int mMonth;
         private int mYear;
@@ -24,6 +25,11 @@ namespace HVRTime
         /// Accessors
         /// </summary>
         /// <returns></returns>
+        public int GetHour()
+        {
+            return mHour;
+        }
+
         public int GetDay()
         {
             return mDay;
@@ -51,6 +57,7 @@ namespace HVRTime
         // Default ctor
         public HVRDateTime()
         {
+            mHour = 0;
             mDay = 1;
             mMonth = 1;
             mYear = 2000;
@@ -58,8 +65,9 @@ namespace HVRTime
         }
 
         // Specific DateTime ctor
-        public HVRDateTime(int day, int month, int year, float dayTimeSeconds)
+        public HVRDateTime(int hour, int day, int month, int year, float dayTimeSeconds)
         {
+            mHour = hour;
             mDay = day;
             mMonth = month;
             mYear = year;
@@ -81,21 +89,27 @@ namespace HVRTime
             bool dateChanged = false;
             mDayTimeSeconds += timePassed;
 
-            if (mDayTimeSeconds >= TimeConstants.SECONDS_PER_DAY)
+            if (mDayTimeSeconds >= (mHour + 1) * TimeConstants.SECONDS_PER_HOUR)
             {
-                mDay++;
-                mDayTimeSeconds = 0.0f;
-                dateChanged = true;
+                mHour++;
 
-                if (mDay >= TimeConstants.DAYS_PER_MONTH)
+                if (mDayTimeSeconds >= TimeConstants.SECONDS_PER_DAY)
                 {
-                    mMonth++;
-                    mDay = 1;
+                    mDay++;
+                    mHour = 0;
+                    mDayTimeSeconds = 0.0f;
+                    dateChanged = true;
 
-                    if (mMonth >= TimeConstants.MONTHS_PER_YEAR)
+                    if (mDay >= TimeConstants.DAYS_PER_MONTH)
                     {
-                        mYear++;
-                        mMonth = 1;
+                        mMonth++;
+                        mDay = 1;
+
+                        if (mMonth >= TimeConstants.MONTHS_PER_YEAR)
+                        {
+                            mYear++;
+                            mMonth = 1;
+                        }
                     }
                 }
             }

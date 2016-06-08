@@ -1,13 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using slipperyeel;
 
 namespace HVRTime
 {
-    public delegate void OnDayChanged(object sender, EventArgs e);
-    public delegate void OnMonthChanged(object sender, EventArgs e);
-    public delegate void OnYearChanged(object sender, EventArgs e);
-
     /// <summary>
     /// Houses the core logic for dictating the passage of time within the game
     /// TODO(JP): Finish this concept. It's just me thinking a bit before bed so far.
@@ -34,13 +31,6 @@ namespace HVRTime
         }
 
         /// <summary>
-        /// Events
-        /// </summary>
-        public event OnDayChanged OnDayChanged;
-        public event OnMonthChanged OnMonthChanged;
-        public event OnYearChanged OnYearChanged;
-
-        /// <summary>
         /// Tunable Fields
         /// </summary>
         [SerializeField]
@@ -55,7 +45,7 @@ namespace HVRTime
         void Awake()
         {
             // TODO(JP): Use a real save system. Currently this means that we'll always start at early morning.
-            mDateTime = new HVRDateTime(1, 1, 1999, TimeConstants.SECONDS_PER_HOUR * 4.0f);
+            mDateTime = new HVRDateTime(0, 1, 1, 1999, TimeConstants.SECONDS_PER_HOUR * 4.0f);
             mCurrentTimeOfDay = TimeOfDay.EarlyMorning;
             mTotalTimePassed = 0.0f;
 
@@ -106,34 +96,22 @@ namespace HVRTime
             if (sender != null)
             {
                 HVRDateTime timeFromEvent = (HVRDateTime)sender;
+                TimeChangedEvent tce = new TimeChangedEvent(timeFromEvent, false, false, false, false);
                 if (timeFromEvent != null)
                 {
-
                     if (mCurrentDay != timeFromEvent.GetDay())
                     {
-                        // Day Changed.
-                        if (OnDayChanged != null)
-                        {
-                            OnDayChanged(this, EventArgs.Empty);
-                        }
+                        tce.DayChanged = true;
                     }
 
                     if (mCurrentMonth != timeFromEvent.GetMonth())
                     {
-                        // Month Changed.
-                        if (OnMonthChanged != null)
-                        {
-                            OnMonthChanged(this, EventArgs.Empty);
-                        }
+                        tce.MonthChanged = true;
                     }
 
                     if (mCurrentYear != timeFromEvent.GetYear())
                     {
-                        // Year Changed.
-                        if (OnYearChanged != null)
-                        {
-                            OnYearChanged(this, EventArgs.Empty);
-                        }
+                        tce.YearChanged = true;
                     }
 
                     // Store the current date values locally
@@ -142,6 +120,8 @@ namespace HVRTime
                     mCurrentYear = timeFromEvent.GetYear();
 
                     timeFromEvent.PrintDateTime();
+
+                    SEEventManager.Instance.TriggerEvent(tce);
                 }
             }
         }
@@ -159,4 +139,22 @@ public enum TimeOfDay
     LateAfternoon,          // 4PM->8PM
     Dusk,                   // 8PM->12AM
     Night                   // 12AM->4AM
+}
+
+public class TimeChangedEvent : SEGameEvent
+{
+    public HVRTime.HVRDateTime dateTime;
+    public bool HourChanged;
+    public bool DayChanged;
+    public bool MonthChanged;
+    public bool YearChanged;
+
+    public TimeChangedEvent(HVRTime.HVRDateTime dt, bool hourChanged, bool dayChanged, bool monthChanged, bool yearChanged)
+    {
+        this.dateTime = dt;
+        this.HourChanged = hourChanged;
+        this.DayChanged = dayChanged;
+        this.MonthChanged = monthChanged;
+        this.YearChanged = yearChanged;
+    }
 }
