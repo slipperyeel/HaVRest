@@ -46,6 +46,12 @@ namespace HVRTime
         [SerializeField]
         private int tTimeScale = 5;
 
+        /// <summary>
+        /// Components
+        /// </summary>
+        [SerializeField]
+        private GameObject cSun;
+
         void Awake()
         {
             // TODO(JP): Use a real save system. Currently this means that we'll always start at early morning.
@@ -56,6 +62,8 @@ namespace HVRTime
             mCurrentDay = mDateTime.GetDay();
             mCurrentMonth = mDateTime.GetMonth();
             mCurrentYear = mDateTime.GetYear();
+
+            Debug.Assert(cSun == null, "No sun set!");
         }
 
         void Start()
@@ -75,6 +83,21 @@ namespace HVRTime
             // Increment our passage of time
             mDateTime.ApplyPassageOfTime(mTimePassedDelta);
             //mDateTime.PrintDateTime();
+            RotateSun();
+        }
+
+        // mDateTime.GetDayTimeSeconds() is the current time in seconds.
+        // 0 degrees is sun rise. 90 degrees is 12pm noon. is 43200seconds
+        private void RotateSun()
+        {
+            if(cSun != null)
+            {
+                float curTimeSeconds = mDateTime.GetDayTimeSeconds();
+                float rotation = Mathf.Lerp(0.0f, 360.0f, (curTimeSeconds / TimeConstants.SECONDS_PER_DAY));
+                Quaternion sunRotation = cSun.transform.rotation;
+                sunRotation = Quaternion.Euler(rotation, sunRotation.y, sunRotation.z);
+                cSun.transform.rotation = sunRotation;
+            }
         }
 
         private void OnPlayerDateTimeChanged(object sender, EventArgs e)
