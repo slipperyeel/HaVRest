@@ -78,9 +78,7 @@ public class FreeGripObject : MonoBehaviour
 
             //Deb
             //Transform newTrans = transform;
-            transform.position = gripDif + transform.position;
-
-
+            transform.position = topDisplacement + transform.position;
         }
     }
 
@@ -98,6 +96,24 @@ public class FreeGripObject : MonoBehaviour
             if (data == null)
             {
                 touchingColliders.Add(new GripData(col.transform, col));
+            }
+
+            if(touchingColliders.Count == 2)
+            {
+                // in this case we will snap to the bottom.
+                float dist1 = Vector3.Distance(touchingColliders[0].GripLocation.position, gripBottom.position);
+                float dist2 = Vector3.Distance(touchingColliders[1].GripLocation.position, gripBottom.position);
+
+                if (dist1 > dist2)
+                {
+                    Vector3 distBetweenHandAndBottom = touchingColliders[1].GripLocation.position - gripBottom.position;
+                    transform.position = transform.position + distBetweenHandAndBottom;
+                }
+                else
+                {
+                    Vector3 distBetweenHandAndBottom = touchingColliders[0].GripLocation.position - gripBottom.position;
+                    transform.position = transform.position + distBetweenHandAndBottom;
+                }
             }
         }
     }
