@@ -1,96 +1,54 @@
-﻿using UnityEngine;
+﻿#define GAMEPLAY_TEST_NOVR
+
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Valve.VR;
 
+/// <summary>
+/// Simple positional tracking system for orientating a given object about two transforms.
+/// Assumes a given object is set up in the same way as the sample object, with the root transform and forward at the base of the tool.
+/// TODO: Implement Steam VR stuff
+/// TODO: Wrap with GAMEPLAY_TEST_NOVR for work without vive
+/// </summary>
 public class FreeGripObject : MonoBehaviour 
 {
     [SerializeField]
-    private BoxCollider col;
+    private BoxCollider mCol;
 
-    [SerializeField]
-    private Transform gripTop;
-
-    [SerializeField]
-    private Transform gripBottom;
+    private static readonly int NUM_GRIP_POINTS = 2;
 
     private List<GripData> touchingColliders;
 
     void Start()
     {
-        touchingColliders = new List<GripData>(2);
+        touchingColliders = new List<GripData>(NUM_GRIP_POINTS);
     }
 
-    private float AngleSigned(Vector3 v1, Vector3 v2, Vector3 n)
-    {
-        return Mathf.Atan2(
-            Vector3.Dot(n, Vector3.Cross(v1, v2)),
-            Vector3.Dot(v1, v2)) * Mathf.Rad2Deg;
-    }
-
-    Vector3 previousCenter;
     void FixedUpdate()
     {
-        // here we need to do some interesting shit.
-        if (touchingColliders.Count == 2)
+        if (touchingColliders.Count > 0)
         {
-            Vector3 gripVec1 = touchingColliders[0].GripLocation.position;
-            Vector3 gripVec2 = touchingColliders[1].GripLocation.position;
+            transform.position = touchingColliders[0].GripLocation.position;
 
-            Vector3 dirVec = gripVec2 - gripVec1;
-            Vector3 forwardXzero = new Vector3(0.0f, transform.forward.y, transform.forward.z);
-            Vector3 dirVecXzero = new Vector3(0.0f, dirVec.y, dirVec.z);
-            Vector3 dirCross = Vector3.Cross(forwardXzero, dirVecXzero);
-            //float angleBetween = AngleSigned(forwardXzero, dirVecXzero, dirCross);
-            float angleBetween = Vector3.Angle(new Vector3(0.0f, transform.forward.y, transform.forward.z), new Vector3(0.0f, dirVec.y, dirVec.z));
+            if (touchingColliders.Count == 1)
+            {
+                transform.rotation = Quaternion.LookRotation(touchingColliders[0].GripLocation.forward);
+            }
+            else if (touchingColliders.Count == NUM_GRIP_POINTS)
+            {
+                Vector3 gripVec1 = touchingColliders[0].GripLocation.position;
+                Vector3 gripVec2 = touchingColliders[1].GripLocation.position;
 
-            Debug.Log(angleBetween);
-
-            Vector3 previousTopGripPos = gripTop.position;
-            Vector3 previousBottomGripPos = gripBottom.position;
-            Vector3 originalCenterPos = transform.position;
-            //Debug.Log("PreviousTopGripPos: " + previousTopGripPos);
-
-
-            Vector3 gripCenter = (gripVec1 + gripVec2) / 2.0f;
-            Vector3 gripDif = gripCenter - previousCenter;
-            previousCenter = gripCenter;
-            transform.rotation = Quaternion.LookRotation(dirVec);
-
-            //    transform.RotateAround(gripCenter, -Vector3.right, angleBetween);
-            //transform.ro
-
-            //Debug.Log("PreviousTopGripPos: " + gripTop.position);
-            Vector3 topDisplacement = gripTop.position - previousTopGripPos;
-
-            Debug.DrawLine(previousTopGripPos, topDisplacement, Color.red);
-
-            Debug.DrawLine(Vector3.zero, originalCenterPos, Color.yellow);
-            Debug.DrawLine(Vector3.zero, previousTopGripPos, Color.magenta);
-
-           // Debug.Log(topDisplacement);
-            Vector3 topPivotDifferential = Vector3.Project(originalCenterPos, previousTopGripPos);
-            Debug.DrawLine(previousTopGripPos, topPivotDifferential, Color.blue);
-            Vector3 transformDisplacement = topPivotDifferential + topDisplacement;
-            Debug.DrawLine(originalCenterPos, transform.position + transformDisplacement, Color.white);
-            // After we rotate, define position in space.
-            Vector3 currentGripObjectSpaceVector = gripTop.position - gripBottom.position;
-
-
-            //Deb
-            //Transform newTrans = transform;
-            transform.position = topDisplacement + transform.position;
+                Vector3 dirVec = gripVec2 - gripVec1;
+                transform.rotation = Quaternion.LookRotation(dirVec);
+            }
         }
-    }
-
-    void OnTriggerStay(Collider col)
-    {
-
     }
 
     void OnTriggerEnter(Collider col)
     {
-        Debug.Log("Trigger Entered");
-        if (touchingColliders.Count <= 2)
+        if (touchingColliders.Count <= NUM_GRIP_POINTS)
         {
             GripData data = touchingColliders.Find(x => x.Collider == col);
             if (data == null)
@@ -98,29 +56,15 @@ public class FreeGripObject : MonoBehaviour
                 touchingColliders.Add(new GripData(col.transform, col));
             }
 
-            if(touchingColliders.Count == 2)
+            if(touchingColliders.Count == 1)
             {
-                // in this case we will snap to the bottom.
-                float dist1 = Vector3.Distance(touchingColliders[0].GripLocation.position, gripBottom.position);
-                float dist2 = Vector3.Distance(touchingColliders[1].GripLocation.position, gripBottom.position);
-
-                if (dist1 > dist2)
-                {
-                    Vector3 distBetweenHandAndBottom = touchingColliders[1].GripLocation.position - gripBottom.position;
-                    transform.position = transform.position + distBetweenHandAndBottom;
-                }
-                else
-                {
-                    Vector3 distBetweenHandAndBottom = touchingColliders[0].GripLocation.position - gripBottom.position;
-                    transform.position = transform.position + distBetweenHandAndBottom;
-                }
+                transform.position = col.gameObject.transform.position;
             }
         }
     }
 
     void OnTriggerExit(Collider col)
     {
-        Debug.Log("Trigger Exit");
         GripData data = touchingColliders.Find(x => x.Collider == col);
         if (data != null)
         {
@@ -129,6 +73,8 @@ public class FreeGripObject : MonoBehaviour
     }
 }
 
+// This is a temporary class to sort of store what a Grip is. 
+// Currently I don't really know what we'll want here other than a transform, but we can add more if needed.
 public class GripData
 {
     public Transform GripLocation;
