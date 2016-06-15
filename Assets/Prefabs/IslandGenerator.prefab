@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1000010412077294}
+  m_IsPrefabParent: 1
+--- !u!1 &1000010412077294
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000013895268722}
+  - 114: {fileID: 114000012788697304}
+  m_Layer: 0
+  m_Name: IslandGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4000013895268722
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010412077294}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114000012788697304
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010412077294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d85dae86ae024f2ba1c302823c078e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _terrainPrefab: {fileID: 1000013406403190, guid: 5b67faf678e854a8fbb12ce30f10b6fa,
+    type: 2}
+  _detailObjects:
+  - {fileID: 1000012499361184, guid: 31b340c7d60044fee87a18b7d9e23662, type: 2}
+  - {fileID: 1000013827704720, guid: 114279ac13b754a3996004ba752d3266, type: 2}
+  - {fileID: 1000012394176470, guid: 99d626e90328146d4af1bd6fd4c7ead9, type: 2}
+  - {fileID: 1000011978275172, guid: bf9636d4dfe6d4fe1aeb3b405bad0bae, type: 2}
+  - {fileID: 1000010501840294, guid: 26f80cdbbcb1a43ff987c71151d08172, type: 2}
+  - {fileID: 1000014077639280, guid: 8f9053a5be5ad4abf8a6156f57d16034, type: 2}
+  - {fileID: 1000012647057590, guid: 8dd7d7dd2cb5243e4a70c0eb71d105fe, type: 2}
+  - {fileID: 1000012078886538, guid: b254577a552884e03ac3a51ca9a5b606, type: 2}
+  - {fileID: 1000012410176476, guid: fedb43454f27f4be4af447f6647b04f4, type: 2}
+  - {fileID: 1000012072282202, guid: a584be8f758514978ae8c920dafe9568, type: 2}
