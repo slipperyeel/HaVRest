@@ -48,27 +48,34 @@ public class FreeGripObject : MonoBehaviour
 
     void OnTriggerEnter(Collider col)
     {
-        if (touchingColliders.Count <= NUM_GRIP_POINTS)
+        Debug.Log(col.tag);
+        if (col.tag == "Hands")
         {
-            GripData data = touchingColliders.Find(x => x.Collider == col);
-            if (data == null)
+            if (touchingColliders.Count <= NUM_GRIP_POINTS)
             {
-                touchingColliders.Add(new GripData(col.transform, col));
-            }
+                GripData data = touchingColliders.Find(x => x.Collider == col);
+                if (data == null)
+                {
+                    touchingColliders.Add(new GripData(col.transform, col));
+                }
 
-            if(touchingColliders.Count == 1)
-            {
-                transform.position = col.gameObject.transform.position;
+                if (touchingColliders.Count == 1)
+                {
+                    transform.position = col.gameObject.transform.position;
+                }
             }
         }
     }
 
     void OnTriggerExit(Collider col)
     {
-        GripData data = touchingColliders.Find(x => x.Collider == col);
-        if (data != null)
+        if (col.tag == "Hands")
         {
-            touchingColliders.Remove(data);
+            GripData data = touchingColliders.Find(x => x.Collider == col);
+            if (data != null)
+            {
+                touchingColliders.Remove(data);
+            }
         }
     }
 }
