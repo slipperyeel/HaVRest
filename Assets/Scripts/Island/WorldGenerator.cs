@@ -11,6 +11,7 @@ public class WorldGenerator : MonoBehaviour
 	[SerializeField]
 	private GameObject _islandGenPrefab;
 
+	public int WorldSeed = -1;
 	public int NumberOfIslands;
 	public int MaxWorldSize;
 	public int MinNumberOfHeightLevels;
@@ -33,8 +34,11 @@ public class WorldGenerator : MonoBehaviour
 		// TODO
 		// will need to load the save file and get the seed
 		// if there is no save, create a new seed
-		int worldSeed = UnityEngine.Random.Range(0, int.MaxValue);
-		GenerateWorld(worldSeed);
+		if (WorldSeed == -1)
+		{
+			WorldSeed = UnityEngine.Random.Range(0, int.MaxValue);
+		}
+		GenerateWorld(WorldSeed);
 
 		_currentIsland = _islands[0];
 	}

@@ -203,18 +203,6 @@ public class IslandGenerator : MonoBehaviour
 		return Mathf.Sqrt((deltaX * deltaX) + (deltaY * deltaY));
 	}
 
-	private void CreateScatter(float x, float y, float w, float h, int rows, int cols)
-	{
-		float xd = w/cols;
-		float yd = h/rows;
-		for (int ix = 0;ix <(cols+1);ix++) {
-			for (int iy = 0;iy<(rows+1);iy++) {
-				float p = 0.4f;
-				//CreatePoint( Vector2(x+xd*ix+rndf(-p,p)*xd,y+yd*iy+rndf(-p,p)*yd));
-			}
-		}
-	}
-
 	private void PlaceDetails(float[,] heights, int size, ref IslandData data, int seed)
 	{
 		System.Random prng = new System.Random(seed);
