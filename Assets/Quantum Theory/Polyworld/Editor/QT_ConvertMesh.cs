@@ -28,26 +28,29 @@ public class QT_ConvertMesh : EditorWindow
         
     }
 
-
     private GameObject[] SourceGOs;
     private Color brightenColor = Color.black;
     private string HelpMessage;
 
-    Texture WorldIcon = (Texture)Resources.Load("QT_PolyWorld-icon");//(Texture)AssetDatabase.LoadAssetAtPath("Assets/Quantum Theory/Polyworld/Editor/QT_PolyWorld-icon.png", typeof(Texture));
-
+    Texture WorldIcon;
 
     private bool filterBilinear = true;
     enum BlurAmount { None, Some, Full }
     BlurAmount blurAmount = BlurAmount.None;
     int mipLevel = 0;
-    private string exportAssetFolder = "Assets"; //contains the folder where we'll export all the assets
-    private string exportWindowsFolder = Application.dataPath;//contains complete path to the exportAssetFolder
+    private string exportAssetFolder = "Assets/ConvertMesh"; //contains the folder where we'll export all the assets
+    private string exportWindowsFolder;
     private string tempExportFolder = "Assets";
     private bool overwriteMeshes = true; //if meshes of the same name are found, overwrite them.
     private bool recalcLMUVs = false; //useful for when multiple meshes get combined.
     private bool combineSubMeshes = true; //combines the submeshes of single gameobjects into one. 
     private string meshSuffix = "-Faceted"; //adds this suffix to the end of the data names
 
+    void OnEnable()
+    {
+        WorldIcon = (Texture)Resources.Load("QT_PolyWorld-icon");//(Texture)AssetDatabase.LoadAssetAtPath("Assets/Quantum Theory/Polyworld/Editor/QT_PolyWorld-icon.png", typeof(Texture));
+        exportWindowsFolder = Application.dataPath;//contains complete path to the exportAssetFolder
+    }
 
     void UpdateProgress(int totalCount,int currentGOIndex,string currentGO)
     {
