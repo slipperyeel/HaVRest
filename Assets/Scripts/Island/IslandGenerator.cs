@@ -5,11 +5,8 @@ public class IslandGenerator : MonoBehaviour
 {
 	public enum DetailType { Tree_Pine_0, Tree_Pine_1, Tree_Pine_2, Rock_Medium, Rock_Large, Flower_Bud, Bush_Small, Grass, Fern, Rock_Small };
 
-	[SerializeField]
-	private GameObject _terrainPrefab;
-
-	[SerializeField]
-	private GameObject[] _detailObjects;
+	public GameObject _terrainPrefab;
+	public GameObject[] _detailObjects;
 
 	public static int IslandID = 0;
 	private int _id;
@@ -26,6 +23,7 @@ public class IslandGenerator : MonoBehaviour
 		float[,] heights = CreateHeightMap(noise, realSize, numHeightLevels);
 
 		Vector3 posWithOffset = new Vector3(position.x - (realSize / 2f), position.y, position.z - (realSize / 2f));
+
 		_currentTerrain = (GameObject)Instantiate(_terrainPrefab, posWithOffset, Quaternion.identity);
 		_currentTerrain.name = string.Format("Island {0}", _id);
 		TerrainData tData = ApplyDataToTerrain(ref _currentTerrain, heights, realSize, numHeightLevels);
@@ -37,6 +35,12 @@ public class IslandGenerator : MonoBehaviour
 		PlaceDetails(heights, realSize, ref data, seed);
 
 		return data;
+	}
+
+	public GameObject Generate(WorldGenerator.IslandSize size, int seed, int numHeightLevels)
+	{
+		Generate(size, seed, Vector3.zero, numHeightLevels);
+		return _currentTerrain;
 	}
 
 	private void DebugDrawGrid(Vector3 islandPos, int size, float[,] heights)
@@ -108,23 +112,23 @@ public class IslandGenerator : MonoBehaviour
 				// also need a better way to do this
 				if (height <= levelIncrement * 0f)
 				{
-					splatmapData[j, i, 0] = 1; // dirt
+					splatmapData[j, i, 4] = 1; // dirt
 				}
 				else if (height <= levelIncrement * 1f)
 				{
-					splatmapData[j, i, 2] = 1; // dark grass
+					splatmapData[j, i, 1] = 1; // dark grass
 				}
 				else if (height <= levelIncrement * 2f)
 				{
-					splatmapData[j, i, 1] = 1; // normal grass
+					splatmapData[j, i, 0] = 1; // normal grass
 				}
 				else if (height <= levelIncrement * 3f)
 				{
-					splatmapData[j, i, 3] = 1; // light grass
+					splatmapData[j, i, 2] = 1; // light grass
 				}
 				else
 				{
-					splatmapData[j, i, 4] = 1; // dead grass
+					splatmapData[j, i, 3] = 1; // dead grass
 				}
 
 			}

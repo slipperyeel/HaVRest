@@ -53,10 +53,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _islandGenPrefab: {fileID: 1000010412077294, guid: 2fd9b790c66c64f3988e42390a0c8205,
     type: 2}
-  WorldSeed: 0
-  NumberOfIslands: 1
-  MaxWorldSize: 100
+  WorldSeed: -1
+  NumberOfIslands: 3
+  MaxWorldSize: 1000
   MinNumberOfHeightLevels: 3
-  SmIslandChance: 0
-  MdIslandChance: 0
-  LgIslandChance: 1
+  SmIslandChance: 0.5
+  MdIslandChance: 0.35
+  LgIslandChance: 0.15

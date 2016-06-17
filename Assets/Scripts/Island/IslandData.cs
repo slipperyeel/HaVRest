@@ -13,6 +13,8 @@ public class IslandData
 	private Tile[,] _tiles;
 
 	private TerrainData _data;
+	public TerrainData Data { get { return _data; } }
+
 	private int _size;
 
 	private Vector3 _worldPosition;
