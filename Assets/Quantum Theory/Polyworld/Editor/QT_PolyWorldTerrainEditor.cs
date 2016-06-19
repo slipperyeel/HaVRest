@@ -14,9 +14,9 @@ public class QT_PolyWorldTerrainEditor : Editor {
     
   //  private GUIStyle styleRed = new GUIStyle();
     private GUIStyle boxStyle;
-    Texture WorldIcon = (Texture)Resources.Load("PW_LogoWide");//(Texture)AssetDatabase.LoadAssetAtPath("Assets/Quantum Theory/Polyworld/Editor/QT_PolyWorld-icon.png", typeof(Texture));
-    Texture UpdateImg = (Texture)Resources.Load("PW_BtnUpdateTerrain");
-    Texture UpdateColor = (Texture)Resources.Load("PW_BtnUpdateColor");
+    Texture WorldIcon;
+    Texture UpdateImg;
+    Texture UpdateColor;
 
     public override void OnInspectorGUI()
     {
@@ -390,6 +390,9 @@ public class QT_PolyWorldTerrainEditor : Editor {
    
     public void OnEnable()
     {
+        WorldIcon = (Texture)Resources.Load("PW_LogoWide");//(Texture)AssetDatabase.LoadAssetAtPath("Assets/Quantum Theory/Polyworld/Editor/QT_PolyWorld-icon.png", typeof(Texture));
+        UpdateImg = (Texture)Resources.Load("PW_BtnUpdateTerrain");
+        UpdateColor = (Texture)Resources.Load("PW_BtnUpdateColor");
         PWT = (QT_PolyWorldTerrain)target;
         PWT.SetupTerrainAssociation(); //initialize all the variables        
     }    
