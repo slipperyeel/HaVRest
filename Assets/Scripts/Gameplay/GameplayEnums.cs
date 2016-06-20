@@ -8,7 +8,7 @@ public enum eTemporalTriggerType
     Day,
     Month,
     Year,
-    Count = Year
+    Count = Year - 1
 }
 
 /// <summary>
@@ -17,9 +17,23 @@ public enum eTemporalTriggerType
 public enum eTemporalTriggerOutcome
 {
     None = -1,
+    Meat_Spoil,
     Crop_Grow,
     Crop_Harvestable,
     Crop_Spoiled,
     Crop_Dead,
-    Count = Crop_Dead
+    Count = Crop_Dead - 1
+}
+
+/// <summary>
+/// Resource Types. These will be paired with a quantity and consumed by resource dependent objects.
+/// </summary>
+public enum eResourceType
+{
+    None = -1,
+    Water,
+    Food,
+    Fuel,
+    Flameable,
+    Count = Flameable - 1
 }

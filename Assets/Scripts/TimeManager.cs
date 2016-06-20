@@ -18,6 +18,7 @@ namespace HVRTime
         private TimeOfDay mCurrentTimeOfDay = TimeOfDay.EarlyMorning;
         private HVRDateTime mDateTime;
 
+        private int mCurrentHour;
         private int mCurrentDay;
         private int mCurrentMonth;
         private int mCurrentYear;
@@ -49,6 +50,7 @@ namespace HVRTime
             mCurrentTimeOfDay = TimeOfDay.EarlyMorning;
             mTotalTimePassed = 0.0f;
 
+            mCurrentHour = mDateTime.GetHour();
             mCurrentDay = mDateTime.GetDay();
             mCurrentMonth = mDateTime.GetMonth();
             mCurrentYear = mDateTime.GetYear();
@@ -99,6 +101,11 @@ namespace HVRTime
                 TimeChangedEvent tce = new TimeChangedEvent(timeFromEvent, false, false, false, false);
                 if (timeFromEvent != null)
                 {
+                    if(mCurrentHour != timeFromEvent.GetHour())
+                    {
+                        tce.HourChanged = true;
+                    }
+
                     if (mCurrentDay != timeFromEvent.GetDay())
                     {
                         tce.DayChanged = true;
@@ -115,6 +122,7 @@ namespace HVRTime
                     }
 
                     // Store the current date values locally
+                    mCurrentHour = timeFromEvent.GetHour();
                     mCurrentDay = timeFromEvent.GetDay();
                     mCurrentMonth = timeFromEvent.GetMonth();
                     mCurrentYear = timeFromEvent.GetYear();

@@ -92,13 +92,13 @@ namespace HVRTime
             if (mDayTimeSeconds >= (mHour + 1) * TimeConstants.SECONDS_PER_HOUR)
             {
                 mHour++;
+                dateChanged = true;
 
                 if (mDayTimeSeconds >= TimeConstants.SECONDS_PER_DAY)
                 {
                     mDay++;
                     mHour = 0;
                     mDayTimeSeconds = 0.0f;
-                    dateChanged = true;
 
                     if (mDay >= TimeConstants.DAYS_PER_MONTH)
                     {
