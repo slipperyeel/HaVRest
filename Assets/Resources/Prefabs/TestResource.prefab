@@ -83,4 +83,4 @@ MonoBehaviour:
   mTemporalTriggers: []
   Resource:
     Type: 3
-    Quantity: 100
+    Quantity: 50
