@@ -19,9 +19,18 @@ public abstract class TemporalObject : MonoBehaviour
     // Designed temporal triggers. There can be as many or few of these as a temporal object wants, though it makes no sense to have none.
     [SerializeField]
     protected List<TemporalTrigger> mTemporalTriggers;
-
+    public List<TemporalTrigger> TemporalTriggers
+    {
+        get { return mTemporalTriggers; }
+        set { mTemporalTriggers = value; }
+    }
     // I intend this to be the save structure for a temporal object.
     protected TemporalLifetime mTemporalLifetime;
+    public TemporalLifetime TemporalLifetime
+    {
+        get { return mTemporalLifetime; }
+        set { mTemporalLifetime = value; }
+    }
 
     // Set up the event listeners.
     protected virtual void Awake()
@@ -36,7 +45,10 @@ public abstract class TemporalObject : MonoBehaviour
 
     protected virtual void OnDestroy()
     {
-        SEEventManager.Instance.RemoveListener<TimeChangedEvent>(HandleTimeChangedEvent);
+        if (SEEventManager.Instance != null)
+        {
+            SEEventManager.Instance.RemoveListener<TimeChangedEvent>(HandleTimeChangedEvent);
+        }
     }
 
     /// <summary>

@@ -33,14 +33,11 @@ public class TestMomento : GameObjectMomento
 			{
 				TestObject test = go.GetComponent<TestObject> ();
 
-				if (test != null) 
-				{
-					Debug.Log (Derp);
-					test.Derp = Derp;
-				}
-
-				Debug.Log ("HUURRR");
-				base.ApplyMomentoData (test.gameObject);
+                if (test != null)
+                {
+                    test.Derp = Derp;
+                    base.ApplyMomentoData(test.gameObject);
+                }
 			}
         }
     }

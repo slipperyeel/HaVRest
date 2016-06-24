@@ -7,15 +7,28 @@ using System.IO;
 
 public class DataManager : Singleton<DataManager>
 {
-    private List<GameObjectMomento> Momentos;
-	private Dictionary<GameObjectMomento, object> dataDictionary;
+    private List<GameObjectMomento> mMomentos;
+	private Dictionary<GameObjectMomento, object> mDataDictionary;
 	private static readonly string PREFABS_PATH = "Prefabs/";
 	private static readonly string SAVEFILE_NAME = "SaveData.dat";
+    private bool mIsSaving = false;
+	private bool mIsLoading = false;
+    private bool mIsDataLoaded = false;
+
+	public bool IsLoading
+	{
+		get { return mIsLoading; }
+	}
+
+    public bool IsDataLoaded
+    {
+        get { return mIsDataLoaded; }
+    }
 
     protected void Awake()
     {
-        Momentos = new List<GameObjectMomento>();
-		dataDictionary = new Dictionary<GameObjectMomento, object> ();
+        mMomentos = new List<GameObjectMomento>();
+		mDataDictionary = new Dictionary<GameObjectMomento, object> ();
     }
 
     /// <summary>
@@ -56,8 +69,8 @@ public class DataManager : Singleton<DataManager>
 	            M momento = (M)Convert.ChangeType(mObj, typeof(M));
 
 				momento.UpdateMomentoData(spawnObj, prefab.name);
-	            Momentos.Add(momento);
-				dataDictionary.Add (momento, spawnObj);
+	            mMomentos.Add(momento);
+				mDataDictionary.Add (momento, spawnObj);
 				return typedObject;
 			}
 			else
@@ -71,48 +84,92 @@ public class DataManager : Singleton<DataManager>
 
     public void SaveGameData()
     {
+        if (!mIsSaving)
+        {
+            mIsSaving = true;
+            StartCoroutine(DoSave());
+        }
+    }
+
+    private IEnumerator DoSave()
+    {
         BinaryFormatter formatter = new BinaryFormatter();
-		FileStream fs = File.Open(Application.persistentDataPath + "/" + SAVEFILE_NAME, FileMode.OpenOrCreate);
+        FileStream fs = File.Open(Application.persistentDataPath + "/" + SAVEFILE_NAME, FileMode.OpenOrCreate);
 
-		for (int i = 0; i < Momentos.Count; i++) 
-		{
-			object obj;
+        for (int i = 0; i < mMomentos.Count; i++)
+        {
+            object obj;
 
-			if (dataDictionary.TryGetValue (Momentos [i], out obj)) 
-			{
-				Momentos [i].UpdateMomentoData (obj, Momentos[i].PrefabName);
-			}
-		}
-        formatter.Serialize(fs, Momentos);
+            if (mDataDictionary.TryGetValue(mMomentos[i], out obj))
+            {
+                mMomentos[i].UpdateMomentoData(obj, mMomentos[i].PrefabName);
+                yield return null;
+            }
+        }
+
+        formatter.Serialize(fs, mMomentos);
 
         fs.Close();
 
-		Debug.Log ("Game Data Saved");
+        Debug.Log("Game Data Saved");
+
+        mIsSaving = false;
     }
 
     public void LoadGameData()
     {
-        BinaryFormatter formatter = new BinaryFormatter();
-		FileStream fs = File.Open(Application.persistentDataPath + "/" + SAVEFILE_NAME, FileMode.Open);
-
-        Momentos = (List<GameObjectMomento>)formatter.Deserialize(fs);
-
-        if (Momentos != null && Momentos.Count > 0)
+        if (!mIsDataLoaded)
         {
-            for (int i = 0; i < Momentos.Count; i++)
+            if (!mIsLoading && !mIsSaving)
             {
-				GameObject loadedObject = (GameObject)Resources.Load<GameObject>(PREFABS_PATH + Momentos[i].PrefabName);
+                mIsLoading = true;
+                StartCoroutine(DoLoad());
+            }
+        }
+    }
 
-				if(loadedObject != null)
-				{
-					loadedObject = GameObject.Instantiate(loadedObject);
-					Momentos[i].ApplyMomentoData(loadedObject);
-				}
+    private IEnumerator DoLoad()
+    {
+        BinaryFormatter formatter = new BinaryFormatter();
+        FileStream fs = File.Open(Application.persistentDataPath + "/" + SAVEFILE_NAME, FileMode.Open);
+
+        mMomentos = (List<GameObjectMomento>)formatter.Deserialize(fs);
+
+        if (mMomentos != null && mMomentos.Count > 0)
+        {
+
+            Debug.Log("Loading: " + mMomentos.Count + " Objects");
+
+            for (int i = 0; i < mMomentos.Count; i++)
+            {
+                GameObject loadedObject = (GameObject)Resources.Load<GameObject>(PREFABS_PATH + mMomentos[i].PrefabName);
+
+                yield return null;
+
+                if (loadedObject != null)
+                {
+                    loadedObject = GameObject.Instantiate(loadedObject);
+                    mMomentos[i].ApplyMomentoData(loadedObject);
+
+                    yield return null;
+                }
             }
         }
 
         fs.Close();
 
-		Debug.Log ("Game Data Loaded");
+        Debug.Log("Game Data Loaded");
+
+        mIsLoading = false;
+        mIsDataLoaded = true;
     }
+
+	public override void OnDestroy()
+	{
+		mMomentos.Clear ();
+		mMomentos = null;
+		mDataDictionary.Clear ();
+		mDataDictionary = null;
+		base.OnDestroy ();
+	}
 }

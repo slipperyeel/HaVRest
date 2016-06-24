@@ -2,6 +2,7 @@
 using System.Collections;
 
 // Simple structure to keep track of how long an object has been alive. We'll want to save this out.
+[Serializable]
 public class TemporalLifetime
 {
     public int Hours = 0;

@@ -10,6 +10,11 @@ public abstract class ResourceDependentObject : MonoBehaviour
 {
     [SerializeField]
     private List<ResourceStore> mResourceStore;
+    public List<ResourceStore> MyResourceStore
+    {
+        get { return mResourceStore; }
+        set { mResourceStore = value; }
+    }
 
     // Set up the event listeners.
     protected virtual void Awake()
