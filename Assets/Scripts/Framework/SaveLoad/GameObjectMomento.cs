@@ -30,9 +30,15 @@ public class GameObjectMomento
     }
 
     private string mPrefabName;
-    public String PrefabName
+    public string PrefabName
     {
         get { return mPrefabName; }
+    }
+
+    private string mUniqueId;
+    public string UniqueId
+    {
+        get { return mUniqueId; }
     }
 
     public GameObjectMomento()
@@ -42,13 +48,13 @@ public class GameObjectMomento
         mScale = new SerializeV3(Vector3.one);
         mIsEnabled = true;
         mPrefabName = "";
+        mUniqueId = Guid.NewGuid().ToString();
     }
 
     public virtual void UpdateMomentoData(object obj, string prefabName)
     {
         if (obj != null)
 		{
-			Debug.Log (obj.GetType ());
 			GameObject go = (GameObject)obj;
             if (go != null)
             {
@@ -56,7 +62,6 @@ public class GameObjectMomento
                 mRotation = new SerializeQ(go.transform.rotation);
                 mScale = new SerializeV3(go.transform.localScale);
 				mIsEnabled = go.activeSelf;
-                Debug.Log(prefabName);
                 mPrefabName = prefabName;
             }
         }

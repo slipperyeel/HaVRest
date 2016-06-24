@@ -5,10 +5,13 @@ using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
+/// <summary>
+/// First pass at an I/O Manager... currently only saves game object type stuff.
+/// </summary>
 public class DataManager : Singleton<DataManager>
 {
     private List<GameObjectMomento> mMomentos;
-	private Dictionary<GameObjectMomento, object> mDataDictionary;
+    private Dictionary<object, GameObjectMomento> mDataDictionary;
 	private static readonly string PREFABS_PATH = "Prefabs/";
 	private static readonly string SAVEFILE_NAME = "SaveData.dat";
     private bool mIsSaving = false;
@@ -28,7 +31,7 @@ public class DataManager : Singleton<DataManager>
     protected void Awake()
     {
         mMomentos = new List<GameObjectMomento>();
-		mDataDictionary = new Dictionary<GameObjectMomento, object> ();
+        mDataDictionary = new Dictionary<object, GameObjectMomento>();
     }
 
     /// <summary>
@@ -70,7 +73,8 @@ public class DataManager : Singleton<DataManager>
 
 				momento.UpdateMomentoData(spawnObj, prefab.name);
 	            mMomentos.Add(momento);
-				mDataDictionary.Add (momento, spawnObj);
+                mDataDictionary.Add(spawnObj, momento);
+
 				return typedObject;
 			}
 			else
@@ -80,6 +84,29 @@ public class DataManager : Singleton<DataManager>
         }
 
         return default(T);
+    }
+
+    public void DestroyObject(GameObject obj)
+    {
+        if (obj != null)
+        {
+            if (mDataDictionary != null && mMomentos != null)
+            {
+                if (mDataDictionary.ContainsKey(obj))
+                {
+                    GameObjectMomento momento = mMomentos.Find(m => m.UniqueId == mDataDictionary[obj].UniqueId);
+
+                    if (momento != null)
+                    {
+                        mMomentos.Remove(momento);
+                    }
+
+                    mDataDictionary.Remove(obj);
+
+                    GameObject.Destroy(obj);
+                }
+            }
+        }
     }
 
     public void SaveGameData()
@@ -93,25 +120,26 @@ public class DataManager : Singleton<DataManager>
 
     private IEnumerator DoSave()
     {
-        BinaryFormatter formatter = new BinaryFormatter();
-        FileStream fs = File.Open(Application.persistentDataPath + "/" + SAVEFILE_NAME, FileMode.OpenOrCreate);
-
-        for (int i = 0; i < mMomentos.Count; i++)
+        if (mMomentos != null && mMomentos.Count > 0)
         {
-            object obj;
-
-            if (mDataDictionary.TryGetValue(mMomentos[i], out obj))
+            if (mDataDictionary != null && mDataDictionary.Count > 0)
             {
-                mMomentos[i].UpdateMomentoData(obj, mMomentos[i].PrefabName);
-                yield return null;
+                BinaryFormatter formatter = new BinaryFormatter();
+                FileStream fs = File.Open(Application.persistentDataPath + "/" + SAVEFILE_NAME, FileMode.OpenOrCreate);
+
+                foreach (KeyValuePair<object, GameObjectMomento> entry in mDataDictionary)
+                {
+                    entry.Value.UpdateMomentoData(entry.Key, entry.Value.PrefabName);
+                    yield return null;
+                }
+
+                formatter.Serialize(fs, mMomentos);
+
+                fs.Close();
+
+                Debug.Log("Game Data Saved");
             }
         }
-
-        formatter.Serialize(fs, mMomentos);
-
-        fs.Close();
-
-        Debug.Log("Game Data Saved");
 
         mIsSaving = false;
     }
@@ -130,35 +158,48 @@ public class DataManager : Singleton<DataManager>
 
     private IEnumerator DoLoad()
     {
-        BinaryFormatter formatter = new BinaryFormatter();
-        FileStream fs = File.Open(Application.persistentDataPath + "/" + SAVEFILE_NAME, FileMode.Open);
-
-        mMomentos = (List<GameObjectMomento>)formatter.Deserialize(fs);
-
-        if (mMomentos != null && mMomentos.Count > 0)
+        if (System.IO.File.Exists(Application.persistentDataPath + "/" + SAVEFILE_NAME))
         {
+            BinaryFormatter formatter = new BinaryFormatter();
 
-            Debug.Log("Loading: " + mMomentos.Count + " Objects");
+            FileStream fs = File.Open(Application.persistentDataPath + "/" + SAVEFILE_NAME, FileMode.Open);
 
-            for (int i = 0; i < mMomentos.Count; i++)
+            mMomentos = (List<GameObjectMomento>)formatter.Deserialize(fs);
+
+            if (mMomentos != null && mMomentos.Count > 0)
             {
-                GameObject loadedObject = (GameObject)Resources.Load<GameObject>(PREFABS_PATH + mMomentos[i].PrefabName);
 
-                yield return null;
+                Debug.Log("Loading: " + mMomentos.Count + " Objects");
 
-                if (loadedObject != null)
+                for (int i = 0; i < mMomentos.Count; i++)
                 {
-                    loadedObject = GameObject.Instantiate(loadedObject);
-                    mMomentos[i].ApplyMomentoData(loadedObject);
+                    GameObject loadedObject = (GameObject)Resources.Load<GameObject>(PREFABS_PATH + mMomentos[i].PrefabName);
+
+                    if (!mDataDictionary.ContainsKey(loadedObject))
+                    {
+                        mDataDictionary.Add(loadedObject, mMomentos[i]);
+                    }
 
                     yield return null;
+
+                    if (loadedObject != null)
+                    {
+                        loadedObject = GameObject.Instantiate(loadedObject);
+                        mMomentos[i].ApplyMomentoData(loadedObject);
+
+                        yield return null;
+                    }
                 }
             }
+
+            fs.Close();
+
+            Debug.Log("Game Data Loaded");
         }
-
-        fs.Close();
-
-        Debug.Log("Game Data Loaded");
+        else
+        {
+            Debug.Log("No save file exists.");
+        }
 
         mIsLoading = false;
         mIsDataLoaded = true;

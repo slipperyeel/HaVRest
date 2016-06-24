@@ -24,7 +24,10 @@ public abstract class ResourceDependentObject : MonoBehaviour
 
     protected virtual void OnDestroy()
     {
-        SEEventManager.Instance.RemoveListener<TimeChangedEvent>(HandleTimeChangedEvent);
+        if (SEEventManager.Instance != null)
+        {
+            SEEventManager.Instance.RemoveListener<TimeChangedEvent>(HandleTimeChangedEvent);
+        }
     }
 
     /// <summary>
