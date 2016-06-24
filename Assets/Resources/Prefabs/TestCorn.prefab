@@ -20,9 +20,9 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000011928164306}
   - 114: {fileID: 114000014292582414}
-  - 114: {fileID: 114000013890715528}
+  - 114: {fileID: 114000013518259834}
   m_Layer: 0
-  m_Name: TestCrop
+  m_Name: TestCorn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -153,7 +153,7 @@ MeshCollider:
   serializedVersion: 2
   m_Convex: 0
   m_Mesh: {fileID: 4300000, guid: 222e2b707a4106445936de3f12aba0c4, type: 3}
---- !u!114 &114000013890715528
+--- !u!114 &114000013518259834
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -161,10 +161,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000012479520486}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b6f2bfd93c550c4ca407b33d6a2bd89, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a06fa9ab52002f4f8f75d4f7082e7be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Derp: 
+  mResourceStore:
+  - Resource:
+      Type: 0
+      Quantity: 20
+    Capacity: 100
+    DepletionRate: 5
+    Thresholds: 
+    TimeTrigger: 0
 --- !u!114 &114000014292582414
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -178,26 +185,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mTemporalTriggers:
   - Type: 1
-    Outcome: 0
+    Outcome: 1
     Ticks: 2
     Triggered: 0
   - Type: 1
-    Outcome: 0
+    Outcome: 1
     Ticks: 5
     Triggered: 0
   - Type: 1
-    Outcome: 0
+    Outcome: 1
     Ticks: 10
     Triggered: 0
   - Type: 1
-    Outcome: 1
+    Outcome: 2
     Ticks: 12
     Triggered: 0
   - Type: 1
-    Outcome: 2
+    Outcome: 3
     Ticks: 20
     Triggered: 0
   - Type: 1
-    Outcome: 3
+    Outcome: 4
     Ticks: 30
     Triggered: 0
