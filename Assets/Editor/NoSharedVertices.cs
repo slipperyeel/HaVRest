@@ -71,7 +71,7 @@ public class NoSharedVertices : EditorWindow
         mesh.RecalculateNormals();
 
         // Save a copy to disk
-        string name = "Assets/Editor/" + go.name + Random.Range(0, int.MaxValue).ToString() + ".asset";
+        string name = "Assets/Prefabs/LowPolyMeshes/" + go.name + Random.Range(0, int.MaxValue).ToString() + ".asset";
         AssetDatabase.CreateAsset(mf.sharedMesh, name);
         AssetDatabase.SaveAssets();
     }

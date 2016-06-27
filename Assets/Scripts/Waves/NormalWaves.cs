@@ -3,10 +3,10 @@ using System.Collections;
 
 public class NormalWaves : MonoBehaviour
 {
-    float scale = 0.1f;
-    float speed = 1.0f;
-    float noiseStrength = 2f;
-    float noiseWalk = 1f;
+    [SerializeField] float scale = 0.1f;
+    [SerializeField] float speed = 1.0f;
+    [SerializeField] float noiseStrength = 1f;
+    [SerializeField] float noiseWalk = 1f;
 
     private Vector3[] baseHeight;
 
