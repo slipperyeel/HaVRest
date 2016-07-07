@@ -10,6 +10,8 @@ public class IslandCreateTool : EditorWindow
 	private WorldGenerator.IslandSize _size = WorldGenerator.IslandSize.Small;
 	private int _seed = 0;
 	private int _levels = 3;
+    //private string _firstSetPath = "Detail Objects/First Set/";
+    private string _secondSetPath = "Detail Objects/Second Set/";
 
 	[MenuItem("Tools/Island Creator")]
 	public static void ShowWindow()
@@ -62,16 +64,16 @@ public class IslandCreateTool : EditorWindow
 
 		GameObject[] detailObjects = new GameObject[]
 		{
-			Resources.Load<GameObject>("Detail Objects/Pine_0"),
-			Resources.Load<GameObject>("Detail Objects/Pine_1"),
-			Resources.Load<GameObject>("Detail Objects/Pine_2"),
-			Resources.Load<GameObject>("Detail Objects/Rock_Med"),
-			Resources.Load<GameObject>("Detail Objects/Rock_Lg"),
-			Resources.Load<GameObject>("Detail Objects/Flower_Bug"),
-			Resources.Load<GameObject>("Detail Objects/Bush_Sm"),
-			Resources.Load<GameObject>("Detail Objects/Grass"),
-			Resources.Load<GameObject>("Detail Objects/Fern"),
-			Resources.Load<GameObject>("Detail Objects/Rock_Small")
+			Resources.Load<GameObject>(_secondSetPath + "Pine_0"),
+			Resources.Load<GameObject>(_secondSetPath + "Pine_1"),
+			Resources.Load<GameObject>(_secondSetPath + "Pine_2"),
+			Resources.Load<GameObject>(_secondSetPath + "Rock_Med"),
+			//Resources.Load<GameObject>(_secondSetPath + "Rock_Lg"),
+			Resources.Load<GameObject>(_secondSetPath + "Flower_Bud"),
+			//Resources.Load<GameObject>(_secondSetPath + "Bush_Sm"),
+			Resources.Load<GameObject>(_secondSetPath + "Grass"),
+			Resources.Load<GameObject>(_secondSetPath + "Fern"),
+			//Resources.Load<GameObject>(_secondSetPath + "Rock_Small")
 		};
 
 		gen._detailObjects = detailObjects;

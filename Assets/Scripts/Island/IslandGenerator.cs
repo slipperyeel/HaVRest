@@ -4,7 +4,8 @@ using UnityEditor;
 
 public class IslandGenerator : MonoBehaviour
 {
-    public enum DetailType { Tree_Pine_0, Tree_Pine_1, Tree_Pine_2, Rock_Medium, Rock_Large, Flower_Bud, Bush_Small, Grass, Fern, Rock_Small };
+    //public enum DetailType { Tree_Pine_0, Tree_Pine_1, Tree_Pine_2, Rock_Medium, Rock_Large, Flower_Bud, Bush_Small, Grass, Fern, Rock_Small };
+    public enum DetailType { Tree_Pine_0, Tree_Pine_1, Tree_Pine_2, Rock_Medium, Flower_Bud, Grass, Fern };
 
     public GameObject[] _detailObjects;
 
@@ -88,19 +89,21 @@ public class IslandGenerator : MonoBehaviour
     private SplatPrototype[] LoadPrototypes()
     {
         SplatPrototype[] newProtos = new SplatPrototype[5];
+        int size = 256;
         Texture2D[] splatTextures = new Texture2D[]
         {
-            Resources.Load<Texture2D>("Terrain Textures/dirt_0"),
-            Resources.Load<Texture2D>("Terrain Textures/grass_0"),
-            Resources.Load<Texture2D>("Terrain Textures/grass_1"),
-            Resources.Load<Texture2D>("Terrain Textures/grass_2"),
-            Resources.Load<Texture2D>("Terrain Textures/grass_3")
+            Resources.Load<Texture2D>("Terrain Textures/dirt_dark_0"),
+            Resources.Load<Texture2D>("Terrain Textures/grass_dark_0"),
+            Resources.Load<Texture2D>("Terrain Textures/grass_dark_1"),
+            Resources.Load<Texture2D>("Terrain Textures/grass_dark_2"),
+            Resources.Load<Texture2D>("Terrain Textures/grass_dark_3")
         };
 
         for (int i = 0; i < 5; ++i)
         {
             SplatPrototype sp = new SplatPrototype();
             sp.texture = splatTextures[i];
+            Debug.Log(sp.texture);
             newProtos[i] = sp;
         }
 
@@ -168,24 +171,6 @@ public class IslandGenerator : MonoBehaviour
         }
 
         return heights;
-    }
-
-    public void RoundAndTextureForTool(ref TerrainData data)
-    {
-        int size = data.heightmapWidth;
-        float[,] heights = data.GetHeights(0, 0, size, size);
-        int numHeights = 3;
-
-        for (int i = 0; i < size; ++i)
-        {
-            for (int j = 0; j < size; ++j)
-            {
-                float height = heights[i, j];
-                heights[i, j] = RoundValue(height, numHeights);
-            }
-        }
-
-        ApplyTextures(heights, ref data, size, numHeights);
     }
 
     private void GetWorldTerrainPosition(Vector3 terrainPos, int x, int y, out int tX, out int tY)
@@ -256,23 +241,34 @@ public class IslandGenerator : MonoBehaviour
                     float value = noise[i][j];
                     if (value > 0.85f)
                     {
-                        detail = _detailObjects[(int)DetailType.Tree_Pine_0];
+                        if (value > 0.95f)
+                        {
+                            detail = _detailObjects[(int)DetailType.Tree_Pine_0];
+                        }
+                        else if (value > 0.9f)
+                        {
+                            detail = _detailObjects[(int)DetailType.Tree_Pine_1];
+                        }
+                        else
+                        {
+                            detail = _detailObjects[(int)DetailType.Tree_Pine_2];
+                        }
                     }
                     else if (value > 0.75f)
                     {
                         detail = _detailObjects[(int)DetailType.Flower_Bud];
                     }
-                    else if (value > 0.7f)
+                    else if (value > 0.68f)
                     {
                         detail = _detailObjects[(int)DetailType.Grass];
                     }
-                    else if (value > 0.685f)
+                    else if (value > 0.65f)
                     {
-                        detail = _detailObjects[(int)DetailType.Bush_Small];
+                        detail = _detailObjects[(int)DetailType.Fern];
                     }
                     else if (value < 0.025f)
                     {
-                        detail = _detailObjects[(int)DetailType.Rock_Small];
+                        detail = _detailObjects[(int)DetailType.Rock_Medium];
                     }
                     else
                     {
