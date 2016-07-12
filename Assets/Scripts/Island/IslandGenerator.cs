@@ -89,7 +89,6 @@ public class IslandGenerator : MonoBehaviour
     private SplatPrototype[] LoadPrototypes()
     {
         SplatPrototype[] newProtos = new SplatPrototype[5];
-        int size = 256;
         Texture2D[] splatTextures = new Texture2D[]
         {
             Resources.Load<Texture2D>("Terrain Textures/dirt_dark_0"),
