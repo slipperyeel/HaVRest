@@ -23,7 +23,19 @@ public class FarmingGame : ISerializable
     private static readonly string kSaveFileName = "GameData";
 
     // Formatter
-    IFormatter formatter = new BinaryFormatter();
+    IFormatter mFormatter = new BinaryFormatter();
+
+    // Initial Game Settings
+    private static readonly int kInitialHour = 6;
+    private static readonly int kInitialDay = 1;
+    private static readonly int kInitialMonth = 1;
+    private static readonly int kInitlaYear = 2016;
+
+    // Custom Serialized Values
+    private bool mHasBeenInitialized = false;
+
+    // Serialization Keys
+    private static readonly string kInitializationFlagKey = "farmingGame_InitFlagKey";
 
     public FarmingGame()
     {
@@ -32,22 +44,25 @@ public class FarmingGame : ISerializable
 
     public void Initialize()
     {
-        // TODO: Make this based on something
-        mDateTime = new HVRDateTime(0, 1, 1, 1999, TimeConstants.SECONDS_PER_HOUR * 4.0f);
-        mPlayer = new FarmingAdventurer();
+        if (!mHasBeenInitialized)
+        {
+            mDateTime = new HVRDateTime(kInitialHour, kInitialDay, kInitialMonth, kInitlaYear, TimeConstants.SECONDS_PER_HOUR * kInitialHour);
+            mPlayer = new FarmingAdventurer();
+            mHasBeenInitialized = true;
+        }
     }
 
     public void Serialize()
     {
         FileStream s = new FileStream(Application.persistentDataPath + "/" + kSaveFileName, FileMode.OpenOrCreate);
-        formatter.Serialize(s, this);
+        mFormatter.Serialize(s, this);
         s.Close();
     }
 
     public void Deserialize()
     {
         FileStream s = new FileStream(Application.persistentDataPath + "/" + kSaveFileName, FileMode.Open);
-        FarmingGame readObj = (FarmingGame)formatter.Deserialize(s);
+        FarmingGame readObj = (FarmingGame)mFormatter.Deserialize(s);
 
         if (readObj != null)
         {
@@ -64,12 +79,15 @@ public class FarmingGame : ISerializable
    
     protected FarmingGame(SerializationInfo information, StreamingContext context)
     {
+        mHasBeenInitialized = (bool)information.GetValue(kInitializationFlagKey, typeof(bool));
         mDateTime = new HVRDateTime(information, context);
         mPlayer = new FarmingAdventurer(information, context);
     }
 
     public void GetObjectData(SerializationInfo info, StreamingContext context)
     {
+        info.AddValue(kInitializationFlagKey, mHasBeenInitialized);
+
         if (mDateTime != null && mPlayer != null)
         {
             mDateTime.GetObjectData(info, context);

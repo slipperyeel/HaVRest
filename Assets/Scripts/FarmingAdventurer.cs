@@ -10,14 +10,25 @@ using System.Runtime.Serialization;
 public class FarmingAdventurer : ISerializable
 {
     // Keys
-    static private readonly string kTestKey = "farmingAdventurer_TestKey";
+    private static readonly string kPlayerNameKey = "farmingGame_PlayerNameKey";
+    private static readonly string kPlayerAgeKey = "farmingGame_PlayerAgeKey";
 
     // Values
-    private int val = 1337;
+    private string mPlayerName = "";
+    public string PlayerName { get { return mPlayerName; } }
+
+    private int mPlayerAge = 0;
+    public int PlayerAge { get { return mPlayerAge; } }
 
     public FarmingAdventurer()
     {
         // EMPTY CTOR FOR COMPLIATION
+    }
+
+    public FarmingAdventurer(string name, int age)
+    {
+        mPlayerName = name;
+        mPlayerAge = age;
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -26,12 +37,13 @@ public class FarmingAdventurer : ISerializable
 
     public FarmingAdventurer(SerializationInfo information, StreamingContext context)
     {
-        val = (int)information.GetValue(kTestKey, typeof(int));
-        Debug.Log("Testing Farming Adventurer, value is: " + val);
+        mPlayerAge = (int)information.GetValue(kPlayerAgeKey, typeof(int));
+        mPlayerName = (string)information.GetValue(kPlayerNameKey, typeof(string));
     }
 
     public void GetObjectData(SerializationInfo info, StreamingContext context)
     {
-        info.AddValue(kTestKey, val);
+        info.AddValue(kPlayerAgeKey, mPlayerAge);
+        info.AddValue(kPlayerNameKey, mPlayerName);
     }
 }
