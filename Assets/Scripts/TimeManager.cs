@@ -45,8 +45,13 @@ namespace HVRTime
 
         void Awake()
         {
-            // TODO(JP): Use a real save system. Currently this means that we'll always start at early morning.
-            mDateTime = new HVRDateTime(0, 1, 1, 1999, TimeConstants.SECONDS_PER_HOUR * 4.0f);
+            // Awake should only be used in GameManager... OOO
+        }
+
+        void Start()
+        {
+            mDateTime = GameManager.Instance.Game.DateTime;
+
             mCurrentTimeOfDay = TimeOfDay.EarlyMorning;
             mTotalTimePassed = 0.0f;
 
@@ -56,10 +61,7 @@ namespace HVRTime
             mCurrentYear = mDateTime.GetYear();
 
             Debug.Assert(cSun == null, "No sun set!");
-        }
 
-        void Start()
-        {
             if (mDateTime != null)
             {
                 mDateTime.OnDateChanged += new OnDateChanged(OnPlayerDateTimeChanged);

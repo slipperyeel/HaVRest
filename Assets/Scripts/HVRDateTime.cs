@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Runtime.Serialization;
 
 /// <summary>
 /// DateTime Object specific to HVR
@@ -10,7 +11,7 @@ namespace HVRTime
     // Event delegate definitions
     public delegate void OnDateChanged(object sender, EventArgs e);
 
-    public class HVRDateTime
+    public class HVRDateTime : ISerializable
     {
         /// <summary>
         /// Private Members
@@ -20,6 +21,13 @@ namespace HVRTime
         private int mMonth;
         private int mYear;
         private float mDayTimeSeconds;
+
+        // Keys
+        static private readonly string kHourKey = "hvrDateTime_HourKey";
+        static private readonly string kDayKey = "hvrDateTime_DayKey";
+        static private readonly string kMonthKey = "hvrDateTime_MonthKey";
+        static private readonly string kYearKey = "hvrDateTime_YearKey";
+        static private readonly string kDayTimeSecondsKey = "hvrDateTime_DTSKey";
 
         /// <summary>
         /// Accessors
@@ -131,6 +139,30 @@ namespace HVRTime
             string debugPrint = string.Format("(CurrentTime) - [Year: {0}] [Month: {1}] [Day: {2}] [Seconds: {3}]", mYear, mMonth, mDay, mDayTimeSeconds);
             Debug.Log(debugPrint);
             debugPrint = null;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////
+        /// Implementation of ISerializable (C# .Net)
+        ////////////////////////////////////////////////////////////////////////////
+
+        public HVRDateTime(SerializationInfo information, StreamingContext context)
+        {
+            mDay = (int)information.GetValue(kDayKey, typeof(int));
+            mHour = (int)information.GetValue(kHourKey, typeof(int));
+            mMonth = (int)information.GetValue(kMonthKey, typeof(int));
+            mYear = (int)information.GetValue(kYearKey, typeof(int));
+            mDayTimeSeconds = (float)information.GetValue(kDayTimeSecondsKey, typeof(float));
+
+            Debug.Log("Testing HVRDateTime, year is: " + mYear);
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue(kDayKey, mDay);
+            info.AddValue(kHourKey, mHour);
+            info.AddValue(kMonthKey, mMonth);
+            info.AddValue(kYearKey, mYear);
+            info.AddValue(kDayTimeSecondsKey, mDayTimeSeconds);
         }
     }
 }
