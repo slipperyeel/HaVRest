@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Threading;
 using System.Collections;
 
 public class NormalWaves : MonoBehaviour
@@ -37,22 +38,47 @@ public class NormalWaves : MonoBehaviour
         unsharedVertexMesh.SetTriangles(newIndices, 0);
     }
 
+    private void _ThreadWork(Vector3[] vec, float time)
+    {
+        Vector3[] vertices = new Vector3[vec.Length];
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            Vector3 vertex = baseHeight[i];
+            vertex.y += Mathf.Sin(time * speed + baseHeight[i].x + baseHeight[i].y + baseHeight[i].z) * scale;
+            vertex.y += Mathf.PerlinNoise(baseHeight[i].x + noiseWalk, baseHeight[i].y + Mathf.Sin(time * 0.1f)) * noiseStrength;
+            vertices[i] = vertex;
+        }
+
+        MainThread.Call(() => _Cb(vertices));
+        
+    }
+
+    private void _Cb(Vector3[] verts)
+    {
+        Mesh mesh = GetComponent<MeshFilter>().mesh;
+
+        mesh.vertices = verts;
+        mesh.RecalculateNormals();
+    }
+
     void Update()
     {
         Mesh mesh = GetComponent<MeshFilter>().mesh;
 
         if (baseHeight == null)
             baseHeight = mesh.vertices;
+        float time = Time.time;
+        Thread myNewThread = new Thread(() => _ThreadWork(baseHeight, time));
+        myNewThread.Start();
 
-        Vector3[] vertices = new Vector3[baseHeight.Length];
-        for (int i = 0; i < vertices.Length; i++)
-        {
-            Vector3 vertex = baseHeight[i];
-            vertex.y += Mathf.Sin(Time.time * speed + baseHeight[i].x + baseHeight[i].y + baseHeight[i].z) * scale;
-            vertex.y += Mathf.PerlinNoise(baseHeight[i].x + noiseWalk, baseHeight[i].y + Mathf.Sin(Time.time * 0.1f)) * noiseStrength;
-            vertices[i] = vertex;
-        }
-        mesh.vertices = vertices;
-        mesh.RecalculateNormals();
+        //Vector3[] vertices = new Vector3[baseHeight.Length];
+        //for (int i = 0; i < vertices.Length; i++)
+        //{
+        //    Vector3 vertex = baseHeight[i];
+        //    vertex.y += Mathf.Sin(Time.time * speed + baseHeight[i].x + baseHeight[i].y + baseHeight[i].z) * scale;
+        //    vertex.y += Mathf.PerlinNoise(baseHeight[i].x + noiseWalk, baseHeight[i].y + Mathf.Sin(Time.time * 0.1f)) * noiseStrength;
+        //    vertices[i] = vertex;
+        //}
+
     }
 }
