@@ -47,7 +47,7 @@ public class FarmingGame : ISerializable
         if (!mHasBeenInitialized)
         {
             mDateTime = new HVRDateTime(kInitialHour, kInitialDay, kInitialMonth, kInitlaYear, TimeConstants.SECONDS_PER_HOUR * kInitialHour);
-            mPlayer = new FarmingAdventurer();
+            mPlayer = new FarmingAdventurer("james", 29);
             mHasBeenInitialized = true;
         }
     }
