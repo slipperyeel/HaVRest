@@ -99,11 +99,11 @@ public class PuzzleEditorTool : EditorWindow
             mPuzzleData.RemoveAt(puzzleIndex);
             mExpandedIndex = -1;
         }
-
+        
         GUILayout.EndHorizontal();
 
         // show fields for modifying
-        if (i == mExpandedIndex)
+        if (puzzleIndex == mExpandedIndex)
         {
             GUILayout.Label("> Modify Puzzle");
 
