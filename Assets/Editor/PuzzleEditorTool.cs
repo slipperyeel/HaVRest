@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEditor;
+using HVRPuzzle;
 
 public class PuzzleEditorTool : EditorWindow
 {
@@ -8,7 +9,7 @@ public class PuzzleEditorTool : EditorWindow
     private string kAssetName = "PuzzleCollection";
 
     private PuzzleCollectionData mPuzzleData = null;
-    private HVRPuzzle.Puzzle mCurrentPuzzle = null;
+    private Puzzle mCurrentPuzzle = null;
     private bool mInProgress = false;
     private int mExpandedIndex = -1;
 
@@ -34,6 +35,12 @@ public class PuzzleEditorTool : EditorWindow
             for (int i = 0; i < mPuzzleData.PuzzleCollection.Count; ++i)
             {
                 ShowSavedPuzzle(i);
+            }
+
+            // clear button
+            if (GUILayout.Button("Clear All"))
+            {
+                mPuzzleData.PuzzleCollection.Clear();
             }
         }
         else
@@ -62,7 +69,7 @@ public class PuzzleEditorTool : EditorWindow
         GUILayout.Label("> New Puzzle");
         if (mCurrentPuzzle == null)
         {
-            mCurrentPuzzle = new HVRPuzzle.Puzzle();
+            mCurrentPuzzle = new Puzzle();
         }
 
         // set the fields
@@ -121,14 +128,100 @@ public class PuzzleEditorTool : EditorWindow
     }
 
     // modify the fields for a given puzzle
-    private void ModifyFields(HVRPuzzle.Puzzle p)
+    private void ModifyFields(Puzzle p)
     {
         p.Name = EditorGUILayout.TextField("Name: ", p.Name);
         p.Description = EditorGUILayout.TextArea(p.Description, GUILayout.Height(60));
-        p.PuzzleType = (HVRPuzzle.Type)EditorGUILayout.EnumPopup("Puzzle Type: ", p.PuzzleType);
-        p.TriggerType = (HVRPuzzle.Type)EditorGUILayout.EnumPopup("Trigger Type: ", p.TriggerType);
-        // TODO objects (maybe be able to drag them into the list? or drag them into a field and click an add button)s
-        p.RewardType = (HVRPuzzle.Reward)EditorGUILayout.EnumPopup("Reward Type: ", p.RewardType);
+
+        // Set puzzle data
+        p.Data.Type = (eType)EditorGUILayout.EnumPopup("Puzzle Type: ", p.Data.Type);
+        ModifyTypeData(p.Data);
+
+        DrawLine();
+
+        // Set trigger data
+        p.Trigger.Type = (eType)EditorGUILayout.EnumPopup("Trigger Type: ", p.Trigger.Type);
+        ModifyTypeData(p.Trigger);
+
+        DrawLine();
+
+        // pick reward sub-type
+        ModifyRewardData(p.Reward);
+    }
+
+    private void ModifyTypeData(Puzzle.TypeData data)
+    {
+        switch (data.Type)
+        {
+            case eType.Physical:
+                data.PhysicalSubType = (ePhysicalType)EditorGUILayout.EnumPopup("  Physical: ", data.PhysicalSubType);
+
+                // break physical type down into specifics
+                switch (data.PhysicalSubType)
+                {
+                    case ePhysicalType.PlayerLocation:
+                        data.PlayerCollider = (Collider)EditorGUILayout.ObjectField("  Collider: ", data.PlayerCollider, typeof(Collider), false);
+                        data.PlayerPosition = EditorGUILayout.Vector3Field("  Position:", data.PlayerPosition);
+                        break;
+
+                    case ePhysicalType.ItemLocation:
+                        data.ItemCollider = (Collider)EditorGUILayout.ObjectField("  Collider: ", data.ItemCollider, typeof(Collider), false);
+                        data.ItemPosition = EditorGUILayout.Vector3Field("  Position:", data.ItemPosition);
+                        break;
+
+                    case ePhysicalType.PlayerStateChange:
+                        // show enum field for data.PlayerState
+                        break;
+
+                    case ePhysicalType.ItemStateChange:
+                        // show enum field for data.ItemState
+                        break;
+                }
+
+                break;
+
+            case eType.Temporal:
+                data.TemporalSubType = (eTemporalType)EditorGUILayout.EnumPopup("  Temporal: ", data.TemporalSubType);
+
+                // break temporal type down into specifics
+                switch (data.TemporalSubType)
+                {
+                    case eTemporalType.TimeOfDay:
+                        data.TemporalTimeOfDay = (TimeOfDay)EditorGUILayout.EnumPopup("  Time of Day: ", data.TemporalTimeOfDay);
+                        break;
+
+                    case eTemporalType.Duration:
+                        data.TemporalDuration = EditorGUILayout.FloatField("  Duration: ", data.TemporalDuration);
+                        break;
+                }
+                break;
+        }
+    }
+
+    private void ModifyRewardData(Puzzle.RewardData data)
+    {
+        data.RewardType = (eReward)EditorGUILayout.EnumPopup("Reward Type: ", data.RewardType);
+
+        switch (data.RewardType)
+        {
+            case eReward.Currency:
+                data.RewardAmount = EditorGUILayout.IntField("  Amount: ", data.RewardAmount);
+                break;
+
+            case eReward.Resource:
+                data.RewardObject = (GameObject)EditorGUILayout.ObjectField("  Prefab: ", data.RewardObject, typeof(GameObject), false);
+                data.RewardAmount = EditorGUILayout.IntField("  Amount: ", data.RewardAmount);
+                break;
+
+            case eReward.Seed:
+                data.RewardObject = (GameObject)EditorGUILayout.ObjectField("  Prefab: ", data.RewardObject, typeof(GameObject), false);
+                data.RewardAmount = EditorGUILayout.IntField("  Amount: ", data.RewardAmount);
+                break;
+
+            case eReward.Tool:
+                data.RewardObject = (GameObject)EditorGUILayout.ObjectField("  Prefab: ", data.RewardObject, typeof(GameObject), false);
+                break;
+        }
     }
 
     // load the saved puzzle collection asset

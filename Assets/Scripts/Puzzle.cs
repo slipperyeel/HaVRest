@@ -4,29 +4,53 @@ using System.Collections.Generic;
 
 namespace HVRPuzzle
 {
-    public enum Type { Temporal, Physical }; // need to be able to set sub-types, such as temporal length and physical trigger object
-    public enum Reward { Currency, Resource, Tool, Seed }; // need to be able to set sub-types, such as amount of currency/resource and type of tool/seed
+    public enum eType { Temporal, Physical };
+    public enum eReward { Currency, Resource, Tool, Seed };
+
+    public enum eTemporalType { TimeOfDay, Duration };
+    public enum ePhysicalType { PlayerLocation, ItemLocation, PlayerStateChange, ItemStateChange };
 
     [System.Serializable]
     public class Puzzle
     {
+        public class RewardData
+        {
+            public eReward RewardType;
+            public int RewardAmount;
+            public GameObject RewardObject;
+        }
+
+        public class TypeData
+        {
+            public eType Type;
+
+            public eTemporalType TemporalSubType;
+            public TimeOfDay TemporalTimeOfDay;
+            public float TemporalDuration;
+
+            public ePhysicalType PhysicalSubType;
+            public Collider PlayerCollider;
+            public Vector3 PlayerPosition;
+            public Collider ItemCollider;
+            public Vector3 ItemPosition;
+            //public ePlayerState PlayerState;
+            //public eItemState ItemState;
+        }
+
         private string mName;
         public string Name { get { return mName; } set { mName = value; } }
 
         private string mDesc;
         public string Description { get { return mDesc; } set { mDesc = value; } }
 
-        private Type mTriggerType;
-        public Type TriggerType { get { return mTriggerType; } set { mTriggerType = value; } }
+        private RewardData mReward;
+        public RewardData Reward { get { return mReward; } }
 
-        private Type mPuzzleType;
-        public Type PuzzleType { get { return mPuzzleType; } set { mPuzzleType = value; } }
+        private TypeData mData;
+        public TypeData Data { get { return mData; } }
 
-        private List<GameObject> mObjects;
-        public List<GameObject> Objects { get { return mObjects; } }
-
-        private Reward mRewardType;
-        public Reward RewardType { get { return mRewardType; } set { mRewardType = value; } }
+        private TypeData mTrigger;
+        public TypeData Trigger { get { return mTrigger; } }
 
         private bool mIsActive;
         public bool IsActive { get { return mIsActive; } set { mIsActive = value; } }
@@ -35,18 +59,27 @@ namespace HVRPuzzle
         {
             mName = "None";
             mDesc = "None";
-            mObjects = new List<GameObject>();
+
+            mReward = new RewardData();
+            mTrigger = new TypeData();
+            mData = new TypeData();
+
             mIsActive = false;
         }
 
-        public Puzzle( Type trigger, Type puzzle, Reward reward, string name = "None", string desc = "None")
+        public Puzzle( eType trigger, eType puzzle, eReward reward, string name = "None", string desc = "None")
         {
             mName = name;
             mDesc = desc;
-            mTriggerType = trigger;
-            mPuzzleType = puzzle;
-            mObjects = new List<GameObject>();
-            mRewardType = reward;
+
+            mReward = new RewardData();
+            mTrigger = new TypeData();
+            mData = new TypeData();
+
+            mReward.RewardType = reward;
+            mTrigger.Type = trigger;
+            mData.Type = puzzle;
+
             mIsActive = false;
         }
     }
