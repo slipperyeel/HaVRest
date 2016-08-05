@@ -35,7 +35,7 @@ public class IslandGenerator : MonoBehaviour
 
         IslandData data = new IslandData(_id, realSize, posWithOffset, ref tData);
         PopulateTiles(ref data, posWithOffset, heights, realSize);
-        //DebugDrawGrid(posWithOffset, realSize, heights);
+        DebugDrawGrid(posWithOffset, realSize, heights);
 
         PlaceDetails(heights, realSize, ref data, seed);
 

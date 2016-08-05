@@ -38,6 +38,7 @@ public class WorldGenerator : MonoBehaviour
 		{
 			WorldSeed = UnityEngine.Random.Range(0, int.MaxValue);
 		}
+
 		GenerateWorld(WorldSeed);
 
 		_currentIsland = _islands[0];

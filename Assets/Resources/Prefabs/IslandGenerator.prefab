@@ -51,16 +51,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d85dae86ae024f2ba1c302823c078e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _terrainPrefab: {fileID: 1000013406403190, guid: 5b67faf678e854a8fbb12ce30f10b6fa,
-    type: 2}
   _detailObjects:
-  - {fileID: 1000012499361184, guid: 31b340c7d60044fee87a18b7d9e23662, type: 2}
-  - {fileID: 1000013827704720, guid: 114279ac13b754a3996004ba752d3266, type: 2}
-  - {fileID: 1000012394176470, guid: 99d626e90328146d4af1bd6fd4c7ead9, type: 2}
-  - {fileID: 1000011978275172, guid: bf9636d4dfe6d4fe1aeb3b405bad0bae, type: 2}
-  - {fileID: 1000010501840294, guid: 26f80cdbbcb1a43ff987c71151d08172, type: 2}
-  - {fileID: 1000014077639280, guid: 8f9053a5be5ad4abf8a6156f57d16034, type: 2}
-  - {fileID: 1000012647057590, guid: 8dd7d7dd2cb5243e4a70c0eb71d105fe, type: 2}
-  - {fileID: 1000012078886538, guid: b254577a552884e03ac3a51ca9a5b606, type: 2}
-  - {fileID: 1000012410176476, guid: fedb43454f27f4be4af447f6647b04f4, type: 2}
-  - {fileID: 1000012072282202, guid: a584be8f758514978ae8c920dafe9568, type: 2}
+  - {fileID: 1000012499361184, guid: d0bc91e35722a5b488191dbbd760e98a, type: 2}
+  - {fileID: 1000013827704720, guid: b6cea4139e4b6c744b3ef76253775c60, type: 2}
+  - {fileID: 1000012394176470, guid: 74a50b9414bb14c4db3ef555aba50d49, type: 2}
+  - {fileID: 1000011978275172, guid: 097858c84f2c0b54297673faee57cff6, type: 2}
+  - {fileID: 1000014077639280, guid: 6cd1bcd667e06424ca0ff75b72d78653, type: 2}
+  - {fileID: 1000012078886538, guid: 85b3f5ee0389b02429b38a7310715922, type: 2}
+  - {fileID: 1000012410176476, guid: 0b43fead00abb0b468e18cd3000768a2, type: 2}

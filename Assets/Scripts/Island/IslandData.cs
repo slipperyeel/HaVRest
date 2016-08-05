@@ -42,6 +42,8 @@ public class IslandData
 		if (t.OccupyingObject == null)
 		{
 			Vector3 terrainPos = t.TerrainPosition;
+            terrainPos.x += 0.5f;
+            terrainPos.z += 0.5f;
 			obj.transform.position = terrainPos;
 
 			t.SetOccupyingObject(obj);
