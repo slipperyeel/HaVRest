@@ -6,7 +6,7 @@ public class WorldGenerator : MonoBehaviour
 {
 	public static WorldGenerator Instance;
 
-	public enum IslandSize { Small = 64, Medium = 128, Large = 256 };
+	public enum IslandSize { Small = 128, Medium = 256, Large = 512 };
 
 	[SerializeField]
 	private GameObject _islandGenPrefab;
