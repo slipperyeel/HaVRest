@@ -55,8 +55,8 @@ public class IslandGenerator : MonoBehaviour
             for (int j = 0; j < size; ++j)
             {
                 float height = heights[j, i] * 10f; // 10 is the terrain height scale
-                Debug.DrawLine(new Vector3(islandPos.x + i, height, islandPos.z + j), new Vector3(islandPos.x + i, height, islandPos.z + j + 1), Color.black, 10f);
-                Debug.DrawLine(new Vector3(islandPos.x + i, height, islandPos.z + j), new Vector3(islandPos.x + i + 1, height, islandPos.z + j), Color.black, 10f);
+                Debug.DrawLine(new Vector3(islandPos.x + i, height, islandPos.z + j), new Vector3(islandPos.x + i, height, islandPos.z + j + 1), Color.black, 300f);
+                Debug.DrawLine(new Vector3(islandPos.x + i, height, islandPos.z + j), new Vector3(islandPos.x + i + 1, height, islandPos.z + j), Color.black, 300f);
             }
         }
     }
@@ -102,7 +102,6 @@ public class IslandGenerator : MonoBehaviour
         {
             SplatPrototype sp = new SplatPrototype();
             sp.texture = splatTextures[i];
-            Debug.Log(sp.texture);
             newProtos[i] = sp;
         }
 

@@ -70,6 +70,11 @@ public class IslandData
 		SetHeights(terrainX, terrainY, amount);
 	}
 
+    public Tile GetTile(int x, int y)
+    {
+        return _tiles[x, y];
+    }
+
 	private void SetHeights(int x, int y, float amount)
 	{
 		float[,] currentHeights = _data.GetHeights(y, x, 1, 1);

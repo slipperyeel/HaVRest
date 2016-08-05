@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class WorldGenerator : MonoBehaviour
 {
 	public static WorldGenerator Instance;
 
+    public event EventHandler OnIslandReady;
 	public enum IslandSize { Small = 128, Medium = 256, Large = 512 };
 
 	[SerializeField]
@@ -20,7 +22,9 @@ public class WorldGenerator : MonoBehaviour
 	public float LgIslandChance;
 
 	private List<IslandData> _islands;
+
 	private IslandData _currentIsland;
+    public IslandData CurrentIsland { get { return _currentIsland; } }
 
 	void Awake()
 	{
@@ -42,6 +46,12 @@ public class WorldGenerator : MonoBehaviour
 		GenerateWorld(WorldSeed);
 
 		_currentIsland = _islands[0];
+
+        // for testing input tester thing
+        if (OnIslandReady != null)
+        {
+            OnIslandReady(this, EventArgs.Empty);
+        }
 	}
 
 	private void GenerateWorld(int worldSeed)
