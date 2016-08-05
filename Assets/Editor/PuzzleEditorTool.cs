@@ -5,7 +5,7 @@ using HVRPuzzle;
 
 public class PuzzleEditorTool : EditorWindow
 {
-    private string kDirectoryPath = "Assets/Editor/Data/";
+    private string kDirectoryPath = "Assets/Resources/PuzzleData/";
     private string kAssetName = "PuzzleCollection";
 
     private PuzzleCollectionData mPuzzleData = null;
@@ -229,6 +229,7 @@ public class PuzzleEditorTool : EditorWindow
     {
         string totalPath = string.Format("{0}{1}.asset", kDirectoryPath, kAssetName);
         mPuzzleData = (PuzzleCollectionData)AssetDatabase.LoadAssetAtPath(totalPath, typeof(PuzzleCollectionData));
+        Debug.LogFormat("data: {0}, puzzle count: {1}", mPuzzleData, mPuzzleData.PuzzleCollection.Count);
 
         if (mPuzzleData == null)
         {
@@ -242,6 +243,7 @@ public class PuzzleEditorTool : EditorWindow
     {
         if (mPuzzleData != null)
         {
+            EditorUtility.SetDirty(mPuzzleData);
             AssetDatabase.SaveAssets();
             Debug.Log("Puzzle data saved.");
         }

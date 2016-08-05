@@ -37,21 +37,27 @@ namespace HVRPuzzle
             //public eItemState ItemState;
         }
 
+        [SerializeField]
         private string mName;
         public string Name { get { return mName; } set { mName = value; } }
 
+        [SerializeField]
         private string mDesc;
         public string Description { get { return mDesc; } set { mDesc = value; } }
 
+        [SerializeField]
         private RewardData mReward;
         public RewardData Reward { get { return mReward; } }
 
+        [SerializeField]
         private TypeData mData;
         public TypeData Data { get { return mData; } }
 
+        [SerializeField]
         private TypeData mTrigger;
         public TypeData Trigger { get { return mTrigger; } }
 
+        [SerializeField]
         private bool mIsActive;
         public bool IsActive { get { return mIsActive; } set { mIsActive = value; } }
 

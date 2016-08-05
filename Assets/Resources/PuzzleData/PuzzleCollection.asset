@@ -11,3 +11,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71111082660860b45bc62ad94d8c28b9, type: 3}
   m_Name: PuzzleCollection
   m_EditorClassIdentifier: 
+  mCollection:
+  - mName: None
+    mDesc: None
+    mIsActive: 0
+  - mName: None v2
+    mDesc: None
+    mIsActive: 0
