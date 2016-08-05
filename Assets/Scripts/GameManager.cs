@@ -12,6 +12,9 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private GameObject playerPrefab;
 
+    [SerializeField]
+    private Transform spawnPoint;
+
     public bool TestSaveTrigger = false;
 
 	void Start ()
@@ -26,7 +29,7 @@ public class GameManager : Singleton<GameManager>
             if (DataManager.Instance.IsFirstBoot)
             {
                 Debug.Log("Is First Boot.");
-                DataManager.Instance.SpawnObject<Player, PlayerMomento>(playerPrefab, this.transform.position, this.transform.rotation, Vector3.one);
+                DataManager.Instance.SpawnObject<Player, PlayerMomento>(playerPrefab, spawnPoint.position, spawnPoint.rotation, Vector3.one);
             }
         });
     }
