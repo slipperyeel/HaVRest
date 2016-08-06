@@ -179,18 +179,49 @@ public class IslandGenerator : MonoBehaviour
 
     private void PopulateTiles(ref IslandData data, Vector3 terrainPos, float[,] heights, int size)
     {
+        GameObject container = new GameObject();
+        container.name = "Tile Colliders";
+        container.transform.position = Vector3.zero;
+        GameObject tileObject = null;
+        Tile t = null;
+
         for (int i = 0; i < size; ++i)
         {
             for (int j = 0; j < size; ++j)
             {
                 float height = heights[j, i];
-                int terrainX, terrainY;
-                GetWorldTerrainPosition(terrainPos, i, j, out terrainX, out terrainY);
 
-                Tile t = new Tile(i, j, height, terrainX, terrainY);
+                // don't put tiles on the bottom most layer
+                if (height > 0f)
+                {
+                    int terrainX, terrainY;
+                    GetWorldTerrainPosition(terrainPos, i, j, out terrainX, out terrainY);
+
+                    // create physical tile
+                    tileObject = CreateTileObject();
+                    tileObject.name = string.Format("Tile[{0},{1}]", i, j);
+                    t = tileObject.AddComponent<Tile>();
+                    t.Init(i, j, height, terrainX, terrainY);
+                    tileObject.transform.position = t.TerrainPosition + new Vector3(0.5f, 0.05f, 0.5f);
+
+                    // add to parent container for a neat hierarchy
+                    tileObject.transform.SetParent(container.transform);
+                }
+
+                // need to fill the island data with values, even if no tile is actually created
                 data.AddTile(t, i, j);
             }
         }
+    }
+
+    private GameObject CreateTileObject()
+    {
+        GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        obj.transform.localScale = new Vector3(1f, 0.1f, 1f);
+        Destroy(obj.GetComponent<MeshRenderer>());
+        Destroy(obj.GetComponent<MeshFilter>());
+
+        return obj;
     }
 
     private float RoundValue(float value, int numHeights)
