@@ -8,13 +8,14 @@ public class IslandGenerator : MonoBehaviour
     public enum DetailType { Tree_Pine_0, Tree_Pine_1, Tree_Pine_2, Rock_Medium, Flower_Bud, Grass, Fern };
 
     public GameObject[] _detailObjects;
+    public bool PaintIslandsFromHeight = false;
 
     public static int IslandID = 0;
     private int _id;
     private GameObject _currentTerrain;
     private SplatPrototype[] _terrainSplats;
 
-    public IslandData Generate(WorldGenerator.IslandSize size, int seed, Vector3 position, int numHeightLevels, bool fromTool = false)
+    public IslandData Generate(WorldGenerator.IslandSize size, int seed, Vector3 position, float[][] biomeNoise, int numHeightLevels, bool fromTool = false)
     {
         if (_terrainSplats == null)
         {
@@ -26,25 +27,32 @@ public class IslandGenerator : MonoBehaviour
         PerlinGenerator islandNoiseGen = new PerlinGenerator();
         int octaves = 5;
         float[][] noise = islandNoiseGen.Generate(seed, octaves, realSize);
-        float[,] heights = CreateHeightMap(noise, realSize, numHeightLevels);
+        float[,] heights = CreateHeightMap(noise, realSize, biomeNoise, numHeightLevels);
 
-        Vector3 posWithOffset = new Vector3(position.x - (realSize / 2f), position.y, position.z - (realSize / 2f));
+        //Vector3 posWithOffset = new Vector3(position.x - (realSize / 2f), position.y, position.z - (realSize / 2f));
+        Vector3 posWithOffset = position;
 
-        TerrainData tData = ApplyDataToTerrain(ref _currentTerrain, heights, realSize, numHeightLevels, fromTool);
+        TerrainData tData = ApplyDataToTerrain(ref _currentTerrain, heights, realSize, biomeNoise, numHeightLevels, fromTool);
         _currentTerrain.transform.position = posWithOffset;
 
         IslandData data = new IslandData(_id, realSize, posWithOffset, ref tData);
         PopulateTiles(ref data, posWithOffset, heights, realSize);
-        DebugDrawGrid(posWithOffset, realSize, heights);
+        //DebugDrawGrid(posWithOffset, realSize, heights);
 
-        PlaceDetails(heights, realSize, ref data, seed);
+        PlaceDetails(heights, realSize, ref data, seed, biomeNoise);
 
         return data;
     }
 
     public GameObject Generate(WorldGenerator.IslandSize size, int seed, int numHeightLevels)
     {
-        Generate(size, seed, Vector3.zero, numHeightLevels, true);
+        //fake climate data
+        PerlinGenerator climateNoiseGen = new PerlinGenerator();
+        int octaves = 9;
+        float[][] biomeNoise = climateNoiseGen.Generate(seed, octaves, (int)size);
+
+        // generate island
+        Generate(size, seed, Vector3.zero, biomeNoise, numHeightLevels, true);
         return _currentTerrain;
     }
 
@@ -61,7 +69,7 @@ public class IslandGenerator : MonoBehaviour
         }
     }
 
-    private TerrainData ApplyDataToTerrain(ref GameObject terrain, float[,] heights, int size, int numHeights, bool fromTool)
+    private TerrainData ApplyDataToTerrain(ref GameObject terrain, float[,] heights, int size, float[][] biomeNoise, int numHeights, bool fromTool)
     {
         TerrainData data = new TerrainData();
 
@@ -78,7 +86,7 @@ public class IslandGenerator : MonoBehaviour
         }
 
         data.splatPrototypes = _terrainSplats;
-        ApplyTextures(heights, ref data, size, numHeights);
+        ApplyTextures(heights, ref data, size, biomeNoise, numHeights);
 
         terrain = Terrain.CreateTerrainGameObject(data);
         terrain.name = string.Format("island_{0}", islandID);
@@ -108,7 +116,7 @@ public class IslandGenerator : MonoBehaviour
         return newProtos;
     }
 
-    private void ApplyTextures(float[,] heights, ref TerrainData data, int size, int numHeights)
+    private void ApplyTextures(float[,] heights, ref TerrainData data, int size, float[][] biomeNoise, int numHeights)
     {
         float[,,] splatmapData = new float[size, size, _terrainSplats.Length];
         float levelIncrement = 1 / (float)numHeights;
@@ -117,34 +125,73 @@ public class IslandGenerator : MonoBehaviour
         {
             for (int j = 0; j < size; j++)
             {
-                float height = heights[j, i];
+                if (PaintIslandsFromHeight)
+                {
+                    // color the islands by their heights
+                    float height = heights[j, i];
 
-                // the last index for splatmapData is the number of the texture on the terrain prefab
-                // the value that that index is being set to seems to be regular alpha
-                // set it based on terrain height
+                    // the last index for splatmapData is the number of the texture on the terrain prefab
+                    // the value that that index is being set to seems to be regular alpha
+                    // set it based on terrain height
 
-                // also need a better way to do this
-                if (height <= levelIncrement * 0f)
-                {
-                    splatmapData[j, i, 0] = 1; // dirt
-                }
-                else if (height <= levelIncrement * 1f)
-                {
-                    splatmapData[j, i, 2] = 1; // dark grass
-                }
-                else if (height <= levelIncrement * 2f)
-                {
-                    splatmapData[j, i, 1] = 1; // normal grass
-                }
-                else if (height <= levelIncrement * 3f)
-                {
-                    splatmapData[j, i, 3] = 1; // light grass
+                    // also need a better way to do this
+                    if (height <= levelIncrement * 0f)
+                    {
+                        splatmapData[j, i, 0] = 1; // dirt
+                    }
+                    else if (height <= levelIncrement * 1f)
+                    {
+                        splatmapData[j, i, 2] = 1; // dark grass
+                    }
+                    else if (height <= levelIncrement * 2f)
+                    {
+                        splatmapData[j, i, 1] = 1; // normal grass
+                    }
+                    else if (height <= levelIncrement * 3f)
+                    {
+                        splatmapData[j, i, 3] = 1; // light grass
+                    }
+                    else
+                    {
+                        splatmapData[j, i, 4] = 1; // dead grass
+                    }
                 }
                 else
                 {
-                    splatmapData[j, i, 4] = 1; // dead grass
-                }
+                    // use the global world climate noise to paint the terrain
+                    float noiseValue = biomeNoise[j][i];
 
+                    if (noiseValue < WorldGenerator.Instance.DesertThreshold)
+                    {
+                        splatmapData[j, i, 0] = 1; // dirt
+                    }
+                    else if (noiseValue < WorldGenerator.Instance.SavannahThreshold)
+                    {
+                        splatmapData[j, i, 2] = 1; // dark grass
+                    }
+                    else if (noiseValue < WorldGenerator.Instance.PlainsThreshold)
+                    {
+                        splatmapData[j, i, 1] = 1; // normal grass
+                    }
+                    else if (noiseValue < WorldGenerator.Instance.ForestThreshold)
+                    {
+                        splatmapData[j, i, 3] = 1; // light grass
+                    }
+                    else
+                    {
+                        splatmapData[j, i, 4] = 1; // dead grass
+                    }
+
+                    // for now, make the texture white so that I can tell what's under water
+                    if (heights[j, i] <= 0f)
+                    {
+                        splatmapData[j, i, 0] = 0;
+                        splatmapData[j, i, 1] = 0;
+                        splatmapData[j, i, 2] = 0;
+                        splatmapData[j, i, 3] = 0;
+                        splatmapData[j, i, 4] = 0;
+                    }
+                }
             }
         }
 
@@ -152,7 +199,7 @@ public class IslandGenerator : MonoBehaviour
         data.SetAlphamaps(0, 0, splatmapData);
     }
 
-    private float[,] CreateHeightMap(float[][] noise, int size, int heightLevels)
+    private float[,] CreateHeightMap(float[][] noise, int size, float[][] biomeNoise, int heightLevels)
     {
         float[,] heights = new float[size, size];
 
@@ -165,6 +212,14 @@ public class IslandGenerator : MonoBehaviour
                 float mixedValue = noiseValue - maskValue;
 
                 heights[i, j] = RoundValue(mixedValue, heightLevels);
+
+                // test
+                float biomeNoiseValue = biomeNoise[i][j];
+                if (biomeNoiseValue < WorldGenerator.Instance.DesertThreshold ||
+                    (biomeNoiseValue >= WorldGenerator.Instance.SavannahThreshold && biomeNoiseValue < WorldGenerator.Instance.PlainsThreshold))
+                {
+                    heights[i, j] *= 0.25f;
+                }
             }
         }
 
@@ -252,7 +307,7 @@ public class IslandGenerator : MonoBehaviour
         return Mathf.Sqrt((deltaX * deltaX) + (deltaY * deltaY));
     }
 
-    private void PlaceDetails(float[,] heights, int size, ref IslandData data, int seed)
+    private void PlaceDetails(float[,] heights, int size, ref IslandData data, int seed, float[][] biomeNoise)
     {
         System.Random prng = new System.Random(seed);
         int noiseSeed = prng.Next();
@@ -268,10 +323,22 @@ public class IslandGenerator : MonoBehaviour
                 if (height > 0f)
                 {
                     float value = noise[i][j];
-                    if (value > 0.85f)
+                    float biomeNoiseValue = biomeNoise[i][j];
+                    if ((biomeNoiseValue < WorldGenerator.Instance.ForestThreshold && value > 0.8f) || value > 0.85f)
                     {
+                        // trees
+                        if (biomeNoiseValue < WorldGenerator.Instance.DesertThreshold)
+                        {
+                            continue;
+                        }
+
                         if (value > 0.95f)
                         {
+                            if (biomeNoiseValue < WorldGenerator.Instance.SavannahThreshold)
+                            {
+                                continue;
+                            }
+
                             detail = _detailObjects[(int)DetailType.Tree_Pine_0];
                         }
                         else if (value > 0.9f)
@@ -285,18 +352,42 @@ public class IslandGenerator : MonoBehaviour
                     }
                     else if (value > 0.75f)
                     {
+                        // flowers
+                        if (biomeNoiseValue < WorldGenerator.Instance.SavannahThreshold)
+                        {
+                            continue;
+                        }
+
                         detail = _detailObjects[(int)DetailType.Flower_Bud];
                     }
                     else if (value > 0.68f)
                     {
+                        // grass
+                        if (biomeNoiseValue < WorldGenerator.Instance.DesertThreshold)
+                        {
+                            continue;
+                        }
+
                         detail = _detailObjects[(int)DetailType.Grass];
                     }
                     else if (value > 0.65f)
                     {
+                        // ferns
+                        if (biomeNoiseValue < WorldGenerator.Instance.PlainsThreshold)
+                        {
+                            continue;
+                        }
+
                         detail = _detailObjects[(int)DetailType.Fern];
                     }
                     else if (value < 0.025f)
                     {
+                        // rocks
+                        if (biomeNoiseValue > WorldGenerator.Instance.PlainsThreshold)
+                        {
+                            continue;
+                        }
+
                         detail = _detailObjects[(int)DetailType.Rock_Medium];
                     }
                     else

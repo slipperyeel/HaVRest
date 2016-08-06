@@ -219,11 +219,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 612c50a1c4ae7463d99952d306158ada, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DesertThreshold: 0.2
+  SavannahThreshold: 0.4
+  PlainsThreshold: 0.6
+  ForestThreshold: 0.8
+  JungleThreshold: 1
   _islandGenPrefab: {fileID: 1000010412077294, guid: 2fd9b790c66c64f3988e42390a0c8205,
     type: 2}
   WorldSeed: 0
-  NumberOfIslands: 1
-  MaxWorldSize: 1
+  NumberOfIslands: 5
+  MaxWorldSize: 1000
   MinNumberOfHeightLevels: 3
   SmIslandChance: 1
   MdIslandChance: 0
