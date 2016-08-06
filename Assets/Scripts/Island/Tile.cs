@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[System.Serializable]
-public class Tile
+public class Tile : MonoBehaviour
 {
 	[SerializeField]
 	private Vector2 _coordinates;
@@ -18,11 +17,11 @@ public class Tile
 
 	// TODO need an item interface to see what item/object is occupying this tile
 
-	public Tile(int x, int y, float height, int z, int w)
-	{
-		_coordinates = new Vector2(x, y);
-		_terrainCoordinates = new Vector3(z, height * 10f, w); // 10f is the terrain height scale factor
-	}
+    public void Init(int x, int y, float height, int z, int w)
+    {
+        _coordinates = new Vector2(x, y);
+        _terrainCoordinates = new Vector3(z, height * 10f, w); // 10f is the terrain height scale factor
+    }
 
 	public void SetOccupyingObject(GameObject obj)
 	{
