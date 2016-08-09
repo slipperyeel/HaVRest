@@ -202,6 +202,12 @@ public class IslandGenerator : MonoBehaviour
                     tileObject.name = string.Format("Tile[{0},{1}]", i, j);
                     t = tileObject.AddComponent<Tile>();
                     t.Init(i, j, height, terrainX, terrainY);
+
+                    // check and set tile attributes
+                    Tile.eSoilType soil = CheckSoilType(terrainPos, data.Data);
+                    Tile.eSoilToughness toughness = CheckSoilToughness((WorldGenerator.IslandSize)size);
+                    t.SetTileType(soil, toughness);
+
                     tileObject.transform.position = t.TerrainPosition + new Vector3(0.5f, 0.05f, 0.5f);
 
                     // add to parent container for a neat hierarchy
@@ -212,6 +218,52 @@ public class IslandGenerator : MonoBehaviour
                 data.AddTile(t, i, j);
             }
         }
+    }
+
+    private Tile.eSoilType CheckSoilType(Vector3 pos, TerrainData data)
+    {
+        Tile.eSoilType soilType = Tile.eSoilType.Dirt;
+        int textureIndex = GetMainTextureIndex(pos, data);
+        switch (textureIndex)
+        {
+            case 0: // dirt
+                soilType = Tile.eSoilType.Dirt;
+                break;
+
+            case 1: // normal grass
+            case 2: // dark grass
+            case 3: // light grass
+                soilType = Tile.eSoilType.Grass;
+                break;
+
+            case 4: // dead grass
+                soilType = Tile.eSoilType.Sand;
+                break;
+        }
+
+        return soilType;
+    }
+
+    // TODO add more factors
+    private Tile.eSoilToughness CheckSoilToughness(WorldGenerator.IslandSize size)
+    {
+        Tile.eSoilToughness toughness = Tile.eSoilToughness.Soft;
+        switch (size)
+        {
+            case WorldGenerator.IslandSize.Small:
+                toughness = Tile.eSoilToughness.Hard;
+                break;
+
+            case WorldGenerator.IslandSize.Medium:
+                toughness = Tile.eSoilToughness.Medium;
+                break;
+
+            case WorldGenerator.IslandSize.Large:
+                toughness = Tile.eSoilToughness.Soft;
+                break;
+        }
+
+        return toughness;
     }
 
     private GameObject CreateTileObject()
@@ -315,6 +367,53 @@ public class IslandGenerator : MonoBehaviour
                 }
             }
         }
+    }
+
+    private Vector3 _pos;
+    private float[,,] _splatmapData;
+
+    // returns an array containing the relative mix of textures
+    // on the main terrain at this world position.
+    // The number of values in the array will equal the number
+    // of textures added to the terrain.
+    private float[] GetTextureMix(Vector3 worldPos, TerrainData _data)
+    {
+        // calculate which splat map cell the worldPos falls within (ignoring y)
+        int mapX = (int)(((worldPos.x - _pos.x) / _data.size.x) * _data.alphamapWidth);
+        int mapZ = (int)(((worldPos.z - _pos.z) / _data.size.z) * _data.alphamapHeight);
+
+        // get the splat data for this cell as a 1x1xN 3d array (where N = number of textures)
+        _splatmapData = _data.GetAlphamaps(mapX, mapZ, 1, 1);
+
+        // extract the 3D array data to a 1D array:
+        float[] cellMix = new float[_splatmapData.GetUpperBound(2) + 1];
+        for (int n = 0; n < cellMix.Length; ++n)
+        {
+            cellMix[n] = _splatmapData[0, 0, n];
+        }
+
+        return cellMix;
+    }
+
+    // returns the zero-based index of the most dominant texture
+    // on the main terrain at this world position.
+    private int GetMainTextureIndex(Vector3 worldPos, TerrainData data)
+    {
+        float[] mix = GetTextureMix(worldPos, data);
+        float maxMix = 0;
+        int maxIndex = 0;
+
+        // loop through each mix value and find the maximum
+        for (int n = 0; n < mix.Length; ++n)
+        {
+            if (mix[n] > maxMix)
+            {
+                maxIndex = n;
+                maxMix = mix[n];
+            }
+        }
+
+        return maxIndex;
     }
 
     // this may come in handy later!
