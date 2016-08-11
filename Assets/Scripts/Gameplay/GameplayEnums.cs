@@ -37,3 +37,11 @@ public enum eResourceType
     Flameable,
     Count = Flameable - 1
 }
+
+public enum eImpactType
+{
+    None = -1,
+    Blunt,
+    Sharp,
+    Pierce
+}
