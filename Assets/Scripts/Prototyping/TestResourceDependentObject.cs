@@ -4,7 +4,7 @@ using System;
 
 public class TestResourceDependentObject : ResourceDependentObject
 {
-    protected override void CheckResourceTriggers()
+    protected override void CheckResourceStoreStatus()
     {
         throw new NotImplementedException();
     }

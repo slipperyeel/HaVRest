@@ -111,7 +111,7 @@ public class SerializableList<T> : ISerializable
 
     public void GetObjectData(SerializationInfo info, StreamingContext context)
     {
-        if (mInternalList != null && mInternalList.Count > 0)
+        if (mInternalList != null)
         {
             info.AddValue(mKeyPrefix + kCountSuffixKey, mInternalList.Count);
             for (int i = 0; i < mInternalList.Count; i++)

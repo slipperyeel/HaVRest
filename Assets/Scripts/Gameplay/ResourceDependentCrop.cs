@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ResourceDependentCrop : ResourceDependentObject 
 {
-    protected override void CheckResourceTriggers()
+    protected override void CheckResourceStoreStatus()
     {
         
     }

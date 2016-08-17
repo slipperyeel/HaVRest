@@ -16,6 +16,5 @@ public class ResourceStore
     public Resource Resource = new Resource();
     public int Capacity = 0;
     public int DepletionRate = 0;
-    public List<int> Thresholds = new List<int>(0);
     public eTemporalTriggerType TimeTrigger = eTemporalTriggerType.None;
 }

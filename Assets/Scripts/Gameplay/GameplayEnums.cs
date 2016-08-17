@@ -27,10 +27,14 @@ public enum eTemporalTriggerOutcome
 
 /// <summary>
 /// Resource Types. These will be paired with a quantity and consumed by resource dependent objects.
+/// Note: We can also use the resource system to do vitals.
 /// </summary>
 public enum eResourceType
 {
     None = -1,
+    Health,
+    Stamina,
+    Heat,
     Water,
     Food,
     Fuel,

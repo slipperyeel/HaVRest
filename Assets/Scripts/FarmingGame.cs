@@ -15,8 +15,8 @@ public class FarmingGame : ISerializable
     private HVRDateTime mDateTime;
     public HVRDateTime DateTime { get { return mDateTime; } }
 
-    private FarmingAdventurer mPlayer;
-    public FarmingAdventurer Player { get { return mPlayer; } }
+    //private FarmingAdventurer mPlayer;
+    //public FarmingAdventurer Player { get { return mPlayer; } }
 
 
     // Data Storage
@@ -47,7 +47,7 @@ public class FarmingGame : ISerializable
         if (!mHasBeenInitialized)
         {
             mDateTime = new HVRDateTime(kInitialHour, kInitialDay, kInitialMonth, kInitlaYear, TimeConstants.SECONDS_PER_HOUR * kInitialHour);
-            mPlayer = new FarmingAdventurer("james", 29);
+            //mPlayer = new FarmingAdventurer("james", 29);
             mHasBeenInitialized = true;
         }
     }
@@ -66,7 +66,7 @@ public class FarmingGame : ISerializable
 
         if (readObj != null)
         {
-            this.mPlayer = readObj.Player;
+            //this.mPlayer = readObj.Player;
             this.mDateTime = readObj.DateTime;
         }
 
@@ -81,17 +81,17 @@ public class FarmingGame : ISerializable
     {
         mHasBeenInitialized = (bool)information.GetValue(kInitializationFlagKey, typeof(bool));
         mDateTime = new HVRDateTime(information, context);
-        mPlayer = new FarmingAdventurer(information, context);
+        //mPlayer = new FarmingAdventurer(information, context);
     }
 
     public void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         info.AddValue(kInitializationFlagKey, mHasBeenInitialized);
 
-        if (mDateTime != null && mPlayer != null)
+        if (mDateTime != null)// && mPlayer != null)
         {
             mDateTime.GetObjectData(info, context);
-            mPlayer.GetObjectData(info, context);
+            //mPlayer.GetObjectData(info, context);
         }
     }
 }

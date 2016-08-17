@@ -30,6 +30,11 @@ public abstract class ResourceDependentObject : MonoBehaviour
         }
     }
 
+    protected virtual void Update()
+    {
+        CheckResourceStoreStatus();
+    }
+
     /// <summary>
     /// Consume a resource object.
     /// </summary>
@@ -97,5 +102,5 @@ public abstract class ResourceDependentObject : MonoBehaviour
         }
     }
 
-    protected abstract void CheckResourceTriggers();
+    protected abstract void CheckResourceStoreStatus();
 }
