@@ -10,7 +10,7 @@ public class TestSaveLoad : MonoBehaviour
     {
         if (Load)
         {
-            DataManager.Instance.LoadGameData();
+            DataManager.Instance.LoadGameData(null);
         }
     }
 }

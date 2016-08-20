@@ -12,20 +12,26 @@ public class DataManager : Singleton<DataManager>
 {
     private List<GameObjectMomento> mMomentos;
     private Dictionary<object, GameObjectMomento> mDataDictionary;
-	private static readonly string PREFABS_PATH = "Prefabs/";
-	private static readonly string SAVEFILE_NAME = "SaveData.dat";
+    private static readonly string PREFABS_PATH = "Prefabs/";
+    private static readonly string SAVEFILE_NAME = "SaveData.dat";
     private bool mIsSaving = false;
-	private bool mIsLoading = false;
+    private bool mIsLoading = false;
     private bool mIsDataLoaded = false;
+    private bool mIsFirstBoot = false;
 
-	public bool IsLoading
-	{
-		get { return mIsLoading; }
-	}
+    public bool IsLoading
+    {
+        get { return mIsLoading; }
+    }
 
     public bool IsDataLoaded
     {
         get { return mIsDataLoaded; }
+    }
+
+    public bool IsFirstBoot
+    {
+        get { return mIsFirstBoot; }
     }
 
     protected void Awake()
@@ -70,7 +76,7 @@ public class DataManager : Singleton<DataManager>
 	            // Add it to the momento list
 	            object mObj = Activator.CreateInstance(typeof(M));
 	            M momento = (M)Convert.ChangeType(mObj, typeof(M));
-
+                Debug.Log(momento);
 				momento.UpdateMomentoData(spawnObj, prefab.name);
 	            mMomentos.Add(momento);
                 mDataDictionary.Add(spawnObj, momento);
@@ -144,19 +150,19 @@ public class DataManager : Singleton<DataManager>
         mIsSaving = false;
     }
 
-    public void LoadGameData()
+    public void LoadGameData(Action onDataLoadedCb)
     {
         if (!mIsDataLoaded)
         {
             if (!mIsLoading && !mIsSaving)
             {
                 mIsLoading = true;
-                StartCoroutine(DoLoad());
+                StartCoroutine(DoLoad(onDataLoadedCb));
             }
         }
     }
 
-    private IEnumerator DoLoad()
+    private IEnumerator DoLoad(Action onDataLoadedCb)
     {
         if (System.IO.File.Exists(Application.persistentDataPath + "/" + SAVEFILE_NAME))
         {
@@ -168,17 +174,9 @@ public class DataManager : Singleton<DataManager>
 
             if (mMomentos != null && mMomentos.Count > 0)
             {
-
-                Debug.Log("Loading: " + mMomentos.Count + " Objects");
-
                 for (int i = 0; i < mMomentos.Count; i++)
-                {
+                { 
                     GameObject loadedObject = (GameObject)Resources.Load<GameObject>(PREFABS_PATH + mMomentos[i].PrefabName);
-
-                    if (!mDataDictionary.ContainsKey(loadedObject))
-                    {
-                        mDataDictionary.Add(loadedObject, mMomentos[i]);
-                    }
 
                     yield return null;
 
@@ -189,15 +187,32 @@ public class DataManager : Singleton<DataManager>
 
                         yield return null;
                     }
+
+                    if (!mDataDictionary.ContainsKey(loadedObject))
+                    {
+                        mDataDictionary.Add(loadedObject, mMomentos[i]);
+                    }
                 }
             }
 
             fs.Close();
 
+            mIsFirstBoot = false;
+
+            if (onDataLoadedCb != null)
+            {
+                onDataLoadedCb();
+            }
+
             Debug.Log("Game Data Loaded");
         }
         else
         {
+            if (onDataLoadedCb != null)
+            {
+                mIsFirstBoot = true;
+                onDataLoadedCb();
+            }
             Debug.Log("No save file exists.");
         }
 

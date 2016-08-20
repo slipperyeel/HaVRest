@@ -29,7 +29,7 @@ public class GameObjectMomento
         get { return mIsEnabled; }
     }
 
-    private string mPrefabName;
+    protected string mPrefabName;
     public string PrefabName
     {
         get { return mPrefabName; }
@@ -53,16 +53,20 @@ public class GameObjectMomento
 
     public virtual void UpdateMomentoData(object obj, string prefabName)
     {
+
         if (obj != null)
 		{
 			GameObject go = (GameObject)obj;
+            Debug.Log(go.name);
             if (go != null)
             {
+
                 mPosition = new SerializeV3(go.transform.position);
                 mRotation = new SerializeQ(go.transform.rotation);
                 mScale = new SerializeV3(go.transform.localScale);
 				mIsEnabled = go.activeSelf;
                 mPrefabName = prefabName;
+                Debug.Log("mPosition: " + mPosition.x);
             }
         }
     }
@@ -74,6 +78,7 @@ public class GameObjectMomento
             GameObject go = (GameObject)obj;
             if (go != null)
             {
+                Debug.Log(this.mPosition.ToVector3());
                 go.transform.position = this.mPosition.ToVector3();
                 go.transform.rotation = this.mRotation.ToQuaternion();
                 go.transform.localScale = this.mScale.ToVector3();
