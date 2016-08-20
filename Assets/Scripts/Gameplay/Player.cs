@@ -21,6 +21,10 @@ public class Player : ResourceDependentObject
     [SerializeField]
     private int sMinHeatFreezing = 30;
 
+    [SerializeField]
+    private Backpack mBackPack;
+    public Backpack  BackPack { get { return mBackPack; } set { mBackPack = value; } }
+
     protected override void Awake()
     {
         base.Awake();

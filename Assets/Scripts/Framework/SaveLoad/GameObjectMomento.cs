@@ -66,7 +66,6 @@ public class GameObjectMomento
                 mScale = new SerializeV3(go.transform.localScale);
 				mIsEnabled = go.activeSelf;
                 mPrefabName = prefabName;
-                Debug.Log("mPosition: " + mPosition.x);
             }
         }
     }
@@ -78,7 +77,6 @@ public class GameObjectMomento
             GameObject go = (GameObject)obj;
             if (go != null)
             {
-                Debug.Log(this.mPosition.ToVector3());
                 go.transform.position = this.mPosition.ToVector3();
                 go.transform.rotation = this.mRotation.ToQuaternion();
                 go.transform.localScale = this.mScale.ToVector3();
