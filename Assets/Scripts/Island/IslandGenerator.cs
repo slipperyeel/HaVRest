@@ -13,8 +13,17 @@ public class IslandGenerator : MonoBehaviour
     private int _id;
     private GameObject _currentTerrain;
     private SplatPrototype[] _terrainSplats;
+	private eBiome[,] _biomeTable = new eBiome[,]
+	{
+		//     dry             mild           normal          damp           wet
+		{ eBiome.Desert, eBiome.Savannah, eBiome.Plains, eBiome.Swamp, eBiome.Jungle },  // hot
+		{ eBiome.Desert, eBiome.Savannah, eBiome.Plains, eBiome.Swamp, eBiome.Swamp },    // warm
+		{ eBiome.Savannah, eBiome.Plains, eBiome.Plains, eBiome.Forest, eBiome.Forest },  // normal
+		{ eBiome.Plains, eBiome.Plains, eBiome.Plains, eBiome.Forest, eBiome.Forest   },  // cool
+		{ eBiome.Tundra, eBiome.Tundra, eBiome.Plains, eBiome.Plains, eBiome.Plains   }  // cold
+	};
 
-    public IslandData Generate(WorldGenerator.IslandSize size, int seed, Vector3 position, int numHeightLevels, bool fromTool = false)
+	public IslandData Generate(WorldGenerator.IslandSize size, int seed, Vector3 position, float[][] moistureNoise, float[][] tempNoise, int numHeightLevels, bool fromTool = false)
     {
         if (_terrainSplats == null)
         {
@@ -34,7 +43,7 @@ public class IslandGenerator : MonoBehaviour
         _currentTerrain.transform.position = posWithOffset;
 
         IslandData data = new IslandData(_id, realSize, posWithOffset, ref tData);
-        PopulateTiles(ref data, posWithOffset, heights, realSize);
+        PopulateTiles(ref data, posWithOffset, moistureNoise, tempNoise, heights, realSize);
         DebugDrawGrid(posWithOffset, realSize, heights);
 
         PlaceDetails(heights, realSize, ref data, seed);
@@ -44,8 +53,17 @@ public class IslandGenerator : MonoBehaviour
 
     public GameObject Generate(WorldGenerator.IslandSize size, int seed, int numHeightLevels)
     {
-        Generate(size, seed, Vector3.zero, numHeightLevels, true);
-        return _currentTerrain;
+		//fake climate data
+		PerlinGenerator moistureNoiseGen = new PerlinGenerator();
+		PerlinGenerator tempNoiseGen = new PerlinGenerator();
+
+		int octaves = 9; // higher octaves (10+) create large biomes
+		float[][] moistureNoise = moistureNoiseGen.Generate(seed, octaves, (int)size);
+		float[][] temperatureNoise = tempNoiseGen.Generate(seed, octaves, (int)size);
+
+		// generate island
+		Generate(size, seed, Vector3.zero, moistureNoise, temperatureNoise, numHeightLevels, true);
+		return _currentTerrain;
     }
 
     private void DebugDrawGrid(Vector3 islandPos, int size, float[,] heights)
@@ -177,7 +195,7 @@ public class IslandGenerator : MonoBehaviour
         tY = (int)(terrainPos.z + y);
     }
 
-    private void PopulateTiles(ref IslandData data, Vector3 terrainPos, float[,] heights, int size)
+    private void PopulateTiles(ref IslandData data, Vector3 terrainPos, float[][] moisture, float[][] temps, float[,] heights, int size)
     {
         GameObject container = new GameObject();
         container.name = "Tile Colliders";
@@ -203,12 +221,12 @@ public class IslandGenerator : MonoBehaviour
                     t = tileObject.AddComponent<Tile>();
                     t.Init(i, j, height, terrainX, terrainY);
 
-                    // check and set tile attributes
-                    Tile.eSoilType soil = CheckSoilType(terrainPos, data.Data);
-                    Tile.eSoilToughness toughness = CheckSoilToughness((WorldGenerator.IslandSize)size);
-                    t.SetTileType(soil, toughness);
+                    // determine biome
+					eMoisture moist = GetMoistureEnumFromValue(moisture[i][j]);
+					eTemperature temp = GetTempEnumFromValue(temps[i][j]);
+					t.SetBiomeFields(moist, temp, _biomeTable[(int)moist, (int)temp]);
 
-                    tileObject.transform.position = t.TerrainPosition + new Vector3(0.5f, 0.05f, 0.5f);
+                    tileObject.transform.position = t.WorldPosition + new Vector3(0.5f, 0.05f, 0.5f);
 
                     // add to parent container for a neat hierarchy
                     tileObject.transform.SetParent(container.transform);
@@ -220,51 +238,51 @@ public class IslandGenerator : MonoBehaviour
         }
     }
 
-    private Tile.eSoilType CheckSoilType(Vector3 pos, TerrainData data)
-    {
-        Tile.eSoilType soilType = Tile.eSoilType.Dirt;
-        int textureIndex = GetMainTextureIndex(pos, data);
-        switch (textureIndex)
-        {
-            case 0: // dirt
-                soilType = Tile.eSoilType.Dirt;
-                break;
+	private eMoisture GetMoistureEnumFromValue(float value)
+	{
+		eMoisture m = eMoisture.Wet;
+		if (value < 0.2f)
+		{
+			m = eMoisture.Dry;
+		}
+		else if (value < 0.4f)
+		{
+			m = eMoisture.Mild;
+		}
+		else if (value < 0.6f)
+		{
+			m = eMoisture.Normal;
+		}
+		else if (value < 0.8f)
+		{
+			m = eMoisture.Damp;
+		}
 
-            case 1: // normal grass
-            case 2: // dark grass
-            case 3: // light grass
-                soilType = Tile.eSoilType.Grass;
-                break;
+		return m;
+	}
 
-            case 4: // dead grass
-                soilType = Tile.eSoilType.Sand;
-                break;
-        }
+	private eTemperature GetTempEnumFromValue(float value)
+	{
+		eTemperature t = eTemperature.Cold;
+		if (value < 0.2f)
+		{
+			t = eTemperature.Hot;
+		}
+		else if (value < 0.4f)
+		{
+			t = eTemperature.Warm;
+		}
+		else if (value < 0.6f)
+		{
+			t = eTemperature.Normal;
+		}
+		else if (value < 0.8f)
+		{
+			t = eTemperature.Cool;
+		}
 
-        return soilType;
-    }
-
-    // TODO add more factors
-    private Tile.eSoilToughness CheckSoilToughness(WorldGenerator.IslandSize size)
-    {
-        Tile.eSoilToughness toughness = Tile.eSoilToughness.Soft;
-        switch (size)
-        {
-            case WorldGenerator.IslandSize.Small:
-                toughness = Tile.eSoilToughness.Hard;
-                break;
-
-            case WorldGenerator.IslandSize.Medium:
-                toughness = Tile.eSoilToughness.Medium;
-                break;
-
-            case WorldGenerator.IslandSize.Large:
-                toughness = Tile.eSoilToughness.Soft;
-                break;
-        }
-
-        return toughness;
-    }
+		return t;
+	}
 
     private GameObject CreateTileObject()
     {

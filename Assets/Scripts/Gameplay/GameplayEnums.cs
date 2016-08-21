@@ -49,3 +49,32 @@ public enum eImpactType
     Sharp,
     Pierce
 }
+
+public enum eMoisture
+{
+	Dry = 0,
+	Mild,
+	Normal,
+	Damp,
+	Wet
+}
+
+public enum eTemperature
+{
+	Hot = 0,
+	Warm,
+	Normal,
+	Cool,
+	Cold
+}
+
+public enum eBiome
+{
+	Desert,
+	Savannah,
+	Plains,
+	Forest,
+	Swamp,
+	Jungle,
+	Tundra
+}

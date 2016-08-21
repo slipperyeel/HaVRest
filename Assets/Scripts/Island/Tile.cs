@@ -3,24 +3,25 @@ using System.Collections;
 
 public class Tile : MonoBehaviour
 {
-    public enum eSoilType { Dirt, Grass, Sand, Rock };
-    public enum eSoilToughness { Soft, Medium, Hard };
+	[SerializeField]
+	private Vector2 _islandPos;
+	public Vector2 IslandPosition { get { return _islandPos; } }
 
 	[SerializeField]
-	private Vector2 _coordinates;
-	public Vector2 Coordinates { get { return _coordinates; } }
+	private Vector3 _worldPos;
+	public Vector3 WorldPosition { get { return _worldPos; } }
 
 	[SerializeField]
-	private Vector3 _terrainCoordinates;
-	public Vector3 TerrainPosition { get { return _terrainCoordinates; } }
+	private eMoisture _moisture;
+	public eMoisture Moisture { get { return _moisture; } }
+
+	[SerializeField]
+	private eTemperature _temp;
+	public eTemperature Temperature { get { return _temp; } }
 
     [SerializeField]
-    private eSoilType _type;
-    public eSoilType Type { get { return _type; } }
-
-    [SerializeField]
-    private eSoilToughness _toughness;
-    public eSoilToughness Toughness { get { return _toughness; } }
+	private eBiome _biome;
+	public eBiome Biome { get { return _biome; } }
 
 	[SerializeField]
 	private GameObject _occupyingObject = null;
@@ -34,52 +35,20 @@ public class Tile : MonoBehaviour
 
     public void Init(int x, int y, float height, int z, int w)
     {
-        _coordinates = new Vector2(x, y);
-        _terrainCoordinates = new Vector3(z, height * 10f, w); // 10f is the terrain height scale factor
+        _islandPos = new Vector2(x, y);
+        _worldPos = new Vector3(z, height * 10f, w); // 10f is the terrain height scale factor
     }
 
-    public void SetTileType(eSoilType type, eSoilToughness toughness)
+	public void SetBiomeFields(eMoisture moist, eTemperature temp, eBiome biome)
     {
-        _type = type;
-        _toughness = toughness;
+		_moisture = moist;
+		_temp = temp;
+		_biome = biome;
 
-        int baseDurability = 0;
-
-        switch(type)
-        {
-            case eSoilType.Dirt:
-                baseDurability = 5;
-                break;
-
-            case eSoilType.Grass:
-                baseDurability = 5;
-                break;
-
-            case eSoilType.Sand:
-                baseDurability = 3;
-                break;
-
-            case eSoilType.Rock:
-                baseDurability = 8;
-                break;
-        }
-
-        switch (toughness)
-        {
-            case eSoilToughness.Soft:
-                baseDurability -= 1;
-                break;
-
-            case eSoilToughness.Medium:
-                baseDurability += 1;
-                break;
-
-            case eSoilToughness.Hard:
-                baseDurability += 3;
-                break;
-        }
-
-        _durability = baseDurability;
+		// for now, durability will just be a straight addition of moisture/temp
+		// drier/colder means harder, moist/warm means softer
+		int count = System.Enum.GetNames(typeof(eMoisture)).Length;
+		_durability = (count - (int)moist) + (int)temp;
     }
 
 	public void SetOccupyingObject(GameObject obj)

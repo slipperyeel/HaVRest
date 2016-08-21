@@ -41,7 +41,7 @@ public class IslandData
 		Tile t = _tiles[x,y];
 		if (t.OccupyingObject == null)
 		{
-			Vector3 terrainPos = t.TerrainPosition;
+			Vector3 terrainPos = t.WorldPosition;
             terrainPos.x += 0.5f;
             terrainPos.z += 0.5f;
 			obj.transform.position = terrainPos;

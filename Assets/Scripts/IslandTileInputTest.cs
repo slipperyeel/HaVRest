@@ -26,7 +26,7 @@ public class IslandTileInputTest : MonoBehaviour
             {
                 // hovering over a tile
                 currentOccupyingObject = tileHovered.OccupyingObject;
-                hoverCube.transform.position = tileHovered.TerrainPosition + centerOffset;
+                hoverCube.transform.position = tileHovered.WorldPosition + centerOffset;
 
                 string objName = "Unoccupied";
                 if (currentOccupyingObject != null)
@@ -34,7 +34,7 @@ public class IslandTileInputTest : MonoBehaviour
                     objName = currentOccupyingObject.name;
                 }
 
-                currentFormattedString = string.Format("Tile[{0},{1}] -> {2}", tileHovered.Coordinates.x, tileHovered.Coordinates.y, objName);
+                currentFormattedString = string.Format("Tile[{0},{1}] -> {2}", tileHovered.IslandPosition.x, tileHovered.IslandPosition.y, objName);
             }
         }
     }
