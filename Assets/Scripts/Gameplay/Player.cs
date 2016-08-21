@@ -50,31 +50,31 @@ public class Player : ResourceDependentObject
                     case eResourceType.Health:
                         if (MyResourceStore[i].Resource.Quantity >= sMinHealthForWarning)
                         {
-                            Debug.Log("Health is getting low!");
+                            //Debug.Log("Health is getting low!");
                         }
                         break;
                     case eResourceType.Stamina:
                         if (MyResourceStore[i].Resource.Quantity >= sMinStaminaSluggish)
                         {
-                            Debug.Log("You're getting sluggish.");
+                            //Debug.Log("You're getting sluggish.");
                         }
                         break;
                     case eResourceType.Water:
                         if (MyResourceStore[i].Resource.Quantity >= sMinWaterThirsty)
                         {
-                            Debug.Log("Thirsty...");
+                            //Debug.Log("Thirsty...");
                         }
                         break;
                     case eResourceType.Food:
                         if (MyResourceStore[i].Resource.Quantity >= sMinFoodStarving)
                         {
-                            Debug.Log("You're starving!");
+                            //Debug.Log("You're starving!");
                         }
                         break;
                     case eResourceType.Heat:
                         if (MyResourceStore[i].Resource.Quantity >= sMinHeatFreezing)
                         {
-                            Debug.Log("You're freezing!");
+                            //Debug.Log("You're freezing!");
                         }
                         break;
                 }
