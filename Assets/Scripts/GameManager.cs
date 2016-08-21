@@ -6,30 +6,37 @@ using System.Collections;
 /// </summary>
 public class GameManager : Singleton<GameManager>
 {
-    private FarmingGame game;
-    public FarmingGame Game { get { return game; } }
+    private FarmingGame mGame;
+    public FarmingGame Game { get { return mGame; } }
 
     [SerializeField]
-    private GameObject playerPrefab;
+    private GameObject mPlayerPrefab;
 
     [SerializeField]
-    private Transform spawnPoint;
+    private Transform mSpawnPoint;
+
+    // World Chunks!
+    [SerializeField]
+    private WorldChunkCollection mChunkCollection;
+    public WorldChunkCollection ChunkCollection { get { return mChunkCollection; } }
+
+    public float WorldChunkMinViewDistance = 100.0f;
 
     public bool TestSaveTrigger = false;
 
 	void Start ()
     {
-        game = new FarmingGame();
-        game.Initialize();
-        game.Serialize();
-        game.Deserialize();
+        mGame = new FarmingGame();
+        mGame.Initialize();
+        mGame.Serialize();
+        mGame.Deserialize();
 
         DataManager.Instance.LoadGameData(() =>
         {
             if (DataManager.Instance.IsFirstBoot)
             {
                 Debug.Log("Is First Boot.");
-                DataManager.Instance.SpawnObject<Player, PlayerMomento>(playerPrefab, spawnPoint.position, spawnPoint.rotation, Vector3.one);
+                DataManager.Instance.SpawnObject<Player, PlayerMomento>(mPlayerPrefab, mSpawnPoint.position, mSpawnPoint.rotation, Vector3.one);
             }
         });
     }

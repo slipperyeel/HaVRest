@@ -30,6 +30,11 @@ public class Player : ResourceDependentObject
         base.Awake();
     }
 
+    void Start()
+    {
+        
+    }
+
     protected override void Update ()
     {
         base.Update();
