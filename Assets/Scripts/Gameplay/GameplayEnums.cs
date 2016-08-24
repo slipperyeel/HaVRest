@@ -7,8 +7,7 @@ public enum eTemporalTriggerType
     Hour,
     Day,
     Month,
-    Year,
-    Count = Year - 1
+    Year
 }
 
 /// <summary>
@@ -21,8 +20,7 @@ public enum eTemporalTriggerOutcome
     Crop_Grow,
     Crop_Harvestable,
     Crop_Spoiled,
-    Crop_Dead,
-    Count = Crop_Dead - 1
+    Crop_Dead
 }
 
 /// <summary>
@@ -38,8 +36,7 @@ public enum eResourceType
     Water,
     Food,
     Fuel,
-    Flameable,
-    Count = Flameable - 1
+    Flameable
 }
 
 public enum eImpactType

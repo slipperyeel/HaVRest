@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using HVRTime;
 
 /// <summary>
 /// Eventually this will manage the game.
@@ -24,12 +25,16 @@ public class GameManager : Singleton<GameManager>
 
     public bool TestSaveTrigger = false;
 
-	void Start ()
+	public void Awake ()
     {
         mGame = new FarmingGame();
         mGame.Initialize();
         mGame.Serialize();
         mGame.Deserialize();
+
+        // Initialize Managers
+        DataManager.Instance.Init();
+        TimeManager.Instance.Init();
 
         DataManager.Instance.LoadGameData(() =>
         {

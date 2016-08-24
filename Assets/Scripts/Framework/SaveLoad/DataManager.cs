@@ -34,7 +34,7 @@ public class DataManager : Singleton<DataManager>
         get { return mIsFirstBoot; }
     }
 
-    protected void Awake()
+    public void Init()
     {
         mMomentos = new List<GameObjectMomento>();
         mDataDictionary = new Dictionary<object, GameObjectMomento>();

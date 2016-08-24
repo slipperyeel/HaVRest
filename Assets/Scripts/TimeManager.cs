@@ -43,12 +43,7 @@ namespace HVRTime
         [SerializeField]
         private GameObject cSun;
 
-        void Awake()
-        {
-            // Awake should only be used in GameManager... OOO
-        }
-
-        void Start()
+        public void Init()
         {
             mDateTime = GameManager.Instance.Game.DateTime;
 
@@ -60,7 +55,7 @@ namespace HVRTime
             mCurrentMonth = mDateTime.GetMonth();
             mCurrentYear = mDateTime.GetYear();
 
-            Debug.Assert(cSun == null, "No sun set!");
+            Debug.Assert(cSun != null, "No sun set!");
 
             if (mDateTime != null)
             {

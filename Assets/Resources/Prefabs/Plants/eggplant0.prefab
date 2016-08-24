@@ -21,6 +21,7 @@ GameObject:
   - 4: {fileID: 4000010379783724}
   - 33: {fileID: 33000011325950050}
   - 23: {fileID: 23000013980725794}
+  - 114: {fileID: 114000012201193050}
   m_Layer: 0
   m_Name: eggplant0
   m_TagString: Untagged
@@ -77,3 +78,39 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013959233532}
   m_Mesh: {fileID: 4300000, guid: 96945a5c4baddb14dbc78c2fcfa9c0aa, type: 3}
+--- !u!114 &114000012201193050
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013959233532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a314d7fbfd9f21e45a24a2d16fca3493, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mTemporalTriggers:
+  - Type: 1
+    Outcome: 1
+    Ticks: 5
+    Triggered: 0
+  - Type: 1
+    Outcome: 1
+    Ticks: 10
+    Triggered: 0
+  - Type: 1
+    Outcome: 2
+    Ticks: 15
+    Triggered: 0
+  - Type: 1
+    Outcome: 3
+    Ticks: 20
+    Triggered: 0
+  - Type: 1
+    Outcome: 4
+    Ticks: 30
+    Triggered: 0
+  meshArray:
+  - {fileID: 4300000, guid: 96945a5c4baddb14dbc78c2fcfa9c0aa, type: 3}
+  - {fileID: 4300000, guid: a0f952fd95fcb414fa38916139d9776e, type: 3}
+  - {fileID: 4300002, guid: c38c77e3b947a084c90a418e9d0f3a19, type: 3}

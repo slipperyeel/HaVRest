@@ -4,25 +4,39 @@ using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
-/// A temporal crop! Bare bones now, to test out the code.
+/// Temporal Crop
 /// </summary>
 public class TemporalCrop : TemporalObject
 {
+    [SerializeField]
+    private Mesh[] meshArray;
+
+    private MeshFilter mMeshFilter;
+
+    private int mMeshArrayIndex = 0;
+    public int MeshArrayIndex { get { return mMeshArrayIndex; } set { mMeshArrayIndex = value; } }
+    
     protected override void ApplyTemporalOutcome(eTemporalTriggerOutcome outcome)
     {
         switch (outcome)
         {
             case eTemporalTriggerOutcome.Crop_Grow:
-                Debug.Log("This Crop Grew up! Be proud.");
+                mMeshArrayIndex++;
+                if (mMeshFilter != null && meshArray.Length >= mMeshArrayIndex)
+                {
+                    mMeshFilter.sharedMesh = meshArray[mMeshArrayIndex];
+                }
+                else
+                {
+                    Debug.Assert(false, "Invalid mesh array index for crop: " + this.name);
+                }
                 break;
             case eTemporalTriggerOutcome.Crop_Harvestable:
-                Debug.Log("This Crop is now harvestable! Yeah!");
                 break;
             case eTemporalTriggerOutcome.Crop_Spoiled:
-                Debug.Log("This crop be spoiled. You failed.");
                 break;
             case eTemporalTriggerOutcome.Crop_Dead:
-                Debug.Log("This crop died. oh well, isn't that sad.");
+                GameObject.Destroy(this.gameObject);
                 break;
             default:
                 break;
@@ -31,6 +45,9 @@ public class TemporalCrop : TemporalObject
 
     protected override void Awake()
     {
+        mMeshFilter = GetComponent<MeshFilter>();
+        Debug.Assert(mMeshFilter != null, "Mesh filter is null on crop: " + this.name);
+
         base.Awake();
     }
 
