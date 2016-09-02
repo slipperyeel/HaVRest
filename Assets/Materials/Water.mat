@@ -136,6 +136,15 @@ Material:
         name: _Parallax
       second: 0.02
     - first:
+        name: _RandomHeight
+      second: 0.5
+    - first:
+        name: _RandomSpeed
+      second: 0.5
+    - first:
+        name: _Shininess
+      second: 1
+    - first:
         name: _SmoothnessTextureChannel
       second: 1
     - first:
@@ -150,6 +159,15 @@ Material:
     - first:
         name: _UVSec
       second: 0
+    - first:
+        name: _WaveHeight
+      second: 0.5
+    - first:
+        name: _WaveLength
+      second: 0.5
+    - first:
+        name: _WaveSpeed
+      second: 1
     - first:
         name: _ZWrite
       second: 1
