@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Valve.VR;
+using VRTK;
 
 /// <summary>
 /// Simple positional tracking system for orientating a given object about two transforms.
@@ -11,7 +12,7 @@ using Valve.VR;
 /// TODO: Implement Steam VR stuff
 /// TODO: Wrap with GAMEPLAY_TEST_NOVR for work without vive
 /// </summary>
-public class FreeGripObject : MonoBehaviour 
+public class FreeGripObject : VRTK_InteractableObject
 {
     [SerializeField]
     private BoxCollider mCol;
@@ -20,62 +21,101 @@ public class FreeGripObject : MonoBehaviour
 
     private List<GripData> touchingColliders;
 
-    void Start()
+    protected override void Start()
     {
         touchingColliders = new List<GripData>(NUM_GRIP_POINTS);
+        base.Start();
     }
 
-    void FixedUpdate()
+    protected override void FixedUpdate()
     {
-        if (touchingColliders.Count > 0)
-        {
-            transform.position = touchingColliders[0].GripLocation.position;
+        //if (touchingColliders.Count > 0)
+        //{
+        //    transform.position = touchingColliders[0].GripLocation.position;
 
-            if (touchingColliders.Count == 1)
-            {
-                transform.rotation = Quaternion.LookRotation(touchingColliders[0].GripLocation.forward);
-            }
-            else if (touchingColliders.Count == NUM_GRIP_POINTS)
-            {
-                Vector3 gripVec1 = touchingColliders[0].GripLocation.position;
-                Vector3 gripVec2 = touchingColliders[1].GripLocation.position;
+        //    if (touchingColliders.Count == 1)
+        //    {
+        //        transform.rotation = Quaternion.LookRotation(touchingColliders[0].GripLocation.forward);
+        //    }
+        //    else if (touchingColliders.Count == NUM_GRIP_POINTS)
+        //    {
+        //        Vector3 gripVec1 = touchingColliders[0].GripLocation.position;
+        //        Vector3 gripVec2 = touchingColliders[1].GripLocation.position;
 
-                Vector3 dirVec = gripVec2 - gripVec1;
-                transform.rotation = Quaternion.LookRotation(dirVec);
-            }
-        }
+        //        Vector3 dirVec = gripVec2 - gripVec1;
+        //        transform.rotation = Quaternion.LookRotation(dirVec);
+        //    }
+        //}
+        base.FixedUpdate();
     }
 
     void OnTriggerEnter(Collider col)
     {
         Debug.Log(col.tag);
-        if (col.tag == "Hands")
-        {
-            if (touchingColliders.Count <= NUM_GRIP_POINTS)
-            {
-                GripData data = touchingColliders.Find(x => x.Collider == col);
-                if (data == null)
-                {
-                    touchingColliders.Add(new GripData(col.transform, col));
-                }
+        //if (col.tag == "Hands")
+        //{
+        //    if (touchingColliders.Count <= NUM_GRIP_POINTS)
+        //    {
+        //        GripData data = touchingColliders.Find(x => x.Collider == col);
+        //        if (data == null)
+        //        {
+        //            touchingColliders.Add(new GripData(col.transform, col));
+        //        }
 
-                if (touchingColliders.Count == 1)
-                {
-                    transform.position = col.gameObject.transform.position;
-                }
-            }
-        }
+        //        if (touchingColliders.Count == 1)
+        //        {
+        //            transform.position = col.gameObject.transform.position;
+        //        }
+        //    }
+        //}
     }
 
     void OnTriggerExit(Collider col)
     {
-        if (col.tag == "Hands")
+        //if (col.tag == "Hands")
+        //{
+        //    GripData data = touchingColliders.Find(x => x.Collider == col);
+        //    if (data != null)
+        //    {
+        //        touchingColliders.Remove(data);
+        //    }
+        //}
+    }
+
+    private VRTK_ControllerActions controllerActions;
+    private VRTK_ControllerEvents controllerEvents;
+    private float impactMagnifier = 120f;
+    private float collisionForce = 0f;
+
+    public float CollisionForce()
+    {
+        return collisionForce;
+    }
+
+    public override void Grabbed(GameObject grabbingObject)
+    {
+        Debug.Log("WHAW");
+        base.Grabbed(grabbingObject);
+        controllerActions = grabbingObject.GetComponent<VRTK_ControllerActions>();
+        controllerEvents = grabbingObject.GetComponent<VRTK_ControllerEvents>();
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (controllerActions && controllerEvents && IsGrabbed())
         {
-            GripData data = touchingColliders.Find(x => x.Collider == col);
-            if (data != null)
-            {
-                touchingColliders.Remove(data);
-            }
+            collisionForce = controllerEvents.GetVelocity().magnitude * impactMagnifier;
+            controllerActions.TriggerHapticPulse((ushort)collisionForce, 0.5f, 0.01f);
+        }
+        else
+        {
+            collisionForce = collision.relativeVelocity.magnitude * impactMagnifier;
         }
     }
 }

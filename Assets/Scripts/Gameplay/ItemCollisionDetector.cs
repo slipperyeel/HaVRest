@@ -24,6 +24,7 @@ public class ItemCollisionDetector : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("ItemCollisioNDETECTORRRRRR");
         this.SendMessageUpwards("ItemCollisionDetector_CollisionEnter", collision);
     }
 

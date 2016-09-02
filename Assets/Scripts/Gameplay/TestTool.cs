@@ -6,6 +6,7 @@ public class TestTool : PhysicalItem
 {
     protected override void HandleItemCollisionEnter(Collision col)
     {
+        Debug.Log(col.gameObject.name);
         if (col != null)
         {
             Debug.Log("Collision enter with: " + col.gameObject.name);
