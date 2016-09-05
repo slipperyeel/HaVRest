@@ -46,7 +46,7 @@ namespace VRTK
         public AllowedController allowedTouchControllers = AllowedController.Both;
 
         [Header("Grab Interactions", order = 2)]
-        public bool isGrabbable = false;
+        public bool isTwoHanded = false;
         public bool isDroppable = true;
         public bool isSwappable = true;
         public bool holdButtonToGrab = true;
@@ -80,6 +80,8 @@ namespace VRTK
 
         protected Rigidbody rb;
         protected GameObject grabbingObject = null;
+        protected bool isGrabbable = false;
+        protected bool hasSecondHand = false;
 
         private bool isTouched = false;
         private bool isUsing = false;
@@ -146,6 +148,16 @@ namespace VRTK
             return (grabbingObject != null);
         }
 
+        public virtual bool IsGrabbable()
+        {
+            return isGrabbable;
+        }
+
+        public virtual void SetIsGrabbable(bool grabbable)
+        {
+            isGrabbable = grabbable;
+        }
+
         public bool IsUsing()
         {
             return isUsing;
@@ -170,7 +182,7 @@ namespace VRTK
             RemoveTrackPoint();
             grabbingObject = currentGrabbingObject;
             SetTrackPoint(grabbingObject);
-            if (! isSwappable)
+            if (!isSwappable)
             {
                 previousIsGrabbable = isGrabbable;
                 isGrabbable = false;

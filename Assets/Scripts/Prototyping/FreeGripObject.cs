@@ -17,70 +17,62 @@ public class FreeGripObject : VRTK_InteractableObject
     [SerializeField]
     private BoxCollider mCol;
 
+    [SerializeField]
+    private GameObject model;
+
     private static readonly int NUM_GRIP_POINTS = 2;
 
-    private List<GripData> touchingColliders;
+    //private GameObject firstGrabHand;
+    //private GameObject secondGrabHand;
+
+    //private Transform firstGripTransform;
+    private Transform secondGripTransform;
 
     protected override void Start()
     {
-        touchingColliders = new List<GripData>(NUM_GRIP_POINTS);
         base.Start();
+        isTwoHanded = true;
     }
 
     protected override void FixedUpdate()
     {
-        //if (touchingColliders.Count > 0)
-        //{
-        //    transform.position = touchingColliders[0].GripLocation.position;
-
-        //    if (touchingColliders.Count == 1)
-        //    {
-        //        transform.rotation = Quaternion.LookRotation(touchingColliders[0].GripLocation.forward);
-        //    }
-        //    else if (touchingColliders.Count == NUM_GRIP_POINTS)
-        //    {
-        //        Vector3 gripVec1 = touchingColliders[0].GripLocation.position;
-        //        Vector3 gripVec2 = touchingColliders[1].GripLocation.position;
-
-        //        Vector3 dirVec = gripVec2 - gripVec1;
-        //        transform.rotation = Quaternion.LookRotation(dirVec);
-        //    }
-        //}
+        if (IsGrabbed())
+        {
+            if(/*firstGripTransform != null && */secondGripTransform != null)
+            {
+                Vector3 dirVec = secondGripTransform.position - GetGrabbingObject().transform.position;
+                transform.rotation = Quaternion.LookRotation(dirVec);
+            }
+        }
         base.FixedUpdate();
     }
 
-    void OnTriggerEnter(Collider col)
-    {
-        Debug.Log(col.tag);
-        //if (col.tag == "Hands")
-        //{
-        //    if (touchingColliders.Count <= NUM_GRIP_POINTS)
-        //    {
-        //        GripData data = touchingColliders.Find(x => x.Collider == col);
-        //        if (data == null)
-        //        {
-        //            touchingColliders.Add(new GripData(col.transform, col));
-        //        }
+    //void OnTriggerEnter(Collider col)
+    //{
+    //    Debug.Log(col.tag);
+    //    if (col.tag == "Hands")
+    //    {
+    //        // If we've already got a hand on the tool.
+    //        if (IsGrabbed())
+    //        {
+    //            if (col.gameObject != GetGrabbingObject())
+    //            {
+    //                secondGripTransform = col.gameObject.transform;
+    //            }
+    //        }
+    //    }
+    //}
 
-        //        if (touchingColliders.Count == 1)
-        //        {
-        //            transform.position = col.gameObject.transform.position;
-        //        }
-        //    }
-        //}
-    }
-
-    void OnTriggerExit(Collider col)
-    {
-        //if (col.tag == "Hands")
-        //{
-        //    GripData data = touchingColliders.Find(x => x.Collider == col);
-        //    if (data != null)
-        //    {
-        //        touchingColliders.Remove(data);
-        //    }
-        //}
-    }
+    //void OnTriggerExit(Collider col)
+    //{
+    //    if (col.tag == "Hands")
+    //    {
+    //        if (col.gameObject != GetGrabbingObject())
+    //        {
+    //            secondGripTransform = null;
+    //        }
+    //    }
+    //}
 
     private VRTK_ControllerActions controllerActions;
     private VRTK_ControllerEvents controllerEvents;
@@ -92,12 +84,74 @@ public class FreeGripObject : VRTK_InteractableObject
         return collisionForce;
     }
 
+    public override bool IsGrabbable()
+    {
+        return true;
+    }
+
+    public override void SetIsGrabbable(bool grabbable)
+    {
+        // free grip objects are always grabbable!
+        isGrabbable = true;
+    }
+
     public override void Grabbed(GameObject grabbingObject)
     {
-        Debug.Log("WHAW");
-        base.Grabbed(grabbingObject);
-        controllerActions = grabbingObject.GetComponent<VRTK_ControllerActions>();
-        controllerEvents = grabbingObject.GetComponent<VRTK_ControllerEvents>();
+        if (!IsGrabbed())
+        {
+            Debug.Log("Single Hand Grab");
+            base.Grabbed(grabbingObject);
+            controllerActions = grabbingObject.GetComponent<VRTK_ControllerActions>();
+            controllerEvents = grabbingObject.GetComponent<VRTK_ControllerEvents>();
+            //firstGrabHand = grabbingObject;
+            //firstGripTransform = grabbingObject.transform;
+            //transform.position = grabbingObject.transform.position;
+            rb.isKinematic = true;
+        }
+        else if (isTwoHanded && !hasSecondHand)
+        {
+            Debug.Log("Double Hand Grab");
+            hasSecondHand = true;
+            //secondGrabHand = grabbingObject;
+            secondGripTransform = grabbingObject.transform;
+        }
+    }
+
+    public override void Ungrabbed(GameObject previousGrabbingObject)
+    {
+        //if (previousGrabbingObject == secondGrabHand)
+        //{
+            if (isTwoHanded && !hasSecondHand)
+            {
+                rb.isKinematic = false;
+                //firstGripTransform = null;
+                base.Ungrabbed(previousGrabbingObject);
+                //firstGrabHand = null;
+            }
+            else
+            {
+                secondGripTransform = null;
+                hasSecondHand = false;
+                //;secondGrabHand = null;
+            }
+        //}
+        //else
+        //{
+        //    if (isTwoHanded && hasSecondHand)
+        //    {
+        //        firstGrabHand = secondGrabHand;
+        //        //firstGripTransform = secondGripTransform;
+        //        secondGrabHand = null;
+        //        secondGripTransform = null;
+        //    }
+        //    else
+        //    {
+        //        rb.isKinematic = false;
+        //        //firstGripTransform = null;
+        //        base.Ungrabbed(previousGrabbingObject);
+        //        firstGrabHand = null;
+        //    }
+        //}
     }
 
     protected override void Awake()
@@ -117,19 +171,5 @@ public class FreeGripObject : VRTK_InteractableObject
         {
             collisionForce = collision.relativeVelocity.magnitude * impactMagnifier;
         }
-    }
-}
-
-// This is a temporary class to sort of store what a Grip is. 
-// Currently I don't really know what we'll want here other than a transform, but we can add more if needed.
-public class GripData
-{
-    public Transform GripLocation;
-    public Collider Collider;
-
-    public GripData(Transform gripLoc, Collider col)
-    {
-        GripLocation = gripLoc;
-        Collider = col;
     }
 }
