@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class HVRControllerManager : SteamVR_ControllerManager
 {
     public static HVRControllerManager Instance;
+
+    public event EventHandler DeviceConnected;
 
     private GameObject m_controllerRight;
     public GameObject Right { get { return m_controllerRight; } }
@@ -54,6 +57,12 @@ public class HVRControllerManager : SteamVR_ControllerManager
         if (connected)
         {
             SetControllers();
+        }
+
+        if (DeviceConnected != null)
+        {
+            // this needs to pass meaningful arguments someday
+            DeviceConnected(this, EventArgs.Empty);
         }
     }
 }
