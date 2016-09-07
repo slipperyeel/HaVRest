@@ -26,7 +26,11 @@ public class HVRControllerManager : SteamVR_ControllerManager
     protected override void OnEnable()
     {
         base.OnEnable();
+        SetControllers();
+    }
 
+    private void SetControllers()
+    {
         m_controllerLeft = left;
         m_controllerRight = right;
 
@@ -38,6 +42,18 @@ public class HVRControllerManager : SteamVR_ControllerManager
         if (m_controllerRight != null)
         {
             m_rightEvents = m_controllerRight.GetComponent<VRTK.VRTK_ControllerEvents>();
+        }
+    }
+
+    protected override void OnDeviceConnected(params object[] args)
+    {
+        base.OnDeviceConnected(args);
+
+        // if a controller turns on, we need to refresh the references
+        bool connected = (bool)args[1];
+        if (connected)
+        {
+            SetControllers();
         }
     }
 }
