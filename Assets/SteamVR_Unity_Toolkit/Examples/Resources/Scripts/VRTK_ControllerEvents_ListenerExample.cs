@@ -36,7 +36,7 @@ public class VRTK_ControllerEvents_ListenerExample : MonoBehaviour {
     void DebugLogger(uint index, string button, string action, ControllerInteractionEventArgs e)
     {
         Debug.Log("Controller on index '" + index + "' " + button + " has been " + action 
-                + " with a pressure of " + e.buttonPressure + " / trackpad axis at: " + e.touchpadAxis + " (" + e.touchpadAngle + " degrees)");
+                + " with a pressure of " + e.buttonPressure + " / trackpad axis at: " + e.touchpadAxis + " (" + e.touchpadDirection + " direction)");
     }
 
     void DoTriggerPressed(object sender, ControllerInteractionEventArgs e)

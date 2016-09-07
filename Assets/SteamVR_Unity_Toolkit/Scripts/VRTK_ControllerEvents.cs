@@ -8,7 +8,15 @@
         public uint controllerIndex;
         public float buttonPressure;
         public Vector2 touchpadAxis;
-        public float touchpadAngle;
+        public TouchPadDirection touchpadDirection;
+    }
+
+    public enum TouchPadDirection
+    {
+        Up = 45,
+        Right = 135,
+        Down = 180,
+        Left = 225
     }
 
     public delegate void ControllerInteractionEventHandler(object sender, ControllerInteractionEventArgs e);
@@ -234,7 +242,7 @@
             e.controllerIndex = controllerIndex;
             e.buttonPressure = buttonPressure;
             e.touchpadAxis = device.GetAxis();
-            e.touchpadAngle = CalculateTouchpadAxisAngle(e.touchpadAxis);
+            e.touchpadDirection = GetTouchPadDirection(e.touchpadAxis);
 
             return e;
         }
@@ -248,6 +256,23 @@
         {
             controllerIndex = (uint)trackedController.index;
             device = SteamVR_Controller.Input((int)controllerIndex);
+        }
+
+        private TouchPadDirection GetTouchPadDirection(Vector2 axis)
+        {
+            int rotationalOffset = 45;
+            float angle = CalculateTouchpadAxisAngle(axis);
+            TouchPadDirection direction = TouchPadDirection.Up;
+            for (int i = 0; i < 360; i += 90)
+            {
+                int threshold = i + rotationalOffset;
+                if (angle <= threshold)
+                {
+                    direction = (TouchPadDirection)threshold;
+                }
+            }
+
+            return direction;
         }
 
         private float CalculateTouchpadAxisAngle(Vector2 axis)
