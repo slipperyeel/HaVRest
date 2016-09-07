@@ -20,7 +20,7 @@ public class SteamVR_ControllerManager : MonoBehaviour
 	uint leftIndex = OpenVR.k_unTrackedDeviceIndexInvalid;
 	uint rightIndex = OpenVR.k_unTrackedDeviceIndexInvalid;
 
-	void Awake()
+	protected virtual void Awake()
 	{
 		// Add left and right entries to the head of the list so we only have to operate on the list itself.
 		var additional = (this.objects != null) ? this.objects.Length : 0;
@@ -38,7 +38,7 @@ public class SteamVR_ControllerManager : MonoBehaviour
 		this.objects = objects;
 	}
 
-	void OnEnable()
+	protected virtual void OnEnable()
 	{
 		for (int i = 0; i < objects.Length; i++)
 		{
@@ -58,7 +58,7 @@ public class SteamVR_ControllerManager : MonoBehaviour
 		SteamVR_Utils.Event.Listen("TrackedDeviceRoleChanged", OnTrackedDeviceRoleChanged);
 	}
 
-	void OnDisable()
+	protected virtual void OnDisable()
 	{
 		SteamVR_Utils.Event.Remove("input_focus", OnInputFocus);
 		SteamVR_Utils.Event.Remove("device_connected", OnDeviceConnected);
@@ -106,6 +106,7 @@ public class SteamVR_ControllerManager : MonoBehaviour
 		t.parent = hidden;
 		hidden.gameObject.SetActive(false);
 	}
+
 	private void ShowObject(Transform t, string name)
 	{
 		var hidden = t.parent;
@@ -153,13 +154,13 @@ public class SteamVR_ControllerManager : MonoBehaviour
 	}
 
 	// Keep track of assigned roles.
-	private void OnTrackedDeviceRoleChanged(params object[] args)
+	protected virtual void OnTrackedDeviceRoleChanged(params object[] args)
 	{
 		Refresh();
 	}
 
 	// Keep track of connected controller indices.
-	private void OnDeviceConnected(params object[] args)
+	protected virtual void OnDeviceConnected(params object[] args)
 	{
 		var index = (uint)(int)args[0];
 		bool changed = this.connected[index];
