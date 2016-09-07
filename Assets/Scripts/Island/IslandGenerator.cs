@@ -43,8 +43,8 @@ public class IslandGenerator : MonoBehaviour
         _currentTerrain.transform.position = posWithOffset;
 
         IslandData data = new IslandData(_id, realSize, posWithOffset, ref tData);
-        PopulateTiles(ref data, posWithOffset, moistureNoise, tempNoise, heights, realSize);
-        DebugDrawGrid(posWithOffset, realSize, heights);
+        PopulateTiles(ref data, posWithOffset, moistureNoise, tempNoise, heights, realSize, ref tData);
+        //DebugDrawGrid(posWithOffset, realSize, heights);
 
         PlaceDetails(heights, realSize, ref data, seed);
 
@@ -96,7 +96,7 @@ public class IslandGenerator : MonoBehaviour
         }
 
         data.splatPrototypes = _terrainSplats;
-        ApplyTextures(heights, ref data, size, numHeights);
+        //ApplyTextures(heights, ref data, size, numHeights);
 
         terrain = Terrain.CreateTerrainGameObject(data);
         terrain.name = string.Format("island_{0}", islandID);
@@ -106,17 +106,41 @@ public class IslandGenerator : MonoBehaviour
 
     private SplatPrototype[] LoadPrototypes()
     {
-        SplatPrototype[] newProtos = new SplatPrototype[5];
+        SplatPrototype[] newProtos = new SplatPrototype[23];
         Texture2D[] splatTextures = new Texture2D[]
         {
-            Resources.Load<Texture2D>("Terrain Textures/dirt_dark_0"),
-            Resources.Load<Texture2D>("Terrain Textures/grass_dark_0"),
-            Resources.Load<Texture2D>("Terrain Textures/grass_dark_1"),
-            Resources.Load<Texture2D>("Terrain Textures/grass_dark_2"),
-            Resources.Load<Texture2D>("Terrain Textures/grass_dark_3")
+            (Texture2D)WorldGenerator.Instance.DesertTextures[(int)eTileType.Dirt],
+            (Texture2D)WorldGenerator.Instance.DesertTextures[(int)eTileType.Grass],
+            (Texture2D)WorldGenerator.Instance.DesertTextures[(int)eTileType.Stone],
+            (Texture2D)WorldGenerator.Instance.DesertTextures[(int)eTileType.Sand],
+
+            (Texture2D)WorldGenerator.Instance.SavannahTextures[(int)eTileType.Dirt],
+            (Texture2D)WorldGenerator.Instance.SavannahTextures[(int)eTileType.Grass],
+            (Texture2D)WorldGenerator.Instance.SavannahTextures[(int)eTileType.Stone],
+
+            (Texture2D)WorldGenerator.Instance.PlainsTextures[(int)eTileType.Dirt],
+            (Texture2D)WorldGenerator.Instance.PlainsTextures[(int)eTileType.Grass],
+            (Texture2D)WorldGenerator.Instance.PlainsTextures[(int)eTileType.Stone],
+
+            (Texture2D)WorldGenerator.Instance.ForestTextures[(int)eTileType.Dirt],
+            (Texture2D)WorldGenerator.Instance.ForestTextures[(int)eTileType.Grass],
+            (Texture2D)WorldGenerator.Instance.ForestTextures[(int)eTileType.Stone],
+
+            (Texture2D)WorldGenerator.Instance.SwampTextures[(int)eTileType.Dirt],
+            (Texture2D)WorldGenerator.Instance.SwampTextures[(int)eTileType.Grass],
+            (Texture2D)WorldGenerator.Instance.SwampTextures[(int)eTileType.Stone],
+
+            (Texture2D)WorldGenerator.Instance.JungleTextures[(int)eTileType.Dirt],
+            (Texture2D)WorldGenerator.Instance.JungleTextures[(int)eTileType.Grass],
+            (Texture2D)WorldGenerator.Instance.JungleTextures[(int)eTileType.Stone],
+
+            (Texture2D)WorldGenerator.Instance.TundraTextures[(int)eTileType.Dirt],
+            (Texture2D)WorldGenerator.Instance.TundraTextures[(int)eTileType.Grass],
+            (Texture2D)WorldGenerator.Instance.TundraTextures[(int)eTileType.Stone],
+            (Texture2D)WorldGenerator.Instance.TundraTextures[(int)eTileType.Snow]
         };
 
-        for (int i = 0; i < 5; ++i)
+        for (int i = 0; i < 23; ++i)
         {
             SplatPrototype sp = new SplatPrototype();
             sp.texture = splatTextures[i];
@@ -195,13 +219,16 @@ public class IslandGenerator : MonoBehaviour
         tY = (int)(terrainPos.z + y);
     }
 
-    private void PopulateTiles(ref IslandData data, Vector3 terrainPos, float[][] moisture, float[][] temps, float[,] heights, int size)
+    private void PopulateTiles(ref IslandData data, Vector3 terrainPos, float[][] moisture, float[][] temps, float[,] heights, int size, ref TerrainData tData)
     {
         GameObject container = new GameObject();
         container.name = "Tile Colliders";
         container.transform.position = Vector3.zero;
         GameObject tileObject = null;
         Tile t = null;
+
+        int[] offsets = new int[] { 0, 4, 7, 10, 13, 16, 19 };
+        float[,,] splatData = new float[size, size, _terrainSplats.Length];
 
         for (int i = 0; i < size; ++i)
         {
@@ -224,18 +251,32 @@ public class IslandGenerator : MonoBehaviour
                     // determine biome
 					eMoisture moist = GetMoistureEnumFromValue(moisture[i][j]);
 					eTemperature temp = GetTempEnumFromValue(temps[i][j]);
-					t.SetBiomeFields(moist, temp, _biomeTable[(int)moist, (int)temp]);
+                    eBiome biome = _biomeTable[(int)moist, (int)temp];
+
+					t.SetBiomeFields(moist, temp, biome);
+
+                    // set terrain texture
+                    int textureIndex = offsets[(int)biome] + (int)eTileType.Grass;
+                    splatData[j, i, textureIndex] = 1;
 
                     tileObject.transform.position = t.WorldPosition + new Vector3(0.5f, 0.05f, 0.5f);
 
                     // add to parent container for a neat hierarchy
                     tileObject.transform.SetParent(container.transform);
                 }
+                else
+                {
+                    // just dirt if height is zero
+                    int textureIndex = offsets[(int)eBiome.Jungle] + (int)eTileType.Dirt;
+                    splatData[j, i, textureIndex] = 1;
+                }
 
                 // need to fill the island data with values, even if no tile is actually created
                 data.AddTile(t, i, j);
             }
         }
+
+        tData.SetAlphamaps(0, 0, splatData);
     }
 
 	private eMoisture GetMoistureEnumFromValue(float value)
@@ -326,64 +367,110 @@ public class IslandGenerator : MonoBehaviour
     {
         System.Random prng = new System.Random(seed);
         int noiseSeed = prng.Next();
+        GameObject detailContainer = new GameObject();
+        detailContainer.name = "Details Container";
+        Tile t;
+        eBiome currentBiome = eBiome.Desert;
 
         PerlinGenerator detailNoiseGen = new PerlinGenerator();
         float[][] noise = detailNoiseGen.Generate(noiseSeed, 3, size);
-        GameObject detail = null;
+        
+        int detailID = -1;
         for (int i = 0; i < size; ++i)
         {
             for (int j = 0; j < size; ++j)
             {
+                detailID = -1;
                 float height = heights[j, i];
                 if (height > 0f)
                 {
                     float value = noise[i][j];
+                    currentBiome = data.GetTile(i, j).Biome;
+
                     if (value > 0.85f)
                     {
+                        detailID = (int)eDetailType.Tree;
+
                         if (value > 0.95f)
                         {
-                            detail = _detailObjects[(int)DetailType.Tree_Pine_0];
+                            // TODO set scale modifier here or something
+                            //detail = _detailObjects[(int)DetailType.Tree_Pine_0];
                         }
                         else if (value > 0.9f)
                         {
-                            detail = _detailObjects[(int)DetailType.Tree_Pine_1];
+                            //detail = _detailObjects[(int)DetailType.Tree_Pine_1];
                         }
                         else
                         {
-                            detail = _detailObjects[(int)DetailType.Tree_Pine_2];
+                            //detail = _detailObjects[(int)DetailType.Tree_Pine_2];
                         }
                     }
                     else if (value > 0.75f)
                     {
-                        detail = _detailObjects[(int)DetailType.Flower_Bud];
+                        detailID = (int)eDetailType.Flower;
+                        //detail = _detailObjects[(int)DetailType.Flower_Bud];
                     }
                     else if (value > 0.68f)
                     {
-                        detail = _detailObjects[(int)DetailType.Grass];
+                        detailID = (int)eDetailType.Grass;
+                        //detail = _detailObjects[(int)DetailType.Grass];
                     }
                     else if (value > 0.65f)
                     {
-                        detail = _detailObjects[(int)DetailType.Fern];
+                        detailID = (int)eDetailType.Fern;
+                        //detail = _detailObjects[(int)DetailType.Fern];
                     }
                     else if (value < 0.025f)
                     {
-                        detail = _detailObjects[(int)DetailType.Rock_Medium];
-                    }
-                    else
-                    {
-                        detail = null;
+                        detailID = (int)eDetailType.Rock;
+                        //detail = _detailObjects[(int)DetailType.Rock_Medium];
                     }
 
-                    if (detail != null)
+                    //if (detail != null)
+                    if (detailID > -1)
                     {
+                        //GameObject detail = null;
+                        GameObject detail = GetDetailsForBiome(currentBiome)[detailID];
                         GameObject detailObj = (GameObject)Instantiate(detail, Vector3.zero, Quaternion.identity);
                         float angle = prng.Next(359) + 1;
                         detailObj.transform.Rotate(Vector3.up, angle);
-                        detailObj.transform.SetParent(_currentTerrain.transform);
+                        detailObj.transform.SetParent(detailContainer.transform);
                         data.AddObjectToTile(detailObj, i, j);
                     }
                 }
             }
+        }
+    }
+
+    private GameObject[] GetDetailsForBiome(eBiome biome)
+    {
+        if (biome == eBiome.Desert)
+        {
+            return WorldGenerator.Instance.DesertDetails;
+        }
+        else if (biome == eBiome.Savannah)
+        {
+            return WorldGenerator.Instance.SavannahDetails;
+        }
+        else if (biome == eBiome.Plains)
+        {
+            return WorldGenerator.Instance.PlainsDetails;
+        }
+        else if (biome == eBiome.Forest)
+        {
+            return WorldGenerator.Instance.ForestDetails;
+        }
+        else if (biome == eBiome.Swamp)
+        {
+            return WorldGenerator.Instance.SwampDetails;
+        }
+        else if (biome == eBiome.Jungle)
+        {
+            return WorldGenerator.Instance.JungleDetails;
+        }
+        else
+        {
+            return WorldGenerator.Instance.TundraDetails;
         }
     }
 

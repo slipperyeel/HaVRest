@@ -18,7 +18,63 @@ public class WorldGenerator : MonoBehaviour
 	[SerializeField]
 	private GameObject _islandGenPrefab;
 
-	public int WorldSeed = -1;
+    [SerializeField]
+    private Texture[] _DesertTextures;
+    public Texture[] DesertTextures { get { return _DesertTextures; } }
+
+    [SerializeField]
+    private GameObject[] _DesertDetails;
+    public GameObject[] DesertDetails { get { return _DesertDetails; } }
+
+    [SerializeField]
+    private Texture[] _SavannahTextures;
+    public Texture[] SavannahTextures { get { return _SavannahTextures; } }
+
+    [SerializeField]
+    private GameObject[] _SavannahDetails;
+    public GameObject[] SavannahDetails { get { return _SavannahDetails; } }
+
+    [SerializeField]
+    private Texture[] _PlainsTextures;
+    public Texture[] PlainsTextures { get { return _PlainsTextures; } }
+
+    [SerializeField]
+    private GameObject[] _PlainsDetails;
+    public GameObject[] PlainsDetails { get { return _PlainsDetails; } }
+
+    [SerializeField]
+    private Texture[] _ForestTextures;
+    public Texture[] ForestTextures { get { return _ForestTextures; } }
+
+    [SerializeField]
+    private GameObject[] _ForestDetails;
+    public GameObject[] ForestDetails { get { return _ForestDetails; } }
+
+    [SerializeField]
+    private Texture[] _SwampTextures;
+    public Texture[] SwampTextures { get { return _SwampTextures; } }
+
+    [SerializeField]
+    private GameObject[] _SwampDetails;
+    public GameObject[] SwampDetails { get { return _SwampDetails; } }
+
+    [SerializeField]
+    private Texture[] _JungleTextures;
+    public Texture[] JungleTextures { get { return _JungleTextures; } }
+
+    [SerializeField]
+    private GameObject[] _JungleDetails;
+    public GameObject[] JungleDetails { get { return _JungleDetails; } }
+
+    [SerializeField]
+    private Texture[] _TundraTextures;
+    public Texture[] TundraTextures { get { return _TundraTextures; } }
+
+    [SerializeField]
+    private GameObject[] _TundraDetails;
+    public GameObject[] TundraDetails { get { return _TundraDetails; } }
+
+    public int WorldSeed = -1;
 	public int NumberOfIslands;
 	public int MaxWorldSize;
 	public int MinNumberOfHeightLevels;
@@ -89,7 +145,7 @@ public class WorldGenerator : MonoBehaviour
 
 		// copy out the relevant climate noise
 		float[][] islandSpecificMoistureData = new float[islandSize][];
-		float[][] islandSpecificTempData = new float[islandSeed][];
+		float[][] islandSpecificTempData = new float[islandSize][];
 		//Debug.LogFormat("specific: {0}x{1}", islandSpecificBiomeData.Length, islandSpecificBiomeData[0].Length);
 		//Debug.LogFormat("base: {0}x{1}", biomeNoise.Length, biomeNoise[0].Length);
 

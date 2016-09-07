@@ -67,11 +67,29 @@ public enum eTemperature
 
 public enum eBiome
 {
-	Desert,
+	Desert = 0,
 	Savannah,
 	Plains,
 	Forest,
 	Swamp,
 	Jungle,
 	Tundra
+}
+
+public enum eTileType
+{
+    Dirt = 0,
+    Grass,
+    Stone,
+    Sand, // special
+    Snow  // special
+}
+
+public enum eDetailType
+{
+    Tree = 0,
+    Grass,
+    Fern,
+    Flower,
+    Rock
 }
