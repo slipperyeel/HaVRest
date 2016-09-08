@@ -67,6 +67,7 @@ public class HVRControllerManager : SteamVR_ControllerManager
         {
             ConnectedDeviceArgs deviceArgs = new ConnectedDeviceArgs();
             deviceArgs.controllerIndex = connectedControllerIndex;
+            deviceArgs.IsConnected = connected;
             DeviceConnected(this, deviceArgs);
         }
     }
@@ -74,5 +75,6 @@ public class HVRControllerManager : SteamVR_ControllerManager
     public class ConnectedDeviceArgs : EventArgs
     {
         public int controllerIndex;
+        public bool IsConnected;
     }
 }
