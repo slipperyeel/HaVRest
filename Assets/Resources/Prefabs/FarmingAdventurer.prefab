@@ -792,11 +792,11 @@ GameObject:
   - 4: {fileID: 446384}
   - 114: {fileID: 114000012147821352}
   - 114: {fileID: 114000013443621606}
-  - 114: {fileID: 11491576}
   - 23: {fileID: 2396750}
   - 33: {fileID: 3376060}
   - 114: {fileID: 11402954}
   - 114: {fileID: 114000011423188712}
+  - 114: {fileID: 114000013612494272}
   m_Layer: 0
   m_Name: FarmingAdventurer
   m_TagString: Untagged
@@ -1973,7 +1973,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d37c2cf88f7c59f4c8cf5d3812568143, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  index: -1
+  index: 1
   origin: {fileID: 0}
   isValid: 0
 --- !u!114 &11440038
@@ -2016,20 +2016,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ad1e469d4e3e04489f9a36419f1a4f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &11491576
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 187578}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3b47c2980b93bc48844a54641dab5b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  left: {fileID: 149372}
-  right: {fileID: 192726}
-  objects: []
 --- !u!114 &11493690
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2055,7 +2041,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d37c2cf88f7c59f4c8cf5d3812568143, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  index: -1
+  index: 2
   origin: {fileID: 0}
   isValid: 0
 --- !u!114 &11499444
@@ -2247,6 +2233,8 @@ MonoBehaviour:
   mPouches:
   - {fileID: 114000010847042110}
   - {fileID: 114000013725012382}
+  mItemSackPrefab: {fileID: 1000012012829598, guid: 346de03a174e61246bdf51f1a2ad7d9b,
+    type: 2}
 --- !u!114 &114000011423188712
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2409,7 +2397,7 @@ MonoBehaviour:
   hideControllerOnGrab: 0
   hideControllerDelay: 0
   grabPrecognition: 0
-  throwMultiplier: 1
+  throwMultiplier: 1.15
   createRigidBodyWhenNotTouching: 0
 --- !u!114 &114000013316657116
 MonoBehaviour:
@@ -2449,6 +2437,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf49af891c48cad43809a13145f18b46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114000013612494272
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 187578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4781c58d264214f448731ccd462d528f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  left: {fileID: 149372}
+  right: {fileID: 192726}
+  objects: []
 --- !u!114 &114000013725012382
 MonoBehaviour:
   m_ObjectHideFlags: 1

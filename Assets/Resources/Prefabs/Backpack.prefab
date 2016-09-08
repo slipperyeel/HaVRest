@@ -68,12 +68,12 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.11, y: 10.102, z: -4.363179}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000011173688032}
   - {fileID: 4000011598474670}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4000011173688032
 Transform:
   m_ObjectHideFlags: 1
@@ -83,10 +83,10 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000010919458728}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4000011598474670
 Transform:
   m_ObjectHideFlags: 1
@@ -96,10 +96,10 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000010919458728}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &114000010550934092
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -114,6 +114,8 @@ MonoBehaviour:
   mPouches:
   - {fileID: 114000013415240168}
   - {fileID: 114000011068700386}
+  mItemSackPrefab: {fileID: 1000012012829598, guid: 346de03a174e61246bdf51f1a2ad7d9b,
+    type: 2}
 --- !u!114 &114000011068700386
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -127,11 +129,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mSlots: 0
   mInventoryItems:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - Id: 0
+  - Id: 0
+  - Id: 0
+  - Id: 0
+  - Id: 0
 --- !u!114 &114000013415240168
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -145,8 +147,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mSlots: 0
   mInventoryItems:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - Id: 0
+  - Id: 0
+  - Id: 0
+  - Id: 0
+  - Id: 0
