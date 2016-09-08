@@ -38,6 +38,19 @@ public class DataManager : Singleton<DataManager>
     {
         mMomentos = new List<GameObjectMomento>();
         mDataDictionary = new Dictionary<object, GameObjectMomento>();
+
+        HVRItemFactory.LoadItems();
+        StartCoroutine(TestFactoryEnumerator());
+    }
+
+    private IEnumerator TestFactoryEnumerator()
+    {
+        while(!HVRItemFactory.IsFactoryInitialized)
+        {
+            yield return null;
+        }
+        GameObject testPrefab = HVRItemFactory.GetItemPrefab(ItemEnums.TestItem);
+        SpawnObject<TestObject, TestMomento>(testPrefab, Vector3.zero, default(Quaternion), Vector3.one);
     }
 
     /// <summary>
