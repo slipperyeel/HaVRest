@@ -84,6 +84,8 @@
         public event ControllerInteractionEventHandler AliasMenuOff;
 
         private uint controllerIndex;
+        public int ControllerIndex { get { return (int)controllerIndex; } }
+
         private SteamVR_TrackedObject trackedController;
         private SteamVR_Controller.Device device;
 

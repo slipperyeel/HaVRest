@@ -20,6 +20,9 @@ public class HVRControllerManager : SteamVR_ControllerManager
     private VRTK.VRTK_ControllerEvents m_leftEvents;
     public VRTK.VRTK_ControllerEvents LeftEvents { get { return m_leftEvents; } }
 
+    public int RightIndex { get { return m_rightEvents.ControllerIndex; } }
+    public int LeftIndex { get { return m_leftEvents.ControllerIndex; } }
+
     protected override void Awake()
     {
         Instance = this;
@@ -53,6 +56,7 @@ public class HVRControllerManager : SteamVR_ControllerManager
         base.OnDeviceConnected(args);
 
         // if a controller turns on, we need to refresh the references
+        int connectedControllerIndex = (int)args[0];
         bool connected = (bool)args[1];
         if (connected)
         {
@@ -61,8 +65,14 @@ public class HVRControllerManager : SteamVR_ControllerManager
 
         if (DeviceConnected != null)
         {
-            // this needs to pass meaningful arguments someday
-            DeviceConnected(this, EventArgs.Empty);
+            ConnectedDeviceArgs deviceArgs = new ConnectedDeviceArgs();
+            deviceArgs.controllerIndex = connectedControllerIndex;
+            DeviceConnected(this, deviceArgs);
         }
+    }
+
+    public class ConnectedDeviceArgs : EventArgs
+    {
+        public int controllerIndex;
     }
 }
