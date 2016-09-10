@@ -19,8 +19,8 @@ public class Backpack : MonoBehaviour
     private List<Pouch> mPouches;
     public List<Pouch> Pouches { get { return mPouches; } set { mPouches = value; } }
     [SerializeField]
-    GameObject mItemSackPrefab;
-    GameObject mItemSackObject;
+    public GameObject mItemSackPrefab;
+    private GameObject mItemSackObject;
 
     void Start()
     {
@@ -50,6 +50,20 @@ public class Backpack : MonoBehaviour
             child.enabled = !hidden;
     }
 
+    void SpawnInventoryUI()
+    {
+        //List<InventoryItem> inventoryItems = mPouches[0].InventoryItems;
+        Transform slotContainer = mItemSackObject.transform.GetChild(0);
+        for (int i = 0; i < 16; i++)
+        {
+            GameObject instantiatedObj;
+            //HVRItemFactory.SpawnItem((ItemEnums)inventoryItems[i].Id, Vector3.zero, default(Quaternion), new Vector3(0.1f, 0.1f, 0.1f), out instantiatedObj, "InventorySlotItem");
+            HVRItemFactory.SpawnItem(ItemEnums.EggPlant_Fruit, Vector3.zero, default(Quaternion), new Vector3(0.1f, 0.1f, 0.1f), out instantiatedObj, "InventorySlotItem");
+            instantiatedObj.transform.SetParent(slotContainer.GetChild(i));
+            instantiatedObj.transform.localPosition = Vector3.zero;
+        }
+    }
+
     void DoApplicationMenuPressedLeft(object sender, ControllerInteractionEventArgs e)
     {
         if ((mItemSackObject != null) && (mItemSackObject.transform.parent == HVRControllerManager.Instance.right.transform))
@@ -61,6 +75,7 @@ public class Backpack : MonoBehaviour
             mItemSackObject.transform.SetParent(HVRControllerManager.Instance.Left.transform);
             mItemSackObject.transform.localPosition = Vector3.zero;
             mItemSackObject.transform.localEulerAngles = new Vector3(45, 0, 0);
+            SpawnInventoryUI();
         }
         else if (mItemSackObject == null)
         {
@@ -69,6 +84,7 @@ public class Backpack : MonoBehaviour
             mItemSackObject.transform.SetParent(HVRControllerManager.Instance.Left.transform);
             mItemSackObject.transform.localPosition = Vector3.zero;
             mItemSackObject.transform.localEulerAngles = new Vector3(45, 0, 0);
+            SpawnInventoryUI();
         }
         else
         {
@@ -88,6 +104,7 @@ public class Backpack : MonoBehaviour
             mItemSackObject.transform.SetParent(HVRControllerManager.Instance.Right.transform);
             mItemSackObject.transform.localPosition = Vector3.zero;
             mItemSackObject.transform.localEulerAngles = new Vector3(45, 0, 0);
+            SpawnInventoryUI();
         }
         else if (mItemSackObject == null)
         {
@@ -96,6 +113,7 @@ public class Backpack : MonoBehaviour
             mItemSackObject.transform.SetParent(HVRControllerManager.Instance.Right.transform);
             mItemSackObject.transform.localPosition = Vector3.zero;
             mItemSackObject.transform.localEulerAngles = new Vector3(45, 0, 0);
+            SpawnInventoryUI();
         }
         else
         {

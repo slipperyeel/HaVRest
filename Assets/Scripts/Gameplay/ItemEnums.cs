@@ -1,9 +1,9 @@
 ﻿public enum ItemEnums
 {
+    // Test
     TestItem = 0,
-    Book,
-    Nail,
-    Snake,
-    Brody,
-    Dildo
+    // EggPlant
+    EggPlant_Seed,
+    EggPlant_Crop,
+    EggPlant_Fruit
 }

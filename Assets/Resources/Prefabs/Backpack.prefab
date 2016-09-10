@@ -116,6 +116,23 @@ MonoBehaviour:
   - {fileID: 114000011068700386}
   mItemSackPrefab: {fileID: 1000012012829598, guid: 346de03a174e61246bdf51f1a2ad7d9b,
     type: 2}
+  itemSlots:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &114000011068700386
 MonoBehaviour:
   m_ObjectHideFlags: 1

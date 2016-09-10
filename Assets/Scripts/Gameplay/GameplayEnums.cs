@@ -20,7 +20,11 @@ public enum eTemporalTriggerOutcome
     Crop_Grow,
     Crop_Harvestable,
     Crop_Spoiled,
-    Crop_Dead
+    Crop_Dead,
+    Food_Unripe,
+    Food_Ripe,
+    Food_Spoiled,
+    Food_Rotten
 }
 
 /// <summary>

@@ -61,9 +61,10 @@ public static class HVRItemFactory
         return prefab;
     }
 
-    public static bool SpawnItem(ItemEnums item, Vector3 position, Quaternion rotation, Vector3 scale, string name = null)
+    public static bool SpawnItem(ItemEnums item, Vector3 position, Quaternion rotation, Vector3 scale, out GameObject instantiatedObj, string name = null)
     {
         bool success = false;
+        instantiatedObj = null;
         GameObject itemPrefab = GetItemPrefab(item);
         if (DataManager.Instance)
         {
@@ -73,10 +74,25 @@ public static class HVRItemFactory
                 {
                     case ItemEnums.TestItem:
                         {
-                            TestObject obj = DataManager.Instance.SpawnObject<TestObject, TestMomento>(itemPrefab, Vector3.zero, default(Quaternion), Vector3.one);
+                            TestObject obj = DataManager.Instance.SpawnObject<TestObject, TestMomento>(itemPrefab, position, rotation, scale);
+                            instantiatedObj = obj.gameObject;
                             if (obj != null)
                             {
                                 if(name != null)
+                                {
+                                    obj.name = name;
+                                }
+                                success = true;
+                            }
+                            break;
+                        }
+                    case ItemEnums.EggPlant_Fruit:
+                        {
+                            TemporalFoodStuff obj = DataManager.Instance.SpawnObject<TemporalFoodStuff, FoodStuffMomento>(itemPrefab, position, rotation, scale);
+                            instantiatedObj = obj.gameObject;
+                            if (obj != null)
+                            {
+                                if (name != null)
                                 {
                                     obj.name = name;
                                 }

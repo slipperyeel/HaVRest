@@ -49,7 +49,8 @@ public class DataManager : Singleton<DataManager>
         {
             yield return null;
         }
-        HVRItemFactory.SpawnItem(ItemEnums.TestItem, Vector3.zero, default(Quaternion), Vector3.one, "Test Spawn Object");
+        GameObject unused;
+        HVRItemFactory.SpawnItem(ItemEnums.TestItem, Vector3.zero, default(Quaternion), Vector3.one, out unused, "Test Spawn Object");
     }
 
     /// <summary>
@@ -62,6 +63,9 @@ public class DataManager : Singleton<DataManager>
         if (prefab != null)
         {
             object obj = GameObject.Instantiate(prefab, pos, rot);
+            GameObject gameObj = (GameObject)obj;
+            gameObj.transform.localScale = scale;
+            
 			GameObject spawnObj;
 			T typedObject;
 
