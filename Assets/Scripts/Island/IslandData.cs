@@ -39,15 +39,10 @@ public class IslandData
 	public void AddObjectToTile(GameObject obj, int x, int y)
 	{
 		Tile t = _tiles[x,y];
-		if (t.OccupyingObject == null)
-		{
-			Vector3 terrainPos = t.WorldPosition;
-            terrainPos.x += 0.5f;
-            terrainPos.z += 0.5f;
-			obj.transform.position = terrainPos;
-
-			t.SetOccupyingObject(obj);
-		}
+		Vector3 terrainPos = t.WorldPosition;
+        terrainPos.x += 0.5f;
+        terrainPos.z += 0.5f;
+		obj.transform.position = terrainPos;
 	}
 
 	public void ModifyTerrainAtTilePosition(int x, int y, float amount)

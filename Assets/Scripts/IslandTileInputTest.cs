@@ -25,14 +25,14 @@ public class IslandTileInputTest : MonoBehaviour
             if (tileHovered != null)
             {
                 // hovering over a tile
-                currentOccupyingObject = tileHovered.OccupyingObject;
+                //currentOccupyingObject = tileHovered.OccupyingObject;
                 hoverCube.transform.position = tileHovered.WorldPosition + centerOffset;
 
                 string objName = "Unoccupied";
-                if (currentOccupyingObject != null)
-                {
-                    objName = currentOccupyingObject.name;
-                }
+//                if (currentOccupyingObject != null)
+//                {
+//                    objName = currentOccupyingObject.name;
+//                }
 
                 currentFormattedString = string.Format("Tile[{0},{1}] -> {2}", tileHovered.IslandPosition.x, tileHovered.IslandPosition.y, objName);
             }

@@ -369,7 +369,6 @@ public class IslandGenerator : MonoBehaviour
         int noiseSeed = prng.Next();
         GameObject detailContainer = new GameObject();
         detailContainer.name = "Details Container";
-        Tile t;
         eBiome currentBiome = eBiome.Desert;
 
         PerlinGenerator detailNoiseGen = new PerlinGenerator();
