@@ -49,8 +49,7 @@ public class DataManager : Singleton<DataManager>
         {
             yield return null;
         }
-        GameObject testPrefab = HVRItemFactory.GetItemPrefab(ItemEnums.TestItem);
-        SpawnObject<TestObject, TestMomento>(testPrefab, Vector3.zero, default(Quaternion), Vector3.one);
+        HVRItemFactory.SpawnItem(ItemEnums.TestItem, Vector3.zero, default(Quaternion), Vector3.one, "Test Spawn Object");
     }
 
     /// <summary>

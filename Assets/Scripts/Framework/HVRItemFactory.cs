@@ -60,4 +60,38 @@ public static class HVRItemFactory
         }
         return prefab;
     }
+
+    public static bool SpawnItem(ItemEnums item, Vector3 position, Quaternion rotation, Vector3 scale, string name = null)
+    {
+        bool success = false;
+        GameObject itemPrefab = GetItemPrefab(item);
+        if (DataManager.Instance)
+        {
+            if (itemPrefab != null)
+            {
+                switch (item)
+                {
+                    case ItemEnums.TestItem:
+                        {
+                            TestObject obj = DataManager.Instance.SpawnObject<TestObject, TestMomento>(itemPrefab, Vector3.zero, default(Quaternion), Vector3.one);
+                            if (obj != null)
+                            {
+                                if(name != null)
+                                {
+                                    obj.name = name;
+                                }
+                                success = true;
+                            }
+                            break;
+                        }
+                    default:
+                        {
+                            break;
+                        }
+                }
+            }
+        }
+        itemPrefab = null;
+        return success;
+    }
 }

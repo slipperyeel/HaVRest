@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000013545035934}
   - 114: {fileID: 114000013757988432}
+  - 114: {fileID: 114000011647036262}
   m_Layer: 0
   m_Name: TestPrefab
   m_TagString: Untagged
@@ -36,10 +37,22 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 250.94972, y: 9.941241, z: 479.3843}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114000011647036262
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012581456442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46c0d292c90a9eb4bb64cb64abcee8b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mItemEnum: 0
 --- !u!114 &114000013757988432
 MonoBehaviour:
   m_ObjectHideFlags: 1
