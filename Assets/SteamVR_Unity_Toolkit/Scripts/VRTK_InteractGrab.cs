@@ -106,7 +106,7 @@ namespace VRTK
 
         private bool IsObjectGrabbable(GameObject obj)
         {
-            return (interactTouch.IsObjectInteractable(obj) && obj.GetComponent<VRTK_InteractableObject>().IsGrabbable());
+            return (interactTouch.IsObjectInteractable(obj) && obj.GetComponent<VRTK_InteractableObject>().isGrabbable);
         }
 
         private bool IsObjectHoldOnGrab(GameObject obj)
@@ -164,18 +164,12 @@ namespace VRTK
 
             if(! objectScript.precisionSnap)
             {
-                if (obj.transform.parent == null)
-                {
-                    SetSnappedObjectPosition(obj);
-                }
+                SetSnappedObjectPosition(obj);
             }
 
             if (objectScript.grabAttachMechanic == VRTK_InteractableObject.GrabAttachType.Child_Of_Controller)
             {
-                if (obj.transform.parent == null)
-                {
-                    obj.transform.parent = this.transform;
-                }
+                obj.transform.parent = this.transform;
             }
             else
             {
@@ -260,7 +254,7 @@ namespace VRTK
 
         private bool GrabInteractedObject()
         {
-            if (controllerAttachJoint == null && /*grabbedObject == null &&*/ IsObjectGrabbable(interactTouch.GetTouchedObject()))
+            if (controllerAttachJoint == null && grabbedObject == null && IsObjectGrabbable(interactTouch.GetTouchedObject()))
             {
                 InitGrabbedObject();
                 if(grabbedObject)
@@ -301,18 +295,11 @@ namespace VRTK
                 grabbedObjectScript.Grabbed(this.gameObject);
                 grabbedObjectScript.ZeroVelocity();
                 grabbedObjectScript.ToggleHighlight(false);
-
-                if (grabbedObject.transform.parent == null)
-                {
-                    grabbedObjectScript.ToggleKinematic(false);
-                }
+                grabbedObjectScript.ToggleKinematic(false);
 
                 if (grabbedObjectScript.grabAttachMechanic == VRTK_InteractableObject.GrabAttachType.Child_Of_Controller)
                 {
-                    if (grabbedObject.transform.parent == null)
-                    {
-                        grabbedObjectScript.ToggleKinematic(true);
-                    }
+                    grabbedObjectScript.ToggleKinematic(true);
                 }
             }
 
@@ -365,11 +352,7 @@ namespace VRTK
                 controllerActions.ToggleControllerModel(true, grabbedObject);
             }
 
-            if (grabbedObject.transform.parent == null)
-            {
-                grabbedObject.transform.parent = null;
-                grabbedObject = null;
-            }
+            grabbedObject = null;
         }
 
         private void ReleaseObject(uint controllerIndex, bool withThrow)

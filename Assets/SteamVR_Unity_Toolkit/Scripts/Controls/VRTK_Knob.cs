@@ -74,7 +74,7 @@
             if (io == null) {
                 io = gameObject.AddComponent<VRTK_InteractableObject>();
             }
-            io.SetIsGrabbable(true);
+            io.isGrabbable = true;
             io.precisionSnap = true;
             io.grabAttachMechanic = VRTK_InteractableObject.GrabAttachType.Track_Object;
         }
