@@ -6,7 +6,9 @@ using System.Collections.Generic;
 [Serializable]
 public class Resource
 {
-    public eResourceType Type = eResourceType.None;
+	public eResourceType Type = eResourceType.None; // TODO this should be a list so that resources can have more than one type
+	public bool IsPlantable = false;
+	public bool IsCraftable = false;
     public int Quantity = 0;
 }
 

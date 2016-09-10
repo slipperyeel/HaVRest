@@ -97,3 +97,12 @@ public enum eDetailType
     Flower,
     Rock
 }
+
+public enum eTileState
+{
+	Invalid,
+	Normal,
+	Tilled,
+	Dug,
+	Planted
+}

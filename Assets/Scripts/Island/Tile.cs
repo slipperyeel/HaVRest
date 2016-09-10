@@ -24,19 +24,21 @@ public class Tile : MonoBehaviour
 	public eBiome Biome { get { return _biome; } }
 
 	[SerializeField]
-	private GameObject _occupyingObject = null;
-	public GameObject OccupyingObject { get { return _occupyingObject; } }
+	private eTileState _state;
+	public eTileState State { get { return _state; } }
 
     [SerializeField]
     private int _durability;
     public int Durability { get { return _durability; } }
+
+	public System.Action<Tile, eTileState> StateChangeCallback;
 
 	// TODO need an item interface to see what item/object is occupying this tile
 
     public void Init(int x, int y, float height, int z, int w)
     {
         _islandPos = new Vector2(x, y);
-        _worldPos = new Vector3(z, height * 10f, w); // 10f is the terrain height scale factor
+        _worldPos = new Vector3(z, height * 10f, w); // 10f is the terrain height scale
     }
 
 	public void SetBiomeFields(eMoisture moist, eTemperature temp, eBiome biome)
@@ -51,8 +53,60 @@ public class Tile : MonoBehaviour
 		_durability = (count - (int)moist) + (int)temp;
     }
 
-	public void SetOccupyingObject(GameObject obj)
+	public void SetState(eTileState state)
 	{
-		_occupyingObject = obj;
+		_state = state;
+
+		if (StateChangeCallback != null)
+		{
+			StateChangeCallback(this, _state);
+		}
+	}
+
+	void OnCollisionEnter(Collision other)
+	{
+		PhysicalItem item = other.gameObject.GetComponent<PhysicalItem>();
+		if (item == null) return;
+
+		eImpactType impact = item.ImpactType;
+		switch (_state)
+		{
+		case eTileState.Invalid:
+			// do nothing
+			break;
+
+		case eTileState.Normal:
+			if (impact == eImpactType.Pierce)
+			{
+				SetState(eTileState.Dug);
+			}
+			else if (impact == eImpactType.Sharp)
+			{
+				SetState(eTileState.Tilled);
+			}
+			break;
+
+		case eTileState.Dug:
+		case eTileState.Tilled:
+			if (impact == eImpactType.Blunt)
+			{
+				SetState(eTileState.Normal);
+				break;
+			}
+
+			ResourceObject obj = other.gameObject.GetComponent<ResourceObject>();
+			if (obj == null) return;
+
+			Resource r = obj.Resource;
+			if (r.IsPlantable)
+			{
+				SetState(eTileState.Planted);
+			}
+			break;
+
+		case eTileState.Planted:
+			// TODO decide if you can return to a previous state if planted
+			break;
+		}
 	}
 }

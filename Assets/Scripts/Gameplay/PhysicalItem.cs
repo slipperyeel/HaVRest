@@ -22,6 +22,7 @@ public abstract class PhysicalItem : MonoBehaviour
 
     [SerializeField]
     protected eImpactType sImpactType = eImpactType.Blunt;
+	public eImpactType ImpactType { get { return sImpactType; } }
 
     /// Member Variables
     protected float mCurrentDurability;
