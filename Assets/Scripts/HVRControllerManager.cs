@@ -72,6 +72,19 @@ public class HVRControllerManager : SteamVR_ControllerManager
         }
     }
 
+    public GameObject GetControllerByIndex(int index)
+    {
+        if(index == RightIndex)
+        {
+            return Right;
+        }
+        else if (index == LeftIndex)
+        {
+            return Left;
+        }
+        return null;
+    }
+
     public class ConnectedDeviceArgs : EventArgs
     {
         public int controllerIndex;

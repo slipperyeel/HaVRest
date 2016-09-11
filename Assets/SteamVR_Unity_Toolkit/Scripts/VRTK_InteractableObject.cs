@@ -90,7 +90,9 @@ namespace VRTK
         private bool customTrackPoint = false;
 
         private Transform previousParent;
+        public Transform PreviousParent { get { return previousParent; } set { previousParent = null; } }
         private bool previousKinematicState;
+        public bool PreviousKinematicState { get { return previousKinematicState; } set { previousKinematicState = value; } }
         private bool previousIsGrabbable;
 
         public virtual void OnInteractableObjectTouched(InteractableObjectEventArgs e)

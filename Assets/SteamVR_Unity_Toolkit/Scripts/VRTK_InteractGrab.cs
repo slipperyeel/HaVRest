@@ -63,8 +63,12 @@ namespace VRTK
             }
         }
 
-        public void AttemptGrab()
+        public void AttemptGrab(bool ungrab = false)
         {
+            if(ungrab)
+            {
+                grabbedObject = null;
+            }
             AttemptGrabObject();
         }
 
@@ -164,7 +168,7 @@ namespace VRTK
 
             if(! objectScript.precisionSnap)
             {
-                SetSnappedObjectPosition(obj);
+                //SetSnappedObjectPosition(obj);
             }
 
             if (objectScript.grabAttachMechanic == VRTK_InteractableObject.GrabAttachType.Child_Of_Controller)
@@ -259,7 +263,27 @@ namespace VRTK
                 InitGrabbedObject();
                 if(grabbedObject)
                 {
-                    SnapObjectToGrabToController(grabbedObject);
+                    SteamVR_TrackedObject to = this.GetComponent<SteamVR_TrackedObject>();
+                    SteamVR_TrackedObject.EIndex index = SteamVR_TrackedObject.EIndex.None;
+                    HVRInteractableObject hvrIO = grabbedObject.GetComponent<HVRInteractableObject>();
+
+                    if(to != null)
+                    {
+                        index = to.index;
+                    }
+
+                    if(hvrIO != null)
+                    {
+                        if(hvrIO.grabbedControllerIndex == index)
+                        {
+                            SnapObjectToGrabToController(grabbedObject);
+                        }
+                    }
+                    else
+                    {
+                        SnapObjectToGrabToController(grabbedObject);
+                    }
+
                     return true;
                 }
             }
@@ -290,9 +314,9 @@ namespace VRTK
                 }
 
                 OnControllerGrabInteractableObject(interactTouch.SetControllerInteractEvent(grabbedObject));
-
-                grabbedObjectScript.SaveCurrentState();
                 grabbedObjectScript.Grabbed(this.gameObject);
+                grabbedObjectScript.SaveCurrentState();
+                
                 grabbedObjectScript.ZeroVelocity();
                 grabbedObjectScript.ToggleHighlight(false);
                 grabbedObjectScript.ToggleKinematic(false);
@@ -352,7 +376,28 @@ namespace VRTK
                 controllerActions.ToggleControllerModel(true, grabbedObject);
             }
 
+            HVRInteractableObject obj = grabbedObject.GetComponent<HVRInteractableObject>();
+
             grabbedObject = null;
+
+            if(obj != null)
+            {
+                if(obj.grabbedControllerIndex != SteamVR_TrackedObject.EIndex.None)
+                {
+                    SteamVR_TrackedObject.EIndex index = obj.grabbedControllerIndex;
+
+                    GameObject otherController = HVRControllerManager.Instance.GetControllerByIndex((int)index);
+                    if(otherController != null)
+                    {
+                        VRTK_InteractGrab ig = otherController.GetComponent<VRTK_InteractGrab>();
+
+                        if(ig != null)
+                        {
+                            ig.AttemptGrab(true);
+                        }
+                    }
+                }
+            }
         }
 
         private void ReleaseObject(uint controllerIndex, bool withThrow)

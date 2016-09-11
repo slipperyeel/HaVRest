@@ -14,162 +14,162 @@ using VRTK;
 /// </summary>
 public class FreeGripObject : VRTK_InteractableObject
 {
-    [SerializeField]
-    private BoxCollider mCol;
+    //[SerializeField]
+    //private BoxCollider mCol;
 
-    [SerializeField]
-    private GameObject model;
+    //[SerializeField]
+    //private GameObject model;
 
-    private static readonly int NUM_GRIP_POINTS = 2;
+    //private static readonly int NUM_GRIP_POINTS = 2;
 
-    //private GameObject firstGrabHand;
-    //private GameObject secondGrabHand;
+    ////private GameObject firstGrabHand;
+    ////private GameObject secondGrabHand;
 
-    //private Transform firstGripTransform;
-    private Transform secondGripTransform;
+    ////private Transform firstGripTransform;
+    //private Transform secondGripTransform;
 
-    protected override void Start()
-    {
-        base.Start();
-        isTwoHanded = true;
-    }
-
-    protected override void FixedUpdate()
-    {
-        if (IsGrabbed())
-        {
-            if(/*firstGripTransform != null && */secondGripTransform != null)
-            {
-                Vector3 dirVec = secondGripTransform.position - GetGrabbingObject().transform.position;
-                transform.rotation = Quaternion.LookRotation(dirVec);
-            }
-        }
-        base.FixedUpdate();
-    }
-
-    //void OnTriggerEnter(Collider col)
+    //protected override void Start()
     //{
-    //    Debug.Log(col.tag);
-    //    if (col.tag == "Hands")
+    //    base.Start();
+    //    isTwoHanded = true;
+    //}
+
+    //protected override void FixedUpdate()
+    //{
+    //    if (IsGrabbed())
     //    {
-    //        // If we've already got a hand on the tool.
-    //        if (IsGrabbed())
+    //        if(/*firstGripTransform != null && */secondGripTransform != null)
     //        {
-    //            if (col.gameObject != GetGrabbingObject())
-    //            {
-    //                secondGripTransform = col.gameObject.transform;
-    //            }
+    //            Vector3 dirVec = secondGripTransform.position - GetGrabbingObject().transform.position;
+    //            transform.rotation = Quaternion.LookRotation(dirVec);
     //        }
+    //    }
+    //    base.FixedUpdate();
+    //}
+
+    ////void OnTriggerEnter(Collider col)
+    ////{
+    ////    Debug.Log(col.tag);
+    ////    if (col.tag == "Hands")
+    ////    {
+    ////        // If we've already got a hand on the tool.
+    ////        if (IsGrabbed())
+    ////        {
+    ////            if (col.gameObject != GetGrabbingObject())
+    ////            {
+    ////                secondGripTransform = col.gameObject.transform;
+    ////            }
+    ////        }
+    ////    }
+    ////}
+
+    ////void OnTriggerExit(Collider col)
+    ////{
+    ////    if (col.tag == "Hands")
+    ////    {
+    ////        if (col.gameObject != GetGrabbingObject())
+    ////        {
+    ////            secondGripTransform = null;
+    ////        }
+    ////    }
+    ////}
+
+    //private VRTK_ControllerActions controllerActions;
+    //private VRTK_ControllerEvents controllerEvents;
+    //private float impactMagnifier = 120f;
+    //private float collisionForce = 0f;
+
+    //public float CollisionForce()
+    //{
+    //    return collisionForce;
+    //}
+
+    //public override bool IsGrabbable()
+    //{
+    //    return true;
+    //}
+
+    //public override void SetIsGrabbable(bool grabbable)
+    //{
+    //    // free grip objects are always grabbable!
+    //    isGrabbable = true;
+    //}
+
+    //public override void Grabbed(GameObject grabbingObject)
+    //{
+    //    if (!IsGrabbed())
+    //    {
+    //        Debug.Log("Single Hand Grab");
+    //        base.Grabbed(grabbingObject);
+    //        controllerActions = grabbingObject.GetComponent<VRTK_ControllerActions>();
+    //        controllerEvents = grabbingObject.GetComponent<VRTK_ControllerEvents>();
+    //        //firstGrabHand = grabbingObject;
+    //        //firstGripTransform = grabbingObject.transform;
+    //        //transform.position = grabbingObject.transform.position;
+    //        rb.isKinematic = true;
+    //    }
+    //    else if (isTwoHanded && !hasSecondHand)
+    //    {
+    //        Debug.Log("Double Hand Grab");
+    //        hasSecondHand = true;
+    //        //secondGrabHand = grabbingObject;
+    //        secondGripTransform = grabbingObject.transform;
     //    }
     //}
 
-    //void OnTriggerExit(Collider col)
+    //public override void Ungrabbed(GameObject previousGrabbingObject)
     //{
-    //    if (col.tag == "Hands")
-    //    {
-    //        if (col.gameObject != GetGrabbingObject())
+    //    //if (previousGrabbingObject == secondGrabHand)
+    //    //{
+    //        if (isTwoHanded && !hasSecondHand)
+    //        {
+    //            rb.isKinematic = false;
+    //            //firstGripTransform = null;
+    //            base.Ungrabbed(previousGrabbingObject);
+    //            //firstGrabHand = null;
+    //        }
+    //        else
     //        {
     //            secondGripTransform = null;
+    //            hasSecondHand = false;
+    //            //;secondGrabHand = null;
     //        }
-    //    }
+    //    //}
+    //    //else
+    //    //{
+    //    //    if (isTwoHanded && hasSecondHand)
+    //    //    {
+    //    //        firstGrabHand = secondGrabHand;
+    //    //        //firstGripTransform = secondGripTransform;
+    //    //        secondGrabHand = null;
+    //    //        secondGripTransform = null;
+    //    //    }
+    //    //    else
+    //    //    {
+    //    //        rb.isKinematic = false;
+    //    //        //firstGripTransform = null;
+    //    //        base.Ungrabbed(previousGrabbingObject);
+    //    //        firstGrabHand = null;
+    //    //    }
+    //    //}
     //}
 
-    private VRTK_ControllerActions controllerActions;
-    private VRTK_ControllerEvents controllerEvents;
-    private float impactMagnifier = 120f;
-    private float collisionForce = 0f;
+    //protected override void Awake()
+    //{
+    //    base.Awake();
+    //    rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+    //}
 
-    public float CollisionForce()
-    {
-        return collisionForce;
-    }
-
-    public override bool IsGrabbable()
-    {
-        return true;
-    }
-
-    public override void SetIsGrabbable(bool grabbable)
-    {
-        // free grip objects are always grabbable!
-        isGrabbable = true;
-    }
-
-    public override void Grabbed(GameObject grabbingObject)
-    {
-        if (!IsGrabbed())
-        {
-            Debug.Log("Single Hand Grab");
-            base.Grabbed(grabbingObject);
-            controllerActions = grabbingObject.GetComponent<VRTK_ControllerActions>();
-            controllerEvents = grabbingObject.GetComponent<VRTK_ControllerEvents>();
-            //firstGrabHand = grabbingObject;
-            //firstGripTransform = grabbingObject.transform;
-            //transform.position = grabbingObject.transform.position;
-            rb.isKinematic = true;
-        }
-        else if (isTwoHanded && !hasSecondHand)
-        {
-            Debug.Log("Double Hand Grab");
-            hasSecondHand = true;
-            //secondGrabHand = grabbingObject;
-            secondGripTransform = grabbingObject.transform;
-        }
-    }
-
-    public override void Ungrabbed(GameObject previousGrabbingObject)
-    {
-        //if (previousGrabbingObject == secondGrabHand)
-        //{
-            if (isTwoHanded && !hasSecondHand)
-            {
-                rb.isKinematic = false;
-                //firstGripTransform = null;
-                base.Ungrabbed(previousGrabbingObject);
-                //firstGrabHand = null;
-            }
-            else
-            {
-                secondGripTransform = null;
-                hasSecondHand = false;
-                //;secondGrabHand = null;
-            }
-        //}
-        //else
-        //{
-        //    if (isTwoHanded && hasSecondHand)
-        //    {
-        //        firstGrabHand = secondGrabHand;
-        //        //firstGripTransform = secondGripTransform;
-        //        secondGrabHand = null;
-        //        secondGripTransform = null;
-        //    }
-        //    else
-        //    {
-        //        rb.isKinematic = false;
-        //        //firstGripTransform = null;
-        //        base.Ungrabbed(previousGrabbingObject);
-        //        firstGrabHand = null;
-        //    }
-        //}
-    }
-
-    protected override void Awake()
-    {
-        base.Awake();
-        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (controllerActions && controllerEvents && IsGrabbed())
-        {
-            collisionForce = controllerEvents.GetVelocity().magnitude * impactMagnifier;
-            controllerActions.TriggerHapticPulse((ushort)collisionForce, 0.5f, 0.01f);
-        }
-        else
-        {
-            collisionForce = collision.relativeVelocity.magnitude * impactMagnifier;
-        }
-    }
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    if (controllerActions && controllerEvents && IsGrabbed())
+    //    {
+    //        collisionForce = controllerEvents.GetVelocity().magnitude * impactMagnifier;
+    //        controllerActions.TriggerHapticPulse((ushort)collisionForce, 0.5f, 0.01f);
+    //    }
+    //    else
+    //    {
+    //        collisionForce = collision.relativeVelocity.magnitude * impactMagnifier;
+    //    }
+    //}
 }
