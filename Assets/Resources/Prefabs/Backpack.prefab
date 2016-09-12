@@ -116,23 +116,9 @@ MonoBehaviour:
   - {fileID: 114000011068700386}
   mItemSackPrefab: {fileID: 1000012012829598, guid: 346de03a174e61246bdf51f1a2ad7d9b,
     type: 2}
-  itemSlots:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  mItemFloatController: {fileID: 9100000, guid: 598015e3b4aaed042862cef99459a3d1,
+    type: 2}
+  mRimLight: {fileID: 2100000, guid: fdc3fe9a9d9ce8b45b8bb203a277f40a, type: 2}
 --- !u!114 &114000011068700386
 MonoBehaviour:
   m_ObjectHideFlags: 1

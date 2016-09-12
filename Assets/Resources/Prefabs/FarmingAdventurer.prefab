@@ -2235,6 +2235,9 @@ MonoBehaviour:
   - {fileID: 114000013725012382}
   mItemSackPrefab: {fileID: 1000012012829598, guid: 346de03a174e61246bdf51f1a2ad7d9b,
     type: 2}
+  mItemFloatController: {fileID: 9100000, guid: 598015e3b4aaed042862cef99459a3d1,
+    type: 2}
+  mRimLight: {fileID: 2100000, guid: fdc3fe9a9d9ce8b45b8bb203a277f40a, type: 2}
 --- !u!114 &114000011423188712
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2290,30 +2293,40 @@ MonoBehaviour:
   mResourceStore:
   - Resource:
       Type: 0
+      IsPlantable: 0
+      IsCraftable: 0
       Quantity: 100
     Capacity: 100
     DepletionRate: 0
     TimeTrigger: -1
   - Resource:
       Type: 1
+      IsPlantable: 0
+      IsCraftable: 0
       Quantity: 100
     Capacity: 100
     DepletionRate: 0
     TimeTrigger: -1
   - Resource:
       Type: 2
+      IsPlantable: 0
+      IsCraftable: 0
       Quantity: 100
     Capacity: 100
     DepletionRate: 0
     TimeTrigger: -1
   - Resource:
       Type: 4
+      IsPlantable: 0
+      IsCraftable: 0
       Quantity: 100
     Capacity: 100
     DepletionRate: 10
     TimeTrigger: 0
   - Resource:
       Type: 3
+      IsPlantable: 0
+      IsCraftable: 0
       Quantity: 100
     Capacity: 100
     DepletionRate: 10
