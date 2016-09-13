@@ -38,7 +38,7 @@ public class HVRInteractableObject : VRTK_InteractableObject
                 Vector3 heldDir = topHand.transform.position - bottomHand.transform.position;
                 transform.forward = heldDir.normalized;
                 // this isn't quite there yet, but it's close
-                //transform.Rotate(Quaternion.Euler(0f, 0f, ProperAngle(transform.up, heldController.transform.right)).eulerAngles);
+                transform.Rotate(Quaternion.Euler(0f, 0f, -Angle360(transform.up, heldController.transform.right, Vector3.right)).eulerAngles);
                 Vector3 actualDir = topHand.transform.position - transform.position;
                 Vector3 handDir = topHand.transform.position - bottomHand.transform.position;
                 Vector3 pos = actualDir;
@@ -49,17 +49,10 @@ public class HVRInteractableObject : VRTK_InteractableObject
         base.FixedUpdate();
     }
 
-    private float ProperAngle(Vector3 v1, Vector3 v2)
+    float Angle360(Vector3 from, Vector3 to, Vector3 right)
     {
-        //  Acute angle [0,180]
-        float angle = Vector3.Angle(v1, v2);
-
-        //  -Acute angle [180,-179]
-        float sign = Mathf.Sign(Vector3.Dot(Vector3.up, Vector3.Cross(v1, v2)));
-        float signed_angle = angle * sign;
-
-        //  360 angle
-        return (signed_angle <= 0) ? 360 + signed_angle : signed_angle;
+        float angle = Vector3.Angle(from, to);
+        return (Vector3.Angle(right, to) > 90f) ? 360f - angle : angle;
     }
 
     public override void Grabbed(GameObject grabbingObject)
@@ -75,7 +68,6 @@ public class HVRInteractableObject : VRTK_InteractableObject
         }
         else if (heldControllerIndex == SteamVR_TrackedObject.EIndex.None && index != grabbedControllerIndex)
         {
-            Debug.Log("SECOND CONTROLLER GRABBED");
             controllerActionsArray[(int)HVR_InteractionTypes.Held] = grabbingObject.GetComponent<VRTK_ControllerActions>();
             controllerEventsArray[(int)HVR_InteractionTypes.Held] = grabbingObject.GetComponent<VRTK_ControllerEvents>();
 
