@@ -219,6 +219,25 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1000014135826376
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000013976948068}
+  - 114: {fileID: 114000013576845806}
+  - 114: {fileID: 114000011500790520}
+  - 33: {fileID: 33000010362029468}
+  - 23: {fileID: 23000010953313504}
+  m_Layer: 0
+  m_Name: eggplant_fruit
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1000014164062846
 GameObject:
   m_ObjectHideFlags: 1
@@ -334,10 +353,11 @@ Transform:
   m_GameObject: {fileID: 1000012012829598}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000013171971712}
+  - {fileID: 4000013976948068}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &4000011264522052
@@ -399,8 +419,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010600891554}
   m_LocalRotation: {x: -0.17364825, y: 0, z: 0, w: 0.9848078}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_LocalPosition: {x: 0, y: -0.025, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: -20, y: 0, z: 0}
   m_Children:
   - {fileID: 4000010704394558}
@@ -430,6 +450,48 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4000013171971712}
   m_RootOrder: 1
+--- !u!4 &4000013976948068
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000014135826376}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: -0, y: 0.175, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+  m_Children: []
+  m_Father: {fileID: 4000011244810634}
+  m_RootOrder: 1
+--- !u!23 &23000010953313504
+MeshRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000014135826376}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 2100000, guid: 22ec2c01b1a6b214db67aaa43197c3e6, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_SelectedWireframeHidden: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
 --- !u!23 &23000011182986672
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -459,6 +521,13 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
+--- !u!33 &33000010362029468
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000014135826376}
+  m_Mesh: {fileID: 4300000, guid: 988e68d721549114c876e5b8ce4a6fe7, type: 3}
 --- !u!33 &33000012176785908
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -610,3 +679,45 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.05, y: 0.05, z: 0.05}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114000011500790520
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000014135826376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46c0d292c90a9eb4bb64cb64abcee8b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mItemEnum: 3
+--- !u!114 &114000013576845806
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000014135826376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b3fe1311649bdb448e31f84944d8614, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mTemporalTriggers:
+  - Type: 1
+    Outcome: 6
+    Ticks: 5
+    Triggered: 0
+  - Type: 1
+    Outcome: 7
+    Ticks: 5
+    Triggered: 0
+  - Type: 1
+    Outcome: 8
+    Ticks: 3
+    Triggered: 0
+  Resource:
+    Type: 4
+    IsPlantable: 0
+    IsCraftable: 0
+    Quantity: 100
+  meshArray: []

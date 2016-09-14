@@ -61,8 +61,8 @@ public class Backpack : MonoBehaviour
         for (int i = 0; i < 12; i++)
         {
             GameObject instantiatedObj;
-            //HVRItemFactory.SpawnItem((ItemEnums)inventoryItems[i].Id, Vector3.zero, default(Quaternion), new Vector3(0.1f, 0.1f, 0.1f), out instantiatedObj, "InventorySlotItem");
-            HVRItemFactory.SpawnItem(ItemEnums.EggPlant_Fruit, Vector3.zero, default(Quaternion), new Vector3(0.1f, 0.1f, 0.1f), out instantiatedObj, "InventorySlotItem");
+            //HVRItemFactory.SpawnItem((ItemEnums)inventoryItems[i].Id, Vector3.zero, default(Quaternion), new Vector3(0.35f, 0.35f, 0.35f), out instantiatedObj, "InventorySlotItem");
+            HVRItemFactory.SpawnItem(ItemEnums.EggPlant_Fruit, Vector3.zero, default(Quaternion), new Vector3(0.35f, 0.35f, 0.35f), out instantiatedObj, "InventorySlotItem");
             instantiatedObj.transform.SetParent(slotContainer.GetChild(i));
             instantiatedObj.transform.localPosition = Vector3.zero;
             instantiatedObj.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
@@ -88,7 +88,7 @@ public class Backpack : MonoBehaviour
             mItemSackObject = (GameObject)Instantiate(mItemSackPrefab, HVRControllerManager.Instance.Left.transform.position, HVRControllerManager.Instance.Left.transform.rotation);
             mItemSackObject.transform.SetParent(HVRControllerManager.Instance.Left.transform);
             mItemSackObject.transform.localPosition = Vector3.zero;
-            mItemSackObject.transform.localEulerAngles = new Vector3(-45f, -180f, 180f);
+            mItemSackObject.transform.localEulerAngles = new Vector3(-45f, -180f, 0f);
             SpawnInventoryUI();
         }
         else if (mItemSackObject == null)
@@ -114,7 +114,7 @@ public class Backpack : MonoBehaviour
             HideRenderModels(HVRControllerManager.Instance.Left.transform, false);
             HideRenderModels(HVRControllerManager.Instance.Right.transform, true);
             Destroy(mItemSackObject);
-            mItemSackObject = (GameObject)Instantiate(mItemSackPrefab, HVRControllerManager.Instance.Right.transform.position, HVRControllerManager.Instance.Left.transform.rotation);
+            mItemSackObject = (GameObject)Instantiate(mItemSackPrefab, HVRControllerManager.Instance.Right.transform.position, HVRControllerManager.Instance.Right.transform.rotation);
             mItemSackObject.transform.SetParent(HVRControllerManager.Instance.Right.transform);
             mItemSackObject.transform.localPosition = Vector3.zero;
             mItemSackObject.transform.localEulerAngles = new Vector3(-45f, -180f, 0f);
@@ -123,7 +123,7 @@ public class Backpack : MonoBehaviour
         else if (mItemSackObject == null)
         {
             HideRenderModels(HVRControllerManager.Instance.Right.transform, true);
-            mItemSackObject = (GameObject)Instantiate(mItemSackPrefab, HVRControllerManager.Instance.Right.transform.position, HVRControllerManager.Instance.Left.transform.rotation);
+            mItemSackObject = (GameObject)Instantiate(mItemSackPrefab, HVRControllerManager.Instance.Right.transform.position, HVRControllerManager.Instance.Right.transform.rotation);
             mItemSackObject.transform.SetParent(HVRControllerManager.Instance.Right.transform);
             mItemSackObject.transform.localPosition = Vector3.zero;
             mItemSackObject.transform.localEulerAngles = new Vector3(-45f, -180f, 0f);

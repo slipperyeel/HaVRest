@@ -73,7 +73,7 @@ Transform:
   m_GameObject: {fileID: 1000013176944840}
   m_LocalRotation: {x: 0.0000017881393, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 10.363, z: -2.28}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000013186083296}
@@ -233,4 +233,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0fa889fd2547cf46ab77d89afc74dc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mCol: {fileID: 65000011789574906}
+  highlightOnTouch: 0
+  touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
+  rumbleOnTouch: {x: 0, y: 0}
+  allowedTouchControllers: 0
+  isGrabbable: 0
+  isDroppable: 1
+  isSwappable: 1
+  holdButtonToGrab: 1
+  rumbleOnGrab: {x: 0, y: 0}
+  allowedGrabControllers: 0
+  precisionSnap: 0
+  rightSnapHandle: {fileID: 0}
+  leftSnapHandle: {fileID: 0}
+  grabAttachMechanic: 0
+  detachThreshold: 500
+  springJointStrength: 500
+  springJointDamper: 50
+  throwMultiplier: 1
+  onGrabCollisionDelay: 0
+  isUsable: 0
+  holdButtonToUse: 1
+  pointerActivatesUseAction: 0
+  rumbleOnUse: {x: 0, y: 0}
+  allowedUseControllers: 0
