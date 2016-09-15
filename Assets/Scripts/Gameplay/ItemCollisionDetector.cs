@@ -19,7 +19,7 @@ public class ItemCollisionDetector : MonoBehaviour
         mRigidBody = GetComponent<Rigidbody>();
 
         Debug.Assert(mCollider != null, "ItemCollisionDetector needs a Collider in order to work.");
-        Debug.Assert(mRigidBody != null, "ItemCollisionDetector needs a RigidBody in order to work.");
+        //Debug.Assert(mRigidBody != null, "ItemCollisionDetector needs a RigidBody in order to work.");
     }
 
     void OnCollisionEnter(Collision collision)

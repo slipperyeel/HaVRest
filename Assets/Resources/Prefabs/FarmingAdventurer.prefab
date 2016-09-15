@@ -8,7 +8,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 423118}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: tip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23,7 +23,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 469826}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: rgrip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 449930}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,7 +53,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 402234}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: trackpad_touch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -69,7 +69,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 433310}
   - 114: {fileID: 11405672}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,7 +84,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 422312}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 405692}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: trackpad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,7 +114,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 464184}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -129,7 +129,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 471296}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -144,7 +144,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 458878}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: trackpad_touch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -159,7 +159,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 424810}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: gdc2015
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -174,7 +174,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 460186}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: lgrip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -189,7 +189,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 462920}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -204,7 +204,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 462334}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: trackhat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -219,7 +219,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 423054}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -234,7 +234,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 481146}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -249,7 +249,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 447610}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -264,7 +264,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 462856}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -280,7 +280,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 482528}
   - 114: {fileID: 11440038}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -296,7 +296,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 461982}
   - 54: {fileID: 5469502}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -311,7 +311,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 438990}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -345,7 +345,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 450890}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -360,7 +360,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 431852}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: gdc2015
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -375,7 +375,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 476428}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: sys_button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -390,7 +390,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 410326}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -405,7 +405,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 432614}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -420,7 +420,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 471324}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -435,7 +435,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 416718}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -450,7 +450,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 492448}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: sys_button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -465,7 +465,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 443192}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -485,7 +485,7 @@ GameObject:
   - 114: {fileID: 114000012204925806}
   - 114: {fileID: 114000011054696626}
   - 114: {fileID: 114000010096936304}
-  m_Layer: 2
+  m_Layer: 8
   m_Name: Controller (left)
   m_TagString: Hands
   m_Icon: {fileID: 0}
@@ -500,7 +500,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 465084}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -515,7 +515,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 409672}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: handgrip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -530,7 +530,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 491498}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -545,7 +545,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 476032}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -560,7 +560,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 457306}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: tip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -575,7 +575,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 464378}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -590,7 +590,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 492230}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -605,7 +605,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 418886}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -620,7 +620,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 412654}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -635,7 +635,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 444934}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: handgrip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -650,7 +650,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 488982}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: lgrip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -665,7 +665,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 436586}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -680,7 +680,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 413070}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: trackpad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -695,7 +695,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 427052}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: trackhat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -710,7 +710,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 407878}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -743,7 +743,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 499396}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -758,7 +758,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 439942}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -813,7 +813,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 422648}
   - 54: {fileID: 5409936}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -834,7 +834,7 @@ GameObject:
   - 114: {fileID: 114000012875363636}
   - 114: {fileID: 114000010010441542}
   - 114: {fileID: 114000011754397842}
-  m_Layer: 2
+  m_Layer: 8
   m_Name: Controller (right)
   m_TagString: Hands
   m_Icon: {fileID: 0}
@@ -849,7 +849,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 481498}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -864,7 +864,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 401896}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: rgrip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -879,7 +879,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 441594}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -894,7 +894,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 472966}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -909,7 +909,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 496452}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -924,7 +924,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 487848}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}

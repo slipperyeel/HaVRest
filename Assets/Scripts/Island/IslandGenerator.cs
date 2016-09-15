@@ -328,6 +328,8 @@ public class IslandGenerator : MonoBehaviour
     private GameObject CreateTileObject()
     {
         GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        BoxCollider collider = obj.GetComponent<BoxCollider>();
+        collider.isTrigger = true;
         obj.transform.localScale = new Vector3(1f, 0.1f, 1f);
         Destroy(obj.GetComponent<MeshRenderer>());
         Destroy(obj.GetComponent<MeshFilter>());
