@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public static class HVRItemFactory
 {
-    private static readonly string ITEM_DIRECTORY = "Prefabs/Items";
+    public static readonly string ITEM_DIRECTORY = "Prefabs/Items";
     private static readonly string RESOURCES_DIRECTORY = "Resources";
     private static List<GameObject> mItemPrefabs = new List<GameObject>();
 

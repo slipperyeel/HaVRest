@@ -11,14 +11,14 @@ public class PlayerMomento : GameObjectMomento
 
     // We'll model the backpack as a list of lists of pouches for the momento.
     private List<List<InventoryItem>> mBackPack;
+    private PlayerSkills mPlayerSkills;
 
     public PlayerMomento()
     {
         mResourceStore = new List<ResourceStore>();
         mBackPack = new List<List<InventoryItem>>();
         mPrefabName = sPrefabName;
-
-        Debug.Log("Count: " + mBackPack.Count);
+        mPlayerSkills = new PlayerSkills();
     }
 
     public override void UpdateMomentoData(object obj, string prefabName)
@@ -30,6 +30,7 @@ public class PlayerMomento : GameObjectMomento
             {
                 ResourceDependentObject resourceComp = go.GetComponent<ResourceDependentObject>();
                 Backpack backPackComp = go.GetComponent<Player>().BackPack;
+                mPlayerSkills = go.GetComponent<Player>().PlayerSkills;
 
                 if (resourceComp != null && backPackComp != null)
                 {
@@ -39,11 +40,9 @@ public class PlayerMomento : GameObjectMomento
                     mBackPack = new List<List<InventoryItem>>();
                     for (int i = 0; i < backPackComp.Pouches.Count; i++)
                     {
-                        Debug.Log(backPackComp.Pouches[i].InventoryItems);
                         mBackPack.Add(backPackComp.Pouches[i].InventoryItems);
                     }
 
-                    Debug.Log(mBackPack.Count);
                     base.UpdateMomentoData(go, prefabName);
                 }
             }
@@ -59,10 +58,14 @@ public class PlayerMomento : GameObjectMomento
             {
                 ResourceDependentObject resourceComp = go.GetComponent<ResourceDependentObject>();
                 Backpack backPackComp = go.GetComponent<Player>().BackPack;
+                PlayerSkills pSkills = go.GetComponent<Player>().PlayerSkills;
 
-                if (resourceComp != null && backPackComp != null)
+                if (resourceComp != null && backPackComp != null && pSkills != null)
                 {
                     resourceComp.MyResourceStore = mResourceStore;
+
+                    pSkills = mPlayerSkills;
+
                     // Repopulate the inventory items.
                     for (int i = 0; i < mBackPack.Count; i++)
                     {

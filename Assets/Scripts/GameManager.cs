@@ -41,7 +41,8 @@ public class GameManager : Singleton<GameManager>
             if (DataManager.Instance.IsFirstBoot)
             {
                 Debug.Log("Is First Boot.");
-                DataManager.Instance.SpawnObject<Player, PlayerMomento>(mPlayerPrefab, mSpawnPoint.position, mSpawnPoint.rotation, Vector3.one);
+                Player player = DataManager.Instance.SpawnObject<Player, PlayerMomento>(mPlayerPrefab, mSpawnPoint.position, mSpawnPoint.rotation, Vector3.one);
+                player.InitPlayer();
             }
         });
     }

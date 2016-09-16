@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using slipperyeel;
 
 public class Player : ResourceDependentObject
 {
@@ -23,7 +24,10 @@ public class Player : ResourceDependentObject
 
     [SerializeField]
     private Backpack mBackPack;
-    public Backpack  BackPack { get { return mBackPack; } set { mBackPack = value; } }
+    public Backpack BackPack { get { return mBackPack; } set { mBackPack = value; } }
+
+    private PlayerSkills mPlayerSkills = new PlayerSkills();
+    public PlayerSkills PlayerSkills { get { return mPlayerSkills; } set { mPlayerSkills = value; } }
 
     protected override void Awake()
     {
@@ -32,13 +36,19 @@ public class Player : ResourceDependentObject
 
     void Start()
     {
-        
+        SEEventManager.Instance.AddListener<StatUsageTriggerEvent>(HandleStatUsageEvent);
     }
 
     protected override void Update ()
     {
         base.Update();
 	}
+
+    public void InitPlayer()
+    {
+        mPlayerSkills = new PlayerSkills();
+        mPlayerSkills.InitStats();
+    }
 
     ////////////////////////////////////////////////////////////////////////////
     /// Implementation of ResourceDependentObject (HaVRest)
@@ -85,5 +95,37 @@ public class Player : ResourceDependentObject
                 }
             }
         }
+    }
+
+    protected override void OnDestroy()
+    {
+        if (SEEventManager.Instance != null)
+        {
+            SEEventManager.Instance.RemoveListener<StatUsageTriggerEvent>(HandleStatUsageEvent);
+        }
+    }
+
+    void HandleStatUsageEvent(StatUsageTriggerEvent sute)
+    {
+        PlayerSkill skill = mPlayerSkills.GetPlayerSkill(sute.Skill);
+        if (skill.Level < skill.Max)
+        {
+            skill.Uses++;
+            // TODO (James): Come up with a better leveling curve
+            if (skill.Uses >= skill.Level * 10)
+            {
+                skill.Level++;
+            }
+        }
+    }
+}
+
+public class StatUsageTriggerEvent : SEGameEvent
+{
+    public PlayerSkillsEnum Skill;
+
+    public StatUsageTriggerEvent(PlayerSkillsEnum skill)
+    {
+        this.Skill = skill;
     }
 }

@@ -194,19 +194,31 @@ public class DataManager : Singleton<DataManager>
                 { 
                     GameObject loadedObject = (GameObject)Resources.Load<GameObject>(PREFABS_PATH + mMomentos[i].PrefabName);
 
-                    yield return null;
+                    if (loadedObject == null)
+                    {
+                        loadedObject = (GameObject)Resources.Load<GameObject>(HVRItemFactory.ITEM_DIRECTORY + mMomentos[i].PrefabName);
+                    }
 
                     if (loadedObject != null)
                     {
-                        loadedObject = GameObject.Instantiate(loadedObject);
-                        mMomentos[i].ApplyMomentoData(loadedObject);
-
                         yield return null;
-                    }
 
-                    if (!mDataDictionary.ContainsKey(loadedObject))
+                        if (loadedObject != null)
+                        {
+                            loadedObject = GameObject.Instantiate(loadedObject);
+                            mMomentos[i].ApplyMomentoData(loadedObject);
+
+                            yield return null;
+                        }
+
+                        if (!mDataDictionary.ContainsKey(loadedObject))
+                        {
+                            mDataDictionary.Add(loadedObject, mMomentos[i]);
+                        }
+                    }
+                    else
                     {
-                        mDataDictionary.Add(loadedObject, mMomentos[i]);
+                        Debug.LogError("Prefab for " + mMomentos[i].PrefabName + " Could not be found.");
                     }
                 }
             }
@@ -236,7 +248,7 @@ public class DataManager : Singleton<DataManager>
         mIsDataLoaded = true;
     }
 
-	public override void OnDestroy()
+	protected override void OnDestroy()
 	{
 		mMomentos.Clear ();
 		mMomentos = null;

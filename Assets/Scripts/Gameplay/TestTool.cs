@@ -1,14 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using slipperyeel;
 
 public class TestTool : PhysicalItem
 {
+    [SerializeField]
+    private PlayerSkillsEnum skillType = PlayerSkillsEnum.Axe;
+
     protected override void HandleItemCollisionEnter(Collision col)
     {
         Debug.Log(col.gameObject.name);
         if (col != null)
         {
+            StatUsageTriggerEvent sute = new StatUsageTriggerEvent(skillType);
+            SEEventManager.Instance.TriggerEvent(sute);
+
             Debug.Log("Collision enter with: " + col.gameObject.name);
             PhysicalObject physObj = col.gameObject.GetComponent<PhysicalObject>();
             if(physObj != null)
