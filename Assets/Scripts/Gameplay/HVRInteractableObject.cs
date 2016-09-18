@@ -44,20 +44,14 @@ public class HVRInteractableObject : VRTK_InteractableObject
                     bottomHand = heldController;
                 }
 
-                Quaternion topQuat = topHand.transform.rotation;
-
                 Vector3 heldDir = topHand.transform.position - bottomHand.transform.position;
 
-                transform.LookAt(topHand.transform.position);
-
-                //transform.right = Vector3.Project(topHand.transform.right, transform.right);
-
+                transform.forward = heldDir.normalized;
+                transform.Rotate(Quaternion.Euler(0f, 0f, -Angle360(transform.up, topHand.transform.right, Vector3.right)).eulerAngles);
                 float hiltDist = Vector3.Distance(bottomHand.transform.position, transform.position);
-
                 Vector3 hiltDir = (bottomHand.transform.position - topHand.transform.position).normalized;
 
                 Vector3 hiltOffset = hiltDir * hiltDist;
-                Debug.Log("THIS POS: " + transform.position + " OFFSET POSS: " + bottomHand.transform.position + hiltOffset);
                 transform.position = bottomHand.transform.position + hiltOffset;
             }
         }
