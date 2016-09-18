@@ -47,7 +47,7 @@ public class HVRInteractableObject : VRTK_InteractableObject
                 Vector3 heldDir = topHand.transform.position - bottomHand.transform.position;
 
                 transform.forward = heldDir.normalized;
-                transform.Rotate(Quaternion.Euler(0f, 0f, -Angle360(transform.up, topHand.transform.right, Vector3.right)).eulerAngles);
+                transform.Rotate(Quaternion.Euler(0f, 0f, -Angle360(Vector3.up, topHand.transform.up, Vector3.right)).eulerAngles);
                 float hiltDist = Vector3.Distance(bottomHand.transform.position, transform.position);
                 Vector3 hiltDir = (bottomHand.transform.position - topHand.transform.position).normalized;
 
