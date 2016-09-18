@@ -12,19 +12,28 @@ public class HVRInteractableObject : VRTK_InteractableObject
     public SteamVR_TrackedObject.EIndex grabbedControllerIndex = SteamVR_TrackedObject.EIndex.None;
     public SteamVR_TrackedObject.EIndex heldControllerIndex = SteamVR_TrackedObject.EIndex.None;
 
+    private Vector3 initialGrabOffset = Vector3.zero;
+
     protected override void FixedUpdate()
     {   
-        if (grabbedControllerIndex != SteamVR_TrackedObject.EIndex.None && heldControllerIndex != SteamVR_TrackedObject.EIndex.None)
-        {
+
             GameObject heldController = HVRControllerManager.Instance.GetControllerByIndex((int)heldControllerIndex);
             GameObject grabbingController = HVRControllerManager.Instance.GetControllerByIndex((int)grabbedControllerIndex);
             GameObject topHand, bottomHand;
 
-            if(heldController != null && grabbingController != null)
+        if (grabbingController != null)
+        {
+            transform.position = grabbingController.transform.position;
+
+            if (heldController == null)
+            {
+                transform.rotation = grabbingController.transform.rotation;
+            }
+            else
             {
                 float heldDist = Vector3.Distance(transform.position, heldController.transform.position);
                 float grabbedDist = Vector3.Distance(transform.position, grabbingController.transform.position);
-                if(heldDist >= grabbedDist)
+                if (heldDist >= grabbedDist)
                 {
                     topHand = heldController;
                     bottomHand = grabbingController;
@@ -35,15 +44,21 @@ public class HVRInteractableObject : VRTK_InteractableObject
                     bottomHand = heldController;
                 }
 
+                Quaternion topQuat = topHand.transform.rotation;
+
                 Vector3 heldDir = topHand.transform.position - bottomHand.transform.position;
-                transform.forward = heldDir.normalized;
-                // this isn't quite there yet, but it's close
-                transform.Rotate(Quaternion.Euler(0f, 0f, -Angle360(transform.up, heldController.transform.right, Vector3.right)).eulerAngles);
-                Vector3 actualDir = topHand.transform.position - transform.position;
-                Vector3 handDir = topHand.transform.position - bottomHand.transform.position;
-                Vector3 pos = actualDir;
-                pos = Vector3.Project(pos, handDir.normalized);
-                transform.position = topHand.transform.position - pos;
+
+                transform.LookAt(topHand.transform.position);
+
+                //transform.right = Vector3.Project(topHand.transform.right, transform.right);
+
+                float hiltDist = Vector3.Distance(bottomHand.transform.position, transform.position);
+
+                Vector3 hiltDir = (bottomHand.transform.position - topHand.transform.position).normalized;
+
+                Vector3 hiltOffset = hiltDir * hiltDist;
+                Debug.Log("THIS POS: " + transform.position + " OFFSET POSS: " + bottomHand.transform.position + hiltOffset);
+                transform.position = bottomHand.transform.position + hiltOffset;
             }
         }
         base.FixedUpdate();
@@ -66,6 +81,7 @@ public class HVRInteractableObject : VRTK_InteractableObject
 
             grabbedControllerIndex = index;
         }
+        // Second hand
         else if (heldControllerIndex == SteamVR_TrackedObject.EIndex.None && index != grabbedControllerIndex)
         {
             controllerActionsArray[(int)HVR_InteractionTypes.Held] = grabbingObject.GetComponent<VRTK_ControllerActions>();
@@ -87,6 +103,11 @@ public class HVRInteractableObject : VRTK_InteractableObject
                 {
                     grabbedControllerIndex = heldControllerIndex;
                     heldControllerIndex = SteamVR_TrackedObject.EIndex.None;
+                    GameObject grabController = HVRControllerManager.Instance.GetControllerByIndex((int)grabbedControllerIndex);
+                    if (grabController != null)
+                    {
+                        transform.parent = grabController.transform;
+                    }
                 }
                 else
                 {
@@ -104,7 +125,7 @@ public class HVRInteractableObject : VRTK_InteractableObject
                 controllerActionsArray[(int)HVR_InteractionTypes.Held] = null;
                 controllerEventsArray[(int)HVR_InteractionTypes.Held] = null;
 
-                heldControllerIndex = SteamVR_TrackedObject.EIndex.None;
+                heldControllerIndex = SteamVR_TrackedObject.EIndex.None;    
             }
         }
     }

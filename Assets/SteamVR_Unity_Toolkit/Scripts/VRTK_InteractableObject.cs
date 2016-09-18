@@ -29,7 +29,8 @@ namespace VRTK
             Fixed_Joint,
             Spring_Joint,
             Track_Object,
-            Child_Of_Controller
+            Child_Of_Controller,
+            HVRType
         }
 
         public enum AllowedController

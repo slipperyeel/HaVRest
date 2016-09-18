@@ -40,7 +40,6 @@ GameObject:
   - 4: {fileID: 4000013276384726}
   - 33: {fileID: 33000013058530732}
   - 23: {fileID: 23000012458907516}
-  - 65: {fileID: 65000013282735916}
   m_Layer: 0
   m_Name: Axe_Model
   m_TagString: Untagged
@@ -72,8 +71,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000011570150828}
   m_LocalRotation: {x: -0.5, y: 0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: 0.66400105, y: 3.2239995, z: 0.13600007}
-  m_LocalScale: {x: 4, y: 4, z: 4}
+  m_LocalPosition: {x: 0.086, y: 0.277, z: 0.011}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000013276384726}
@@ -85,7 +84,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010119544154}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.2226562, y: 11.293945, z: -1.9453125}
+  m_LocalPosition: {x: 0.888, y: 11.412, z: -1.567}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
@@ -99,7 +98,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000011048622546}
   m_LocalRotation: {x: 0.4669349, y: -0.5197447, z: -0.50637645, w: 0.5053911}
-  m_LocalPosition: {x: 0.044, y: 0.013, z: 0.315}
+  m_LocalPosition: {x: 0.013, y: -0.032, z: 0.585}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: -3.0890002, y: -88.68101, z: -87.151}
   m_Children:
@@ -167,7 +166,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.02, y: 0.5, z: 0.3}
+  m_Size: {x: 0.02, y: 0.35, z: 0.3}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &65000010933179980
 BoxCollider:
@@ -179,20 +178,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.1, y: 0.1, z: 1.2}
-  m_Center: {x: 0, y: 0, z: 0.61}
---- !u!65 &65000013282735916
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011048622546}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.28, y: 3.86, z: 0.21005821}
-  m_Center: {x: 0.06, y: 0.93, z: 0.15825593}
+  m_Size: {x: -0.05, y: 0.08, z: 1}
+  m_Center: {x: 0, y: 0, z: 0.49}
 --- !u!114 &114000010063609478
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -243,7 +230,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
-  grabAttachMechanic: 3
+  grabAttachMechanic: 4
   detachThreshold: 500
   springJointStrength: 500
   springJointDamper: 50
