@@ -2086,7 +2086,7 @@ GameObject:
   - 4: {fileID: 4000013072652968}
   - 114: {fileID: 114000010847042110}
   m_Layer: 0
-  m_Name: Pouch
+  m_Name: Pouch4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2102,7 +2102,39 @@ GameObject:
   - 4: {fileID: 4000011803269592}
   - 114: {fileID: 114000013725012382}
   m_Layer: 0
-  m_Name: Pouch
+  m_Name: Pouch2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1000012180239254
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000010945882606}
+  - 114: {fileID: 114000011945867718}
+  m_Layer: 0
+  m_Name: Pouch3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1000012482717540
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000011344399496}
+  - 114: {fileID: 114000013041780056}
+  m_Layer: 0
+  m_Name: Pouch1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2135,10 +2167,38 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 4000013072652968}
+  - {fileID: 4000011344399496}
   - {fileID: 4000011803269592}
+  - {fileID: 4000010945882606}
+  - {fileID: 4000013072652968}
   m_Father: {fileID: 446384}
   m_RootOrder: 3
+--- !u!4 &4000010945882606
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012180239254}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 4000010252806906}
+  m_RootOrder: 2
+--- !u!4 &4000011344399496
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012482717540}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 4000010252806906}
+  m_RootOrder: 0
 --- !u!4 &4000011803269592
 Transform:
   m_ObjectHideFlags: 1
@@ -2164,7 +2224,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000010252806906}
-  m_RootOrder: 0
+  m_RootOrder: 3
 --- !u!114 &114000010010441542
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2231,8 +2291,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mPouches:
-  - {fileID: 114000010847042110}
+  - {fileID: 114000013041780056}
   - {fileID: 114000013725012382}
+  - {fileID: 114000011945867718}
+  - {fileID: 114000010847042110}
   mItemSackPrefab: {fileID: 1000012012829598, guid: 346de03a174e61246bdf51f1a2ad7d9b,
     type: 2}
   mItemFloatController: {fileID: 9100000, guid: 598015e3b4aaed042862cef99459a3d1,
@@ -2279,6 +2341,24 @@ MonoBehaviour:
   layersToIgnore:
     serializedVersion: 2
     m_Bits: 4
+--- !u!114 &114000011945867718
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012180239254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31d916098d0d3c0458b8b78f372e77de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mSlots: 0
+  mInventoryItems:
+  - Id: 1
+  - Id: 2
+  - Id: 3
+  - Id: 4
+  - Id: 5
 --- !u!114 &114000012147821352
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2378,6 +2458,24 @@ MonoBehaviour:
   hideControllerOnTouch: 0
   hideControllerDelay: 0
   globalTouchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
+--- !u!114 &114000013041780056
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012482717540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31d916098d0d3c0458b8b78f372e77de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mSlots: 0
+  mInventoryItems:
+  - Id: 1
+  - Id: 2
+  - Id: 3
+  - Id: 4
+  - Id: 5
 --- !u!114 &114000013049302974
 MonoBehaviour:
   m_ObjectHideFlags: 1

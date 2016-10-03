@@ -57,7 +57,7 @@ public class GameObjectMomento
         if (obj != null)
 		{
 			GameObject go = (GameObject)obj;
-            Debug.Log(go.name);
+            //Debug.Log(go.name);
             if (go != null)
             {
 
