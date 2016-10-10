@@ -33,7 +33,7 @@ public class Tile : MonoBehaviour
 
 	public System.Action<Tile, eTileState> StateChangeCallback;
 
-    public void Init(int x, int y, float height, int z, int w)
+    public void Init(int x, int y, float height, float z, float w)
     {
         _islandPos = new Vector2(x, y);
         _worldPos = new Vector3(z, height * 10f, w); // 10f is the terrain height scale

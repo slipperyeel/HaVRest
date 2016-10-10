@@ -9,6 +9,9 @@ public class IslandGenerator : MonoBehaviour
 
     public GameObject[] _detailObjects;
 
+    [SerializeField]
+    private GameObject _tilePrefab;
+
     public static int IslandID = 0;
     private int _id;
     private GameObject _currentTerrain;
@@ -44,7 +47,7 @@ public class IslandGenerator : MonoBehaviour
 
         IslandData data = new IslandData(_id, realSize, posWithOffset, ref tData);
         PopulateTiles(ref data, posWithOffset, moistureNoise, tempNoise, heights, realSize, ref tData);
-        //DebugDrawGrid(posWithOffset, realSize, heights);
+        DebugDrawGrid(posWithOffset, realSize, heights);
 
         PlaceDetails(heights, realSize, ref data, seed);
 
@@ -226,10 +229,13 @@ public class IslandGenerator : MonoBehaviour
         container.transform.position = Vector3.zero;
         GameObject tileObject = null;
         Tile t = null;
+        int tilesPerMeter = 3;
 
         int[] offsets = new int[] { 0, 4, 7, 10, 13, 16, 19 };
         float[,,] splatData = new float[size, size, _terrainSplats.Length];
 
+        float subTileOffset = 1 / (float)tilesPerMeter;
+        Vector3 offsetPosition = new Vector3(0f, 0.05f, 0f);
         for (int i = 0; i < size; ++i)
         {
             for (int j = 0; j < size; ++j)
@@ -242,14 +248,33 @@ public class IslandGenerator : MonoBehaviour
                     int terrainX, terrainY;
                     GetWorldTerrainPosition(terrainPos, i, j, out terrainX, out terrainY);
 
-                    // create physical tile
-                    tileObject = CreateTileObject();
-                    tileObject.name = string.Format("Tile[{0},{1}]", i, j);
-                    t = tileObject.AddComponent<Tile>();
-                    t.Init(i, j, height, terrainX, terrainY);
+                    GameObject tileContainer = new GameObject();
+                    tileContainer.name = string.Format("Tile[{0},{1}]", i, j);
+                    tileContainer.transform.SetParent(container.transform);
+                    tileContainer.transform.position = Vector3.zero;
+
+                    // for multiple tiles per meter
+                    for (int k = 0; k < tilesPerMeter; ++k)
+                    {
+                        for (int l = 0; l < tilesPerMeter; ++l)
+                        {
+                            // create physical tile
+                            offsetPosition.x = (subTileOffset / 2f) + subTileOffset * l;
+                            offsetPosition.z = (subTileOffset / 2f) + subTileOffset * k;
+
+                            tileObject = (GameObject)Instantiate(_tilePrefab);
+                            tileObject.name = string.Format("Sub Tile[{0},{1}]", k, l);
+                            t = tileObject.AddComponent<Tile>();
+                            t.Init(i, j, height, terrainX + offsetPosition.x, terrainY + offsetPosition.z);
+                            tileObject.transform.position = t.WorldPosition;
+
+                            // add to parent container for a neat hierarchy
+                            tileObject.transform.SetParent(tileContainer.transform);
+                        }
+                    }
 
                     // determine biome
-					eMoisture moist = GetMoistureEnumFromValue(moisture[i][j]);
+                    eMoisture moist = GetMoistureEnumFromValue(moisture[i][j]);
 					eTemperature temp = GetTempEnumFromValue(temps[i][j]);
                     eBiome biome = _biomeTable[(int)moist, (int)temp];
 
@@ -258,11 +283,6 @@ public class IslandGenerator : MonoBehaviour
                     // set terrain texture
                     int textureIndex = offsets[(int)biome] + (int)eTileType.Grass;
                     splatData[j, i, textureIndex] = 1;
-
-                    tileObject.transform.position = t.WorldPosition + new Vector3(0.5f, 0.05f, 0.5f);
-
-                    // add to parent container for a neat hierarchy
-                    tileObject.transform.SetParent(container.transform);
                 }
                 else
                 {
@@ -324,18 +344,6 @@ public class IslandGenerator : MonoBehaviour
 
 		return t;
 	}
-
-    private GameObject CreateTileObject()
-    {
-        GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        BoxCollider collider = obj.GetComponent<BoxCollider>();
-        collider.isTrigger = true;
-        obj.transform.localScale = new Vector3(1f, 0.1f, 1f);
-        Destroy(obj.GetComponent<MeshRenderer>());
-        Destroy(obj.GetComponent<MeshFilter>());
-
-        return obj;
-    }
 
     private float RoundValue(float value, int numHeights)
     {

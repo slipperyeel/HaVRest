@@ -36,10 +36,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &114000012788697304
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -59,3 +59,5 @@ MonoBehaviour:
   - {fileID: 1000014077639280, guid: 6cd1bcd667e06424ca0ff75b72d78653, type: 2}
   - {fileID: 1000012078886538, guid: 85b3f5ee0389b02429b38a7310715922, type: 2}
   - {fileID: 1000012410176476, guid: 0b43fead00abb0b468e18cd3000768a2, type: 2}
+  _tilePrefab: {fileID: 1000014270955372, guid: 6f0492efed2e08b4a94f6909557dec23,
+    type: 2}
