@@ -64,6 +64,16 @@ public class Backpack : MonoBehaviour
             child.enabled = !hidden;
     }
 
+    void SpawnTopObject(ItemEnums itemEnum)
+    {
+        GameObject instantiatedObj;
+        HVRItemFactory.SpawnItem(itemEnum, Vector3.zero, default(Quaternion), Vector3.one, out instantiatedObj, "TopItem");
+        Destroy(instantiatedObj.GetComponent<Rigidbody>());
+        instantiatedObj.transform.SetParent(mItemSackObject.transform.GetChild(0).GetChild(12));
+        instantiatedObj.transform.localPosition = Vector3.zero;
+        instantiatedObj.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
+    }
+
     void SpawnInventoryUI(bool isLeft)
     {
         mItemSackObject.GetComponent<BagInteraction>().mIsBagOnLeft = isLeft;
@@ -84,6 +94,7 @@ public class Backpack : MonoBehaviour
                 Material[] newMaterials = new Material[instantiatedObj.GetComponent<MeshRenderer>().materials.Length];
                 newMaterials[0] = mRimLight;
                 instantiatedObj.GetComponent<MeshRenderer>().materials = newMaterials;
+                SpawnTopObject(ItemEnums.EggPlant_Fruit);
             }
             //itemFloatController.runtimeAnimatorController = mItemFloatController;
         }
