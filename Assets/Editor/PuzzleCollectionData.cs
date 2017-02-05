@@ -6,7 +6,7 @@ using HVRPuzzle;
 [System.Serializable]
 public class PuzzleCollectionData : ScriptableObject
 {
-    [SerializeField, HideInInspector] // for some reason, on Unity 5.4 beta, showing this in the inspector spams errors
+    [SerializeField]
     private List<Puzzle> mCollection;
     public List<Puzzle> PuzzleCollection { get { return mCollection; } }
 

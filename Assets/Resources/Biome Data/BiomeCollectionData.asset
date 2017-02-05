@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80fb0c0fb1193f3479b6c288774264c6, type: 3}
+  m_Name: BiomeCollectionData
+  m_EditorClassIdentifier: 
+  _data:
+  - DetailObjects:
+    - {fileID: 1000012394176470, guid: 74a50b9414bb14c4db3ef555aba50d49, type: 2}
+    - {fileID: 1000012078886538, guid: 85b3f5ee0389b02429b38a7310715922, type: 2}
+    - {fileID: 1000012410176476, guid: 0b43fead00abb0b468e18cd3000768a2, type: 2}
+    - {fileID: 1000014077639280, guid: 6cd1bcd667e06424ca0ff75b72d78653, type: 2}
+    - {fileID: 1000011978275172, guid: 097858c84f2c0b54297673faee57cff6, type: 2}
+    Textures:
+    - {fileID: 2800000, guid: 34c86874624eef747b2b6b05aa4f9ba7, type: 3}
+    - {fileID: 2800000, guid: 86bbce0dcefee0243a4f6bff3fc7079d, type: 3}
+    - {fileID: 2800000, guid: e401182491224064e81245cf12e721b7, type: 3}
+    - {fileID: 2800000, guid: dd676ffe1e0bdc141858af45ab8eb5b8, type: 3}
+  - DetailObjects:
+    - {fileID: 1000012499361184, guid: d0bc91e35722a5b488191dbbd760e98a, type: 2}
+    - {fileID: 1000012078886538, guid: 85b3f5ee0389b02429b38a7310715922, type: 2}
+    - {fileID: 1000012410176476, guid: 0b43fead00abb0b468e18cd3000768a2, type: 2}
+    - {fileID: 1000014077639280, guid: 6cd1bcd667e06424ca0ff75b72d78653, type: 2}
+    - {fileID: 1000011978275172, guid: 097858c84f2c0b54297673faee57cff6, type: 2}
+    Textures:
+    - {fileID: 2800000, guid: e62a9e996110fac4dbb36dcd77aac8bf, type: 3}
+    - {fileID: 2800000, guid: 11c3acb12675e4142bf41040b420fc18, type: 3}
+    - {fileID: 2800000, guid: 73fdf71f80f0e9d4cae0f6c53151de72, type: 3}
+  - DetailObjects:
+    - {fileID: 1000013827704720, guid: b6cea4139e4b6c744b3ef76253775c60, type: 2}
+    - {fileID: 1000012078886538, guid: 85b3f5ee0389b02429b38a7310715922, type: 2}
+    - {fileID: 1000012410176476, guid: 0b43fead00abb0b468e18cd3000768a2, type: 2}
+    - {fileID: 1000014077639280, guid: 6cd1bcd667e06424ca0ff75b72d78653, type: 2}
+    - {fileID: 1000011978275172, guid: 097858c84f2c0b54297673faee57cff6, type: 2}
+    Textures:
+    - {fileID: 2800000, guid: 4accfceabc7e01d45bd0bcad76d55812, type: 3}
+    - {fileID: 2800000, guid: c365db2cd4cc8ec4bb726383fcb91577, type: 3}
+    - {fileID: 2800000, guid: dcb2a69bc1fb7944aaceb33e1a72160b, type: 3}
+  - DetailObjects:
+    - {fileID: 1000012499361184, guid: d0bc91e35722a5b488191dbbd760e98a, type: 2}
+    - {fileID: 1000012078886538, guid: 85b3f5ee0389b02429b38a7310715922, type: 2}
+    - {fileID: 1000012410176476, guid: 0b43fead00abb0b468e18cd3000768a2, type: 2}
+    - {fileID: 1000014077639280, guid: 6cd1bcd667e06424ca0ff75b72d78653, type: 2}
+    - {fileID: 1000011978275172, guid: 097858c84f2c0b54297673faee57cff6, type: 2}
+    Textures:
+    - {fileID: 2800000, guid: c697d0924c8f9674aae6ff840af6e7eb, type: 3}
+    - {fileID: 2800000, guid: 2488b98c6dd1fe14bb6c758ac6a55b70, type: 3}
+    - {fileID: 2800000, guid: 231319f8e570e1f4795bf5c858d0d463, type: 3}
+  - DetailObjects:
+    - {fileID: 1000013827704720, guid: b6cea4139e4b6c744b3ef76253775c60, type: 2}
+    - {fileID: 1000012078886538, guid: 85b3f5ee0389b02429b38a7310715922, type: 2}
+    - {fileID: 1000012410176476, guid: 0b43fead00abb0b468e18cd3000768a2, type: 2}
+    - {fileID: 1000014077639280, guid: 6cd1bcd667e06424ca0ff75b72d78653, type: 2}
+    - {fileID: 1000011978275172, guid: 097858c84f2c0b54297673faee57cff6, type: 2}
+    Textures:
+    - {fileID: 2800000, guid: 92685d0e771f11e4e8457dbd633f1b57, type: 3}
+    - {fileID: 2800000, guid: f53ccd3c9c660164693898c758ff5d39, type: 3}
+    - {fileID: 2800000, guid: b92710174f3a2d0438336ad87e34796c, type: 3}
+  - DetailObjects:
+    - {fileID: 1000013827704720, guid: b6cea4139e4b6c744b3ef76253775c60, type: 2}
+    - {fileID: 1000012078886538, guid: 85b3f5ee0389b02429b38a7310715922, type: 2}
+    - {fileID: 1000012410176476, guid: 0b43fead00abb0b468e18cd3000768a2, type: 2}
+    - {fileID: 1000014077639280, guid: 6cd1bcd667e06424ca0ff75b72d78653, type: 2}
+    - {fileID: 1000011978275172, guid: 097858c84f2c0b54297673faee57cff6, type: 2}
+    Textures:
+    - {fileID: 2800000, guid: f7f772e3e5f261e4bac1984892032ff1, type: 3}
+    - {fileID: 2800000, guid: 9916cc56a4735dc46ad4bdd5450c16ec, type: 3}
+    - {fileID: 2800000, guid: 5bfcd9ce8c4fcd34693ea4ea13a8103c, type: 3}
+  - DetailObjects:
+    - {fileID: 1000012499361184, guid: d0bc91e35722a5b488191dbbd760e98a, type: 2}
+    - {fileID: 1000012078886538, guid: 85b3f5ee0389b02429b38a7310715922, type: 2}
+    - {fileID: 1000012410176476, guid: 0b43fead00abb0b468e18cd3000768a2, type: 2}
+    - {fileID: 1000014077639280, guid: 6cd1bcd667e06424ca0ff75b72d78653, type: 2}
+    - {fileID: 1000011978275172, guid: 097858c84f2c0b54297673faee57cff6, type: 2}
+    Textures:
+    - {fileID: 2800000, guid: 8723f104219c4d54880f86f8872794e2, type: 3}
+    - {fileID: 2800000, guid: 8160e917d34d3b24fa770982ab3dfb4b, type: 3}
+    - {fileID: 2800000, guid: 131566da1d373de42b1372e6338e42c3, type: 3}
+    - {fileID: 0}
+    - {fileID: 2800000, guid: fba23d32706fa5c4287c771f92fc42d4, type: 3}

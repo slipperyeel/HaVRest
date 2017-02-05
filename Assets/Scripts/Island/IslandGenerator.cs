@@ -12,6 +12,8 @@ public class IslandGenerator : MonoBehaviour
     [SerializeField]
     private GameObject _tilePrefab;
 
+    private BiomeCollectionData _biomeData;
+
     public static int IslandID = 0;
     private int _id;
     private GameObject _currentTerrain;
@@ -95,7 +97,7 @@ public class IslandGenerator : MonoBehaviour
         if (fromTool)
         {
             // have to save terrain data out as an asset for some reason
-            AssetDatabase.CreateAsset(data, "Assets/Resources/Custom Islands/Data_" + islandID + ".asset");
+            AssetDatabase.CreateAsset(data, "Assets/Resources/Custom Islands Generated/Data_" + islandID + ".asset");
         }
 
         data.splatPrototypes = _terrainSplats;
@@ -109,38 +111,86 @@ public class IslandGenerator : MonoBehaviour
 
     private SplatPrototype[] LoadPrototypes()
     {
+        string kDirectoryPath = "Assets/Resources/Biome Data/";
+        string kAssetName = "BiomeCollectionData";
+
+        string totalPath = string.Format("{0}{1}.asset", kDirectoryPath, kAssetName);
+        _biomeData = (BiomeCollectionData)AssetDatabase.LoadAssetAtPath(totalPath, typeof(BiomeCollectionData));
+        if (_biomeData == null)
+        {
+            Debug.LogError("Failed to load biome data");
+        }
+
+        BiomeCollectionData.BiomeData desert = _biomeData.GetBiome(eBiome.Desert);
+        BiomeCollectionData.BiomeData savannah = _biomeData.GetBiome(eBiome.Savannah);
+        BiomeCollectionData.BiomeData plains = _biomeData.GetBiome(eBiome.Plains);
+        BiomeCollectionData.BiomeData forest = _biomeData.GetBiome(eBiome.Forest);
+        BiomeCollectionData.BiomeData swamp = _biomeData.GetBiome(eBiome.Swamp);
+        BiomeCollectionData.BiomeData jungle = _biomeData.GetBiome(eBiome.Jungle);
+        BiomeCollectionData.BiomeData tundra = _biomeData.GetBiome(eBiome.Tundra);
+
         SplatPrototype[] newProtos = new SplatPrototype[23];
         Texture2D[] splatTextures = new Texture2D[]
         {
-            (Texture2D)WorldGenerator.Instance.DesertTextures[(int)eTileType.Dirt],
-            (Texture2D)WorldGenerator.Instance.DesertTextures[(int)eTileType.Grass],
-            (Texture2D)WorldGenerator.Instance.DesertTextures[(int)eTileType.Stone],
-            (Texture2D)WorldGenerator.Instance.DesertTextures[(int)eTileType.Sand],
+            (Texture2D)desert.Textures[(int)eTileType.Dirt],
+            (Texture2D)desert.Textures[(int)eTileType.Grass],
+            (Texture2D)desert.Textures[(int)eTileType.Stone],
+            (Texture2D)desert.Textures[(int)eTileType.Sand],
 
-            (Texture2D)WorldGenerator.Instance.SavannahTextures[(int)eTileType.Dirt],
-            (Texture2D)WorldGenerator.Instance.SavannahTextures[(int)eTileType.Grass],
-            (Texture2D)WorldGenerator.Instance.SavannahTextures[(int)eTileType.Stone],
+            (Texture2D)savannah.Textures[(int)eTileType.Dirt],
+            (Texture2D)savannah.Textures[(int)eTileType.Grass],
+            (Texture2D)savannah.Textures[(int)eTileType.Stone],
 
-            (Texture2D)WorldGenerator.Instance.PlainsTextures[(int)eTileType.Dirt],
-            (Texture2D)WorldGenerator.Instance.PlainsTextures[(int)eTileType.Grass],
-            (Texture2D)WorldGenerator.Instance.PlainsTextures[(int)eTileType.Stone],
+            (Texture2D)plains.Textures[(int)eTileType.Dirt],
+            (Texture2D)plains.Textures[(int)eTileType.Grass],
+            (Texture2D)plains.Textures[(int)eTileType.Stone],
 
-            (Texture2D)WorldGenerator.Instance.ForestTextures[(int)eTileType.Dirt],
-            (Texture2D)WorldGenerator.Instance.ForestTextures[(int)eTileType.Grass],
-            (Texture2D)WorldGenerator.Instance.ForestTextures[(int)eTileType.Stone],
+            (Texture2D)forest.Textures[(int)eTileType.Dirt],
+            (Texture2D)forest.Textures[(int)eTileType.Grass],
+            (Texture2D)forest.Textures[(int)eTileType.Stone],
 
-            (Texture2D)WorldGenerator.Instance.SwampTextures[(int)eTileType.Dirt],
-            (Texture2D)WorldGenerator.Instance.SwampTextures[(int)eTileType.Grass],
-            (Texture2D)WorldGenerator.Instance.SwampTextures[(int)eTileType.Stone],
+            (Texture2D)swamp.Textures[(int)eTileType.Dirt],
+            (Texture2D)swamp.Textures[(int)eTileType.Grass],
+            (Texture2D)swamp.Textures[(int)eTileType.Stone],
 
-            (Texture2D)WorldGenerator.Instance.JungleTextures[(int)eTileType.Dirt],
-            (Texture2D)WorldGenerator.Instance.JungleTextures[(int)eTileType.Grass],
-            (Texture2D)WorldGenerator.Instance.JungleTextures[(int)eTileType.Stone],
+            (Texture2D)jungle.Textures[(int)eTileType.Dirt],
+            (Texture2D)jungle.Textures[(int)eTileType.Grass],
+            (Texture2D)jungle.Textures[(int)eTileType.Stone],
 
-            (Texture2D)WorldGenerator.Instance.TundraTextures[(int)eTileType.Dirt],
-            (Texture2D)WorldGenerator.Instance.TundraTextures[(int)eTileType.Grass],
-            (Texture2D)WorldGenerator.Instance.TundraTextures[(int)eTileType.Stone],
-            (Texture2D)WorldGenerator.Instance.TundraTextures[(int)eTileType.Snow]
+            (Texture2D)tundra.Textures[(int)eTileType.Dirt],
+            (Texture2D)tundra.Textures[(int)eTileType.Grass],
+            (Texture2D)tundra.Textures[(int)eTileType.Stone],
+            (Texture2D)tundra.Textures[(int)eTileType.Snow]
+
+            //(Texture2D)WorldGenerator.Instance.DesertTextures[(int)eTileType.Dirt],
+            //(Texture2D)WorldGenerator.Instance.DesertTextures[(int)eTileType.Grass],
+            //(Texture2D)WorldGenerator.Instance.DesertTextures[(int)eTileType.Stone],
+            //(Texture2D)WorldGenerator.Instance.DesertTextures[(int)eTileType.Sand],
+
+            //(Texture2D)WorldGenerator.Instance.SavannahTextures[(int)eTileType.Dirt],
+            //(Texture2D)WorldGenerator.Instance.SavannahTextures[(int)eTileType.Grass],
+            //(Texture2D)WorldGenerator.Instance.SavannahTextures[(int)eTileType.Stone],
+
+            //(Texture2D)WorldGenerator.Instance.PlainsTextures[(int)eTileType.Dirt],
+            //(Texture2D)WorldGenerator.Instance.PlainsTextures[(int)eTileType.Grass],
+            //(Texture2D)WorldGenerator.Instance.PlainsTextures[(int)eTileType.Stone],
+
+            //(Texture2D)WorldGenerator.Instance.ForestTextures[(int)eTileType.Dirt],
+            //(Texture2D)WorldGenerator.Instance.ForestTextures[(int)eTileType.Grass],
+            //(Texture2D)WorldGenerator.Instance.ForestTextures[(int)eTileType.Stone],
+
+            //(Texture2D)WorldGenerator.Instance.SwampTextures[(int)eTileType.Dirt],
+            //(Texture2D)WorldGenerator.Instance.SwampTextures[(int)eTileType.Grass],
+            //(Texture2D)WorldGenerator.Instance.SwampTextures[(int)eTileType.Stone],
+
+            //(Texture2D)WorldGenerator.Instance.JungleTextures[(int)eTileType.Dirt],
+            //(Texture2D)WorldGenerator.Instance.JungleTextures[(int)eTileType.Grass],
+            //(Texture2D)WorldGenerator.Instance.JungleTextures[(int)eTileType.Stone],
+
+            //(Texture2D)WorldGenerator.Instance.TundraTextures[(int)eTileType.Dirt],
+            //(Texture2D)WorldGenerator.Instance.TundraTextures[(int)eTileType.Grass],
+            //(Texture2D)WorldGenerator.Instance.TundraTextures[(int)eTileType.Stone],
+            //(Texture2D)WorldGenerator.Instance.TundraTextures[(int)eTileType.Snow]
         };
 
         for (int i = 0; i < 23; ++i)
@@ -226,6 +276,7 @@ public class IslandGenerator : MonoBehaviour
     {
         GameObject container = new GameObject();
         container.name = "Tile Colliders";
+        container.transform.SetParent(_currentTerrain.transform);
         container.transform.position = Vector3.zero;
         GameObject tileObject = null;
         Tile t = null;
@@ -379,6 +430,7 @@ public class IslandGenerator : MonoBehaviour
         int noiseSeed = prng.Next();
         GameObject detailContainer = new GameObject();
         detailContainer.name = "Details Container";
+        detailContainer.transform.SetParent(_currentTerrain.transform);
         eBiome currentBiome = eBiome.Desert;
 
         PerlinGenerator detailNoiseGen = new PerlinGenerator();
@@ -453,34 +505,36 @@ public class IslandGenerator : MonoBehaviour
 
     private GameObject[] GetDetailsForBiome(eBiome biome)
     {
-        if (biome == eBiome.Desert)
-        {
-            return WorldGenerator.Instance.DesertDetails;
-        }
-        else if (biome == eBiome.Savannah)
-        {
-            return WorldGenerator.Instance.SavannahDetails;
-        }
-        else if (biome == eBiome.Plains)
-        {
-            return WorldGenerator.Instance.PlainsDetails;
-        }
-        else if (biome == eBiome.Forest)
-        {
-            return WorldGenerator.Instance.ForestDetails;
-        }
-        else if (biome == eBiome.Swamp)
-        {
-            return WorldGenerator.Instance.SwampDetails;
-        }
-        else if (biome == eBiome.Jungle)
-        {
-            return WorldGenerator.Instance.JungleDetails;
-        }
-        else
-        {
-            return WorldGenerator.Instance.TundraDetails;
-        }
+        //if (biome == eBiome.Desert)
+        //{
+        //    return WorldGenerator.Instance.DesertDetails;
+        //}
+        //else if (biome == eBiome.Savannah)
+        //{
+        //    return WorldGenerator.Instance.SavannahDetails;
+        //}
+        //else if (biome == eBiome.Plains)
+        //{
+        //    return WorldGenerator.Instance.PlainsDetails;
+        //}
+        //else if (biome == eBiome.Forest)
+        //{
+        //    return WorldGenerator.Instance.ForestDetails;
+        //}
+        //else if (biome == eBiome.Swamp)
+        //{
+        //    return WorldGenerator.Instance.SwampDetails;
+        //}
+        //else if (biome == eBiome.Jungle)
+        //{
+        //    return WorldGenerator.Instance.JungleDetails;
+        //}
+        //else
+        //{
+        //    return WorldGenerator.Instance.TundraDetails;
+        //}
+
+        return _biomeData.GetBiome(biome).DetailObjects;
     }
 
     private Vector3 _pos;
