@@ -59,8 +59,11 @@ public class IslandCreateTool : EditorWindow
 
 	private void GenerateIsland()
 	{
-		GameObject generatorObj = new GameObject();
-		IslandGenerator gen = generatorObj.AddComponent<IslandGenerator>();
+		//GameObject generatorObj = new GameObject();
+		//IslandGenerator gen = generatorObj.AddComponent<IslandGenerator>();
+        GameObject islandGenPrefab = Resources.Load<GameObject>("Prefabs/IslandGenerator");
+        GameObject generatorObj = (GameObject)Instantiate(islandGenPrefab);
+        IslandGenerator gen = generatorObj.GetComponent<IslandGenerator>();
 
 		GameObject[] detailObjects = new GameObject[]
 		{
@@ -79,9 +82,9 @@ public class IslandCreateTool : EditorWindow
 		gen._detailObjects = detailObjects;
 		GameObject terrainObj = gen.Generate(_size, _seed, _levels);
 
-		PrefabUtility.CreatePrefab("Assets/Resources/Custom Islands/" + terrainObj.name + ".prefab", terrainObj);
+		PrefabUtility.CreatePrefab("Assets/Resources/Custom Islands Generated/" + terrainObj.name + ".prefab", terrainObj);
 
-		DestroyImmediate(generatorObj);
+        DestroyImmediate(generatorObj);
 		DestroyImmediate(terrainObj);
 	}
 }
