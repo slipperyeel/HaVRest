@@ -59,19 +59,28 @@ public class BagInteraction : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        mWasTriggerEnteredSkipped = false;
-        if (other.gameObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
+        // Temporary to avoid null ref
+        if (other == null)
         {
-            if (OnExited != null)
-            {
-                OnExited();
-            }
-
+            mWasTriggerEnteredSkipped = false;
             mIsItemOverBag = false;
+        }
+        else
+        {
+            mWasTriggerEnteredSkipped = false;
+            if (other.gameObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
+            {
+                if (OnExited != null)
+                {
+                    OnExited();
+                }
 
-            Material[] newMaterials = new Material[other.gameObject.GetComponent<MeshRenderer>().materials.Length];
-            newMaterials[0] = oldMaterial;
-            other.gameObject.GetComponent<MeshRenderer>().materials = newMaterials;
+                mIsItemOverBag = false;
+
+                Material[] newMaterials = new Material[other.gameObject.GetComponent<MeshRenderer>().materials.Length];
+                newMaterials[0] = oldMaterial;
+                other.gameObject.GetComponent<MeshRenderer>().materials = newMaterials;
+            }
         }
     }
 
@@ -105,9 +114,9 @@ public class BagInteraction : MonoBehaviour
     {
         UndoItemOverBag();
 
-        transform.GetChild(0).gameObject.SetActive(!mManageMode);
+        transform.GetChild(0).GetChild(1).gameObject.SetActive(!mManageMode);
         transform.GetComponent<CapsuleCollider>().enabled = mManageMode;
-        transform.GetChild(1).gameObject.SetActive(mManageMode);
+        transform.GetChild(0).GetChild(0).gameObject.SetActive(mManageMode);
         mManageMode = !mManageMode;
     }
 
@@ -121,6 +130,8 @@ public class BagInteraction : MonoBehaviour
         {
             if (mItemOverBagCollider != null)
             {
+                GameObject item = mItemOverBagCollider.gameObject;
+                GameObject.Find("Backpack").GetComponent<Backpack>().AddItemToInventory(item.GetComponent<ItemFactoryData>().ItemEnum);
                 Destroy(mItemOverBagCollider.gameObject);
             }
         }
@@ -138,6 +149,8 @@ public class BagInteraction : MonoBehaviour
             {
                 if (mItemOverBagCollider != null)
                 {
+                    GameObject item = mItemOverBagCollider.gameObject;
+                    GameObject.Find("Backpack").GetComponent<Backpack>().AddItemToInventory(item.GetComponent<ItemFactoryData>().ItemEnum);
                     Destroy(mItemOverBagCollider.gameObject);
                 }
             }

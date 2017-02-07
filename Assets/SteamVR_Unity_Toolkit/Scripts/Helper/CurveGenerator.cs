@@ -66,6 +66,10 @@ namespace VRTK
 
         private Vector3[] points;
         private GameObject[] items;
+
+        private Vector3[] positions;
+        public Vector3[] Positions { get { return positions; } }
+
         private BezierControlPointMode[] modes;
         private bool loop;
         private int frequency;
@@ -76,6 +80,7 @@ namespace VRTK
             float circleSize = radius / 8;
 
             frequency = setFrequency;
+            positions = new Vector3[frequency];
             items = new GameObject[frequency];
             for (int f = 0; f < items.Length; f++)
             {
@@ -282,6 +287,7 @@ namespace VRTK
 
                 Vector3 position = this.GetPoint(f * stepSize);
                 items[f].transform.position = position;
+                positions[f] = position;
 
                 Vector3 nextPosition = this.GetPoint((f + 1) * stepSize);
                 Vector3 lookPosition = (nextPosition - position).normalized;

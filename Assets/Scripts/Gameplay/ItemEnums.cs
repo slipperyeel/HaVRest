@@ -2,8 +2,16 @@
 {
     // Test
     TestItem = 0,
-    // EggPlant
+    Axe,
+    Tool_Pouch_Start = Axe,
+    Hoe,
+    Pitchfork,
+    Shovel,
+    Wateringcan,
+    Tool_Pouch_End = Wateringcan,
+    // Eggplant
     EggPlant_Seed,
+    Seed_Pouch_Start = EggPlant_Seed,
     EggPlant_Crop,
     EggPlant_Fruit,
     Cucumber_Fruit,
@@ -17,5 +25,6 @@
     Onion_Vegetable,
     Pepper_Vegetable,
     Potato_Vegetable,
-    Raddish_Vegetable
+    Raddish_Vegetable,
+    Seed_Pouch_End = Raddish_Vegetable
 }

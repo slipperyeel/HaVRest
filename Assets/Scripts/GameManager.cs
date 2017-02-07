@@ -49,7 +49,8 @@ public class GameManager : Singleton<GameManager>
 
     void Update()
     {
-        if(TestSaveTrigger)
+        //if(TestSaveTrigger)
+        if (Input.GetKeyUp("space"))
         {
             DataManager.Instance.SaveGameData();
         }

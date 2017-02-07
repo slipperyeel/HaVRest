@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -25,6 +26,7 @@ public class Backpack : MonoBehaviour
     public RuntimeAnimatorController mItemFloatController;
     [SerializeField]
     public Material mRimLight;
+    private GameObject mTopObject;
 
     void Start()
     {
@@ -58,6 +60,15 @@ public class Backpack : MonoBehaviour
         }
     }
 
+    void DoControllerGrabInteractableObject(object sender, ObjectInteractEventArgs e)
+    {
+        if (e.target == mTopObject)
+        {
+            //mTopObject.GetComponent<Rigidbody>().useGravity = true;
+            //mTopObject.transform.parent = null;
+        }
+    }
+
     void HideRenderModels(Transform controller, bool hidden)
     {
         foreach (MeshRenderer child in controller.GetComponentsInChildren<MeshRenderer>(true))
@@ -68,35 +79,84 @@ public class Backpack : MonoBehaviour
     {
         GameObject instantiatedObj;
         HVRItemFactory.SpawnItem(itemEnum, Vector3.zero, default(Quaternion), Vector3.one, out instantiatedObj, "TopItem");
-        Destroy(instantiatedObj.GetComponent<Rigidbody>());
-        instantiatedObj.transform.SetParent(mItemSackObject.transform.GetChild(0).GetChild(12));
+        //instantiatedObj.GetComponent<Rigidbody>().useGravity = false;
+        instantiatedObj.GetComponent<Rigidbody>().isKinematic = true;
+        instantiatedObj.transform.SetParent(mItemSackObject.transform.GetChild(0).GetChild(1).GetChild(12));
         instantiatedObj.transform.localPosition = Vector3.zero;
         instantiatedObj.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
+        mTopObject = instantiatedObj;
+    }
+
+    public void AddItemToInventory(ItemEnums itemEnum)
+    {
+        if (itemEnum <= ItemEnums.Tool_Pouch_End)
+        {
+            int itemEnumPouchIndex = (int)itemEnum - (int)ItemEnums.Tool_Pouch_Start;
+            mPouches[0].InventoryItems[itemEnumPouchIndex].Quantity++;
+        }
+        else if (itemEnum <= ItemEnums.Seed_Pouch_End)
+        {
+            int itemEnumPouchIndex = (int)itemEnum - (int)ItemEnums.Seed_Pouch_Start;
+            mPouches[1].InventoryItems[itemEnumPouchIndex].Quantity++;
+        }
+    }
+
+    void FilterInventory(List<InventoryItem> inventoryItems)
+    {
+        for (int i = 0; i < inventoryItems.Count; i++)
+        {
+            if (inventoryItems[i].Quantity == 0)
+            {
+                inventoryItems.RemoveAt(i);
+                i--;
+            }
+        }
     }
 
     void SpawnInventoryUI(bool isLeft)
     {
         mItemSackObject.GetComponent<BagInteraction>().mIsBagOnLeft = isLeft;
 
-        //List<InventoryItem> inventoryItems = mPouches[0].InventoryItems;
-        Transform slotContainer = mItemSackObject.transform.GetChild(0);
+        List<InventoryItem> inventoryItems = mPouches[1].InventoryItems;
+        List<InventoryItem> filteredInventoryItems = new List<InventoryItem>(inventoryItems);
+        FilterInventory(filteredInventoryItems);
+        Transform slotContainer = mItemSackObject.transform.GetChild(0).GetChild(1);
         for (int i = 0; i < 12; i++)
         {
-            GameObject instantiatedObj;
-            HVRItemFactory.SpawnItem(ItemEnums.EggPlant_Fruit, Vector3.zero, default(Quaternion), new Vector3(0.35f, 0.35f, 0.35f), out instantiatedObj, "InventorySlotItem");
-            instantiatedObj.transform.SetParent(slotContainer.GetChild(i));
-            instantiatedObj.transform.localPosition = Vector3.zero;
-            instantiatedObj.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
-            Animator itemFloatController = instantiatedObj.AddComponent<Animator>() as Animator;
-            instantiatedObj.GetComponent<Animator>().runtimeAnimatorController = mItemFloatController;
-            if (i == 0)
+            if (filteredInventoryItems.Count > i)
             {
-                Material[] newMaterials = new Material[instantiatedObj.GetComponent<MeshRenderer>().materials.Length];
-                newMaterials[0] = mRimLight;
-                instantiatedObj.GetComponent<MeshRenderer>().materials = newMaterials;
-                SpawnTopObject(ItemEnums.EggPlant_Fruit);
+                GameObject instantiatedObj;
+                HVRItemFactory.SpawnItem(filteredInventoryItems[i].Id, Vector3.zero, default(Quaternion), new Vector3(0.35f, 0.35f, 0.35f), out instantiatedObj, "InventorySlotItem");
+                Destroy(instantiatedObj.GetComponent<Rigidbody>());
+                Destroy(instantiatedObj.GetComponent<VRTK_InteractableObject>());
+                instantiatedObj.transform.SetParent(slotContainer.GetChild(i));
+                instantiatedObj.transform.localPosition = Vector3.zero;
+                instantiatedObj.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
+                Animator itemFloatController = instantiatedObj.AddComponent<Animator>() as Animator;
+                instantiatedObj.GetComponent<Animator>().runtimeAnimatorController = mItemFloatController;
+                if (i == 0)
+                {
+                    Material[] newMaterials = new Material[instantiatedObj.GetComponent<MeshRenderer>().materials.Length];
+                    newMaterials[0] = mRimLight;
+                    instantiatedObj.GetComponent<MeshRenderer>().materials = newMaterials;
+                    SpawnTopObject(ItemEnums.EggPlant_Fruit);
+                }
+                //itemFloatController.runtimeAnimatorController = mItemFloatController;
+                slotContainer.GetChild(i).GetChild(0).gameObject.GetComponent<Text>().text = filteredInventoryItems[i].Quantity.ToString();
             }
-            //itemFloatController.runtimeAnimatorController = mItemFloatController;
+            else
+            {
+                slotContainer.GetChild(i).GetChild(0).gameObject.SetActive(false);
+            }
+        }
+
+        if (isLeft)
+        {
+            HVRControllerManager.Instance.right.transform.GetComponent<VRTK_InteractGrab>().ControllerGrabInteractableObject += new ObjectInteractEventHandler(DoControllerGrabInteractableObject);
+        }
+        else
+        {
+            HVRControllerManager.Instance.left.transform.GetComponent<VRTK_InteractGrab>().ControllerGrabInteractableObject += new ObjectInteractEventHandler(DoControllerGrabInteractableObject);
         }
     }
 

@@ -7,5 +7,6 @@ using System;
 [Serializable]
 public class InventoryItem
 {
-    public int Id;
+    public ItemEnums Id;
+    public int Quantity;
 }

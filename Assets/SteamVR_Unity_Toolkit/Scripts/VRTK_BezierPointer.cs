@@ -35,6 +35,7 @@ namespace VRTK
 
         private GameObject pointerCursor;
         private CurveGenerator curvedBeam;
+        private LineRenderer line;
 
         // Use this for initialization
         protected override void Start()
@@ -62,7 +63,7 @@ namespace VRTK
             pointerCursor = (customPointerCursor ? Instantiate(customPointerCursor) : CreateCursor());
 
             pointerCursor.name = string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_PointerCursor", this.gameObject.name);
-            pointerCursor.layer = 2;
+            //pointerCursor.layer = 2;
             pointerCursor.SetActive(false);
 
             GameObject global = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_CurvedBeamContainer", this.gameObject.name));
@@ -70,6 +71,11 @@ namespace VRTK
             curvedBeam = global.gameObject.AddComponent<CurveGenerator>();
             curvedBeam.transform.parent = null;
             curvedBeam.Create(pointerDensity, pointerCursorRadius, customPointerTracer);
+
+            // temporary, don't panic!
+            line = GetComponent<LineRenderer>();
+            line.SetVertexCount(pointerDensity);
+
             base.InitPointer();
         }
 
@@ -112,6 +118,8 @@ namespace VRTK
         protected override void TogglePointer(bool state)
         {
             state = (beamAlwaysOn ? true : state);
+
+            line.enabled = state;
 
             projectedBeamForward.gameObject.SetActive(state);
             projectedBeamJoint.gameObject.SetActive(state);
@@ -248,7 +256,10 @@ namespace VRTK
             projectedBeamDown.transform.position,
             };
             curvedBeam.SetPoints(beamPoints, pointerMaterial);
-            curvedBeam.TogglePoints(true);
+
+            line.SetPositions(curvedBeam.Positions);
+
+            //curvedBeam.TogglePoints(true);
         }
     }
 }

@@ -93,7 +93,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -108,7 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46c0d292c90a9eb4bb64cb64abcee8b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mItemEnum: 3
+  mItemEnum: 8
 --- !u!114 &114000013788681392
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -124,7 +124,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
-  isGrabbable: 0
+  isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
   holdButtonToGrab: 1

@@ -87,6 +87,10 @@ public static class HVRItemFactory
                             break;
                         }
                     case ItemEnums.EggPlant_Fruit:
+                    case ItemEnums.Cucumber_Fruit:
+                    case ItemEnums.Pumpkin_Fruit:
+                    case ItemEnums.Tomato_Fruit:
+                    case ItemEnums.Watermelon_Fruit:
                         {
                             TemporalFoodStuff obj = DataManager.Instance.SpawnObject<TemporalFoodStuff, FoodStuffMomento>(itemPrefab, position, rotation, scale);
                             instantiatedObj = obj.gameObject;
