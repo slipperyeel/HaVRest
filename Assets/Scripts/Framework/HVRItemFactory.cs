@@ -70,44 +70,31 @@ public static class HVRItemFactory
         {
             if (itemPrefab != null)
             {
-                switch (item)
+                if (item == ItemEnums.TestItem)
                 {
-                    case ItemEnums.TestItem:
+                    TestObject obj = DataManager.Instance.SpawnObject<TestObject, TestMomento>(itemPrefab, position, rotation, scale);
+                    instantiatedObj = obj.gameObject;
+                    if (obj != null)
+                    {
+                        if (name != null)
                         {
-                            TestObject obj = DataManager.Instance.SpawnObject<TestObject, TestMomento>(itemPrefab, position, rotation, scale);
-                            instantiatedObj = obj.gameObject;
-                            if (obj != null)
-                            {
-                                if(name != null)
-                                {
-                                    obj.name = name;
-                                }
-                                success = true;
-                            }
-                            break;
+                            obj.name = name;
                         }
-                    case ItemEnums.EggPlant_Fruit:
-                    case ItemEnums.Cucumber_Fruit:
-                    case ItemEnums.Pumpkin_Fruit:
-                    case ItemEnums.Tomato_Fruit:
-                    case ItemEnums.Watermelon_Fruit:
+                        success = true;
+                    }
+                }
+                else if ((item >= ItemEnums.Seed_Pouch_Start) && (item <= ItemEnums.Seed_Pouch_End))
+                {
+                    TemporalFoodStuff obj = DataManager.Instance.SpawnObject<TemporalFoodStuff, FoodStuffMomento>(itemPrefab, position, rotation, scale);
+                    instantiatedObj = obj.gameObject;
+                    if (obj != null)
+                    {
+                        if (name != null)
                         {
-                            TemporalFoodStuff obj = DataManager.Instance.SpawnObject<TemporalFoodStuff, FoodStuffMomento>(itemPrefab, position, rotation, scale);
-                            instantiatedObj = obj.gameObject;
-                            if (obj != null)
-                            {
-                                if (name != null)
-                                {
-                                    obj.name = name;
-                                }
-                                success = true;
-                            }
-                            break;
+                            obj.name = name;
                         }
-                    default:
-                        {
-                            break;
-                        }
+                        success = true;
+                    }
                 }
             }
         }

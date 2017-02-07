@@ -22,11 +22,14 @@ public class Backpack : MonoBehaviour
     [SerializeField]
     public GameObject mItemSackPrefab;
     private GameObject mItemSackObject;
+    private Transform mSlotContainer;
+    private List<GameObject> mInventorySlotItems;
     [SerializeField]
     public RuntimeAnimatorController mItemFloatController;
     [SerializeField]
     public Material mRimLight;
     private GameObject mTopObject;
+    private bool mIsLeft;
 
     void Start()
     {
@@ -66,6 +69,9 @@ public class Backpack : MonoBehaviour
         {
             //mTopObject.GetComponent<Rigidbody>().useGravity = true;
             //mTopObject.transform.parent = null;
+            SubtractItemFromInventory(mTopObject.GetComponent<ItemFactoryData>().ItemEnum);
+            e.target.transform.parent = null;
+            e.target.layer = 0;
         }
     }
 
@@ -85,6 +91,7 @@ public class Backpack : MonoBehaviour
         instantiatedObj.transform.localPosition = Vector3.zero;
         instantiatedObj.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
         mTopObject = instantiatedObj;
+        mTopObject.layer = 5;
     }
 
     public void AddItemToInventory(ItemEnums itemEnum)
@@ -101,6 +108,34 @@ public class Backpack : MonoBehaviour
         }
     }
 
+    private void SubtractItemFromInventory(ItemEnums itemEnum)
+    {
+        int quantity = 0;
+        if (itemEnum <= ItemEnums.Tool_Pouch_End)
+        {
+            int itemEnumPouchIndex = (int)itemEnum - (int)ItemEnums.Tool_Pouch_Start;
+            mPouches[0].InventoryItems[itemEnumPouchIndex].Quantity--;
+            quantity = mPouches[0].InventoryItems[itemEnumPouchIndex].Quantity;
+        }
+        else if (itemEnum <= ItemEnums.Seed_Pouch_End)
+        {
+            int itemEnumPouchIndex = (int)itemEnum - (int)ItemEnums.Seed_Pouch_Start;
+            mPouches[1].InventoryItems[itemEnumPouchIndex].Quantity--;
+            quantity = mPouches[1].InventoryItems[itemEnumPouchIndex].Quantity;
+        }
+        if (quantity == 0)
+        {
+            DestroyInventoryUI();
+            SpawnInventoryUI();
+        }
+        else
+        {
+            SpawnTopObject(itemEnum);
+            // Update this when we have a selected id
+            mSlotContainer.GetChild(0).GetChild(0).gameObject.GetComponent<Text>().text = quantity.ToString();
+        }
+    }
+
     void FilterInventory(List<InventoryItem> inventoryItems)
     {
         for (int i = 0; i < inventoryItems.Count; i++)
@@ -113,23 +148,25 @@ public class Backpack : MonoBehaviour
         }
     }
 
-    void SpawnInventoryUI(bool isLeft)
+    public void SpawnInventoryUI()
     {
-        mItemSackObject.GetComponent<BagInteraction>().mIsBagOnLeft = isLeft;
+        mItemSackObject.GetComponent<BagInteraction>().mIsBagOnLeft = mIsLeft;
 
         List<InventoryItem> inventoryItems = mPouches[1].InventoryItems;
         List<InventoryItem> filteredInventoryItems = new List<InventoryItem>(inventoryItems);
+        mInventorySlotItems = new List<GameObject>();
         FilterInventory(filteredInventoryItems);
-        Transform slotContainer = mItemSackObject.transform.GetChild(0).GetChild(1);
+        mSlotContainer = mItemSackObject.transform.GetChild(0).GetChild(1);
         for (int i = 0; i < 12; i++)
         {
             if (filteredInventoryItems.Count > i)
             {
                 GameObject instantiatedObj;
                 HVRItemFactory.SpawnItem(filteredInventoryItems[i].Id, Vector3.zero, default(Quaternion), new Vector3(0.35f, 0.35f, 0.35f), out instantiatedObj, "InventorySlotItem");
+                mInventorySlotItems.Add(instantiatedObj);
                 Destroy(instantiatedObj.GetComponent<Rigidbody>());
                 Destroy(instantiatedObj.GetComponent<VRTK_InteractableObject>());
-                instantiatedObj.transform.SetParent(slotContainer.GetChild(i));
+                instantiatedObj.transform.SetParent(mSlotContainer.GetChild(i));
                 instantiatedObj.transform.localPosition = Vector3.zero;
                 instantiatedObj.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
                 Animator itemFloatController = instantiatedObj.AddComponent<Animator>() as Animator;
@@ -139,18 +176,19 @@ public class Backpack : MonoBehaviour
                     Material[] newMaterials = new Material[instantiatedObj.GetComponent<MeshRenderer>().materials.Length];
                     newMaterials[0] = mRimLight;
                     instantiatedObj.GetComponent<MeshRenderer>().materials = newMaterials;
-                    SpawnTopObject(ItemEnums.EggPlant_Fruit);
+                    SpawnTopObject(filteredInventoryItems[i].Id);
                 }
                 //itemFloatController.runtimeAnimatorController = mItemFloatController;
-                slotContainer.GetChild(i).GetChild(0).gameObject.GetComponent<Text>().text = filteredInventoryItems[i].Quantity.ToString();
+                mSlotContainer.GetChild(i).GetChild(0).gameObject.SetActive(true);
+                mSlotContainer.GetChild(i).GetChild(0).gameObject.GetComponent<Text>().text = filteredInventoryItems[i].Quantity.ToString();
             }
             else
             {
-                slotContainer.GetChild(i).GetChild(0).gameObject.SetActive(false);
+                mSlotContainer.GetChild(i).GetChild(0).gameObject.SetActive(false);
             }
         }
 
-        if (isLeft)
+        if (mIsLeft)
         {
             HVRControllerManager.Instance.right.transform.GetComponent<VRTK_InteractGrab>().ControllerGrabInteractableObject += new ObjectInteractEventHandler(DoControllerGrabInteractableObject);
         }
@@ -160,8 +198,32 @@ public class Backpack : MonoBehaviour
         }
     }
 
+    public void DestroyInventoryUI()
+    {
+        if (mInventorySlotItems != null)
+        {
+            for (int i = 0; i < mInventorySlotItems.Count; i++)
+            {
+                Destroy(mInventorySlotItems[i]);
+                mSlotContainer.GetChild(i).GetChild(0).gameObject.SetActive(false);
+            }
+            mInventorySlotItems.Clear();
+        }
+
+        // We don't actually need to remove this, just stop from doing it more than once
+        if (mIsLeft)
+        {
+            HVRControllerManager.Instance.right.transform.GetComponent<VRTK_InteractGrab>().ControllerGrabInteractableObject -= new ObjectInteractEventHandler(DoControllerGrabInteractableObject);
+        }
+        else
+        {
+            HVRControllerManager.Instance.left.transform.GetComponent<VRTK_InteractGrab>().ControllerGrabInteractableObject -= new ObjectInteractEventHandler(DoControllerGrabInteractableObject);
+        }
+    }
+
     void DoApplicationMenuPressedLeft(object sender, ControllerInteractionEventArgs e)
     {
+        mIsLeft = true;
         if ((mItemSackObject != null) && (mItemSackObject.transform.parent == HVRControllerManager.Instance.right.transform))
         {
             HideRenderModels(HVRControllerManager.Instance.Right.transform, false);
@@ -173,7 +235,7 @@ public class Backpack : MonoBehaviour
             mItemSackObject.transform.localPosition = Vector3.zero;
             mItemSackObject.transform.localEulerAngles = new Vector3(-45f, -180f, 0f);
             mItemSackObject.GetComponent<BagInteraction>().SubscribeTriggers();
-            SpawnInventoryUI(true);
+            SpawnInventoryUI();
         }
         else if (mItemSackObject == null)
         {
@@ -183,18 +245,20 @@ public class Backpack : MonoBehaviour
             mItemSackObject.transform.localPosition = Vector3.zero;
             mItemSackObject.transform.localEulerAngles = new Vector3(-45f, -180f, 0f);
             mItemSackObject.GetComponent<BagInteraction>().SubscribeTriggers();
-            SpawnInventoryUI(true);
+            SpawnInventoryUI();
         }
         else
         {
             HideRenderModels(HVRControllerManager.Instance.Left.transform, false);
             mItemSackObject.GetComponent<BagInteraction>().UnsubscribeTriggers();
+            DestroyInventoryUI();
             Destroy(mItemSackObject);
         }
     }
 
     void DoApplicationMenuPressedRight(object sender, ControllerInteractionEventArgs e)
     {
+        mIsLeft = false;
         if ((mItemSackObject != null) && (mItemSackObject.transform.parent == HVRControllerManager.Instance.left.transform))
         {
             HideRenderModels(HVRControllerManager.Instance.Left.transform, false);
@@ -206,7 +270,7 @@ public class Backpack : MonoBehaviour
             mItemSackObject.transform.localPosition = Vector3.zero;
             mItemSackObject.transform.localEulerAngles = new Vector3(-45f, -180f, 0f);
             mItemSackObject.GetComponent<BagInteraction>().SubscribeTriggers();
-            SpawnInventoryUI(false);
+            SpawnInventoryUI();
         }
         else if (mItemSackObject == null)
         {
@@ -216,12 +280,13 @@ public class Backpack : MonoBehaviour
             mItemSackObject.transform.localPosition = Vector3.zero;
             mItemSackObject.transform.localEulerAngles = new Vector3(-45f, -180f, 0f);
             mItemSackObject.GetComponent<BagInteraction>().SubscribeTriggers();
-            SpawnInventoryUI(false);
+            SpawnInventoryUI();
         }
         else
         {
             HideRenderModels(HVRControllerManager.Instance.Right.transform, false);
             mItemSackObject.GetComponent<BagInteraction>().UnsubscribeTriggers();
+            DestroyInventoryUI();
             Destroy(mItemSackObject);
         }
     }

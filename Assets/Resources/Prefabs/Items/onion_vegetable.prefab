@@ -25,7 +25,7 @@ GameObject:
   - 23: {fileID: 23000013893549256}
   - 54: {fileID: 54000011115781686}
   - 136: {fileID: 136000012096931764}
-  - 114: {fileID: 114000013600666228}
+  - 114: {fileID: 114000013089891616}
   m_Layer: 0
   m_Name: onion_vegetable
   m_TagString: Untagged
@@ -93,7 +93,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mItemEnum: 17
---- !u!114 &114000013600666228
+--- !u!114 &114000013089891616
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -117,7 +117,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000011612325864}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9bd6aebf08e1834d88e62c1223af2c0, type: 3}
+  m_Script: {fileID: 11500000, guid: a3abaf4521bf2344ea21ed3020b98eb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   highlightOnTouch: 0
@@ -144,8 +144,6 @@ MonoBehaviour:
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
-  grabbedControllerIndex: -1
-  heldControllerIndex: -1
 --- !u!114 &114000014145860358
 MonoBehaviour:
   m_ObjectHideFlags: 1

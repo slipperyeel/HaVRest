@@ -8,6 +8,7 @@ public class BagInteraction : MonoBehaviour
     [SerializeField]
     public Material mRimLight;
     private Material oldMaterial;
+    private Backpack mBackpack;
 
     public delegate void TriggerEnter(Collider other);
     public static event TriggerEnter OnEntered;
@@ -20,6 +21,11 @@ public class BagInteraction : MonoBehaviour
     private bool mWasTriggerEnteredSkipped = false;
     private Collider mItemOverBagCollider;
     private ushort bagHapticVibration = 500;
+
+    void Awake()
+    {
+        mBackpack = GameObject.Find("Backpack").GetComponent<Backpack>();
+    }
 
     public void SubscribeTriggers()
     {
@@ -114,6 +120,14 @@ public class BagInteraction : MonoBehaviour
     {
         UndoItemOverBag();
 
+        if (mManageMode)
+        {
+            mBackpack.DestroyInventoryUI();
+        }
+        else
+        {
+            mBackpack.SpawnInventoryUI();
+        }
         transform.GetChild(0).GetChild(1).gameObject.SetActive(!mManageMode);
         transform.GetComponent<CapsuleCollider>().enabled = mManageMode;
         transform.GetChild(0).GetChild(0).gameObject.SetActive(mManageMode);
@@ -131,7 +145,7 @@ public class BagInteraction : MonoBehaviour
             if (mItemOverBagCollider != null)
             {
                 GameObject item = mItemOverBagCollider.gameObject;
-                GameObject.Find("Backpack").GetComponent<Backpack>().AddItemToInventory(item.GetComponent<ItemFactoryData>().ItemEnum);
+                mBackpack.AddItemToInventory(item.GetComponent<ItemFactoryData>().ItemEnum);
                 Destroy(mItemOverBagCollider.gameObject);
             }
         }
@@ -150,7 +164,7 @@ public class BagInteraction : MonoBehaviour
                 if (mItemOverBagCollider != null)
                 {
                     GameObject item = mItemOverBagCollider.gameObject;
-                    GameObject.Find("Backpack").GetComponent<Backpack>().AddItemToInventory(item.GetComponent<ItemFactoryData>().ItemEnum);
+                    mBackpack.AddItemToInventory(item.GetComponent<ItemFactoryData>().ItemEnum);
                     Destroy(mItemOverBagCollider.gameObject);
                 }
             }
