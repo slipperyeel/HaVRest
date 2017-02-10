@@ -28,6 +28,8 @@ public class Backpack : MonoBehaviour
     public RuntimeAnimatorController mItemFloatController;
     [SerializeField]
     public Material mRimLight;
+    private Material[] mPreviousMaterials;
+    private int mFocusedSlot = 0;
     private GameObject mTopObject;
     private bool mIsLeft;
 
@@ -71,7 +73,8 @@ public class Backpack : MonoBehaviour
             //mTopObject.transform.parent = null;
             SubtractItemFromInventory(mTopObject.GetComponent<ItemFactoryData>().ItemEnum);
             e.target.transform.parent = null;
-            e.target.layer = 0;
+            e.target.transform.gameObject.GetComponent<Collider>().isTrigger = false;
+            //e.target.layer = 0;
         }
     }
 
@@ -79,19 +82,6 @@ public class Backpack : MonoBehaviour
     {
         foreach (MeshRenderer child in controller.GetComponentsInChildren<MeshRenderer>(true))
             child.enabled = !hidden;
-    }
-
-    void SpawnTopObject(ItemEnums itemEnum)
-    {
-        GameObject instantiatedObj;
-        HVRItemFactory.SpawnItem(itemEnum, Vector3.zero, default(Quaternion), Vector3.one, out instantiatedObj, "TopItem");
-        //instantiatedObj.GetComponent<Rigidbody>().useGravity = false;
-        instantiatedObj.GetComponent<Rigidbody>().isKinematic = true;
-        instantiatedObj.transform.SetParent(mItemSackObject.transform.GetChild(0).GetChild(1).GetChild(12));
-        instantiatedObj.transform.localPosition = Vector3.zero;
-        instantiatedObj.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
-        mTopObject = instantiatedObj;
-        mTopObject.layer = 5;
     }
 
     public void AddItemToInventory(ItemEnums itemEnum)
@@ -136,6 +126,40 @@ public class Backpack : MonoBehaviour
         }
     }
 
+    void SpawnTopObject(ItemEnums itemEnum)
+    {
+        GameObject instantiatedObj;
+        HVRItemFactory.SpawnItem(itemEnum, Vector3.zero, default(Quaternion), Vector3.one, out instantiatedObj, "TopItem");
+        //instantiatedObj.GetComponent<Rigidbody>().useGravity = false;
+        instantiatedObj.GetComponent<Rigidbody>().isKinematic = true;
+        instantiatedObj.GetComponent<Collider>().isTrigger = true;
+        instantiatedObj.transform.SetParent(mItemSackObject.transform.GetChild(0).GetChild(1).GetChild(12));
+        instantiatedObj.transform.localPosition = Vector3.zero;
+        instantiatedObj.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
+        mTopObject = instantiatedObj;
+        //mTopObject.layer = 5;
+    }
+
+    public void FocusOnSlot(int slot, bool isRefresh = false)
+    {
+        // Reset the material for the now unfocused slot
+        if ((mPreviousMaterials != null) && (slot != mFocusedSlot))
+        {
+            mInventorySlotItems[mFocusedSlot].GetComponent<MeshRenderer>().materials = mPreviousMaterials;
+        }
+        mPreviousMaterials = mInventorySlotItems[slot].GetComponent<MeshRenderer>().materials;
+
+        Material[] newMaterials = new Material[mInventorySlotItems[slot].GetComponent<MeshRenderer>().materials.Length];
+        newMaterials[0] = mRimLight;
+        mInventorySlotItems[slot].GetComponent<MeshRenderer>().materials = newMaterials;
+        if (isRefresh == true)
+        {
+            Destroy(mTopObject);
+        }
+        SpawnTopObject(mInventorySlotItems[slot].GetComponent<ItemFactoryData>().ItemEnum);
+        mFocusedSlot = slot;
+    }
+
     void FilterInventory(List<InventoryItem> inventoryItems)
     {
         for (int i = 0; i < inventoryItems.Count; i++)
@@ -148,9 +172,13 @@ public class Backpack : MonoBehaviour
         }
     }
 
-    public void SpawnInventoryUI()
+    public void SpawnInventoryUI(bool modeSwitch = false)
     {
         mItemSackObject.GetComponent<BagInteraction>().mIsBagOnLeft = mIsLeft;
+        if (modeSwitch)
+        {
+            Destroy(mTopObject);
+        }
 
         List<InventoryItem> inventoryItems = mPouches[1].InventoryItems;
         List<InventoryItem> filteredInventoryItems = new List<InventoryItem>(inventoryItems);
@@ -166,18 +194,13 @@ public class Backpack : MonoBehaviour
                 mInventorySlotItems.Add(instantiatedObj);
                 Destroy(instantiatedObj.GetComponent<Rigidbody>());
                 Destroy(instantiatedObj.GetComponent<VRTK_InteractableObject>());
+                Destroy(instantiatedObj.GetComponent<Collider>());
                 instantiatedObj.transform.SetParent(mSlotContainer.GetChild(i));
                 instantiatedObj.transform.localPosition = Vector3.zero;
                 instantiatedObj.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
                 Animator itemFloatController = instantiatedObj.AddComponent<Animator>() as Animator;
                 instantiatedObj.GetComponent<Animator>().runtimeAnimatorController = mItemFloatController;
-                if (i == 0)
-                {
-                    Material[] newMaterials = new Material[instantiatedObj.GetComponent<MeshRenderer>().materials.Length];
-                    newMaterials[0] = mRimLight;
-                    instantiatedObj.GetComponent<MeshRenderer>().materials = newMaterials;
-                    SpawnTopObject(filteredInventoryItems[i].Id);
-                }
+                mSlotContainer.GetChild(i).GetComponent<Collider>().enabled = true;
                 //itemFloatController.runtimeAnimatorController = mItemFloatController;
                 mSlotContainer.GetChild(i).GetChild(0).gameObject.SetActive(true);
                 mSlotContainer.GetChild(i).GetChild(0).gameObject.GetComponent<Text>().text = filteredInventoryItems[i].Quantity.ToString();
@@ -185,7 +208,13 @@ public class Backpack : MonoBehaviour
             else
             {
                 mSlotContainer.GetChild(i).GetChild(0).gameObject.SetActive(false);
+                mSlotContainer.GetChild(i).GetComponent<Collider>().enabled = false;
             }
+        }
+        mFocusedSlot = (mFocusedSlot == 0) ? 0 : mFocusedSlot - 1;
+        if (filteredInventoryItems.Count > 0)
+        {
+            FocusOnSlot(mFocusedSlot);
         }
 
         if (mIsLeft)

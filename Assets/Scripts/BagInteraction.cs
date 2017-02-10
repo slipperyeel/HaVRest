@@ -126,7 +126,7 @@ public class BagInteraction : MonoBehaviour
         }
         else
         {
-            mBackpack.SpawnInventoryUI();
+            mBackpack.SpawnInventoryUI(true);
         }
         transform.GetChild(0).GetChild(1).gameObject.SetActive(!mManageMode);
         transform.GetComponent<CapsuleCollider>().enabled = mManageMode;
