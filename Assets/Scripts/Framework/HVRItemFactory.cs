@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public static class HVRItemFactory
 {
-    public static readonly string ITEM_DIRECTORY = "Prefabs/Items";
+    public static readonly string ITEM_DIRECTORY = "Prefabs/Items/";
     private static readonly string RESOURCES_DIRECTORY = "Resources";
     private static List<GameObject> mItemPrefabs = new List<GameObject>();
 
@@ -28,7 +28,7 @@ public static class HVRItemFactory
             GameObject loadedObject = null;
             try
             {
-                string fileName = ITEM_DIRECTORY + "/" + Path.GetFileNameWithoutExtension(info[i].FullName);
+                string fileName = ITEM_DIRECTORY + Path.GetFileNameWithoutExtension(info[i].FullName);
                 loadedObject = (GameObject)Resources.Load(fileName);
                 mItemPrefabs.Add(loadedObject);
             }
@@ -100,5 +100,10 @@ public static class HVRItemFactory
         }
         itemPrefab = null;
         return success;
+    }
+
+    public static void DestroyObject(GameObject obj)
+    {
+        DataManager.Instance.DestroyObject(obj);
     }
 }

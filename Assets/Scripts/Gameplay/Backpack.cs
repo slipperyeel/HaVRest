@@ -50,6 +50,19 @@ public class Backpack : MonoBehaviour
 
     }
 
+    public ItemSack GetItemSack()
+    {
+        if(mItemSackObject != null)
+        {
+            if(mItemSackObject.GetComponent<ItemSack>() != null)
+            {
+                return mItemSackObject.GetComponent<ItemSack>();
+            }
+        }
+
+        return null;
+    }
+
     void OnDeviceConnected(object sender, System.EventArgs e)
     {
         HVRControllerManager.ConnectedDeviceArgs dca = (HVRControllerManager.ConnectedDeviceArgs)e;
@@ -154,7 +167,8 @@ public class Backpack : MonoBehaviour
         mInventorySlotItems[slot].GetComponent<MeshRenderer>().materials = newMaterials;
         if (isRefresh == true)
         {
-            Destroy(mTopObject);
+            //Destroy(mTopObject);
+            HVRItemFactory.DestroyObject(mTopObject);
         }
         SpawnTopObject(mInventorySlotItems[slot].GetComponent<ItemFactoryData>().ItemEnum);
         mFocusedSlot = slot;
@@ -177,7 +191,7 @@ public class Backpack : MonoBehaviour
         mItemSackObject.GetComponent<BagInteraction>().mIsBagOnLeft = mIsLeft;
         if (modeSwitch)
         {
-            Destroy(mTopObject);
+            HVRControllerManager.DestroyObject(mTopObject);
         }
 
         List<InventoryItem> inventoryItems = mPouches[1].InventoryItems;
@@ -189,8 +203,12 @@ public class Backpack : MonoBehaviour
         {
             if (filteredInventoryItems.Count > i)
             {
-                GameObject instantiatedObj;
-                HVRItemFactory.SpawnItem(filteredInventoryItems[i].Id, Vector3.zero, default(Quaternion), new Vector3(0.35f, 0.35f, 0.35f), out instantiatedObj, "InventorySlotItem");
+                //GameObject instantiatedObj;
+                //HVRItemFactory.SpawnItem(filteredInventoryItems[i].Id, Vector3.zero, default(Quaternion), new Vector3(0.35f, 0.35f, 0.35f), out instantiatedObj, "InventorySlotItem");
+                object obj = GameObject.Instantiate(HVRItemFactory.GetItemPrefab(filteredInventoryItems[i].Id));
+                GameObject instantiatedObj = (GameObject)obj;
+                instantiatedObj.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
+
                 mInventorySlotItems.Add(instantiatedObj);
                 Destroy(instantiatedObj.GetComponent<Rigidbody>());
                 Destroy(instantiatedObj.GetComponent<VRTK_InteractableObject>());

@@ -9,7 +9,6 @@ public class ItemSlotInteraction : MonoBehaviour
     private int mSlotNumber;
     [SerializeField]
     private BagInteraction mBagInteraction;
-    private Backpack mBackpack;
 
     public delegate void TriggerEnter(Collider other);
     public static event TriggerEnter OnEntered;
@@ -23,8 +22,6 @@ public class ItemSlotInteraction : MonoBehaviour
     {
         HVRControllerManager.Instance.RightEvents.TriggerReleased += DoTriggerReleasedRight;
         HVRControllerManager.Instance.LeftEvents.TriggerReleased += DoTriggerReleasedLeft;
-
-        mBackpack = GameObject.Find("Backpack").GetComponent<Backpack>();
     }
 
     void OnDestroy()
@@ -50,7 +47,7 @@ public class ItemSlotInteraction : MonoBehaviour
         {
             if (mIsSlotBeingHovered)
             {
-                mBackpack.FocusOnSlot(mSlotNumber, true);
+                GameManager.Instance.Player.BackPack.FocusOnSlot(mSlotNumber, true);
             }
         }
     }
@@ -61,7 +58,7 @@ public class ItemSlotInteraction : MonoBehaviour
         {
             if (mIsSlotBeingHovered)
             {
-                mBackpack.FocusOnSlot(mSlotNumber, true);
+                GameManager.Instance.Player.BackPack.FocusOnSlot(mSlotNumber, true);
             }
         }
     }

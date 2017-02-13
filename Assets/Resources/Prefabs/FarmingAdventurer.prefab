@@ -2392,7 +2392,7 @@ MonoBehaviour:
   sMinFoodStarving: 10
   sMinWaterThirsty: 40
   sMinHeatFreezing: 30
-  mBackPack: {fileID: 0}
+  mBackPack: {fileID: 114000011048276180}
 --- !u!114 &114000012204925806
 MonoBehaviour:
   m_ObjectHideFlags: 1

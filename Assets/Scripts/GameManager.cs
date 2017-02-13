@@ -11,6 +11,14 @@ public class GameManager : Singleton<GameManager>
     public FarmingGame Game { get { return mGame; } }
 
     [SerializeField]
+    private Player mPlayer;
+    public Player Player
+    {
+        get { return mPlayer; }
+        set { mPlayer = value; }
+    }
+
+    [SerializeField]
     private GameObject mPlayerPrefab;
 
     [SerializeField]
@@ -41,8 +49,8 @@ public class GameManager : Singleton<GameManager>
             if (DataManager.Instance.IsFirstBoot)
             {
                 Debug.Log("Is First Boot.");
-                Player player = DataManager.Instance.SpawnObject<Player, PlayerMomento>(mPlayerPrefab, mSpawnPoint.position, mSpawnPoint.rotation, Vector3.one);
-                player.InitPlayer();
+                mPlayer = DataManager.Instance.SpawnObject<Player, PlayerMomento>(mPlayerPrefab, mSpawnPoint.position, mSpawnPoint.rotation, Vector3.one);
+                mPlayer.InitPlayer();
             }
         });
     }

@@ -208,6 +208,11 @@ public class DataManager : Singleton<DataManager>
                             loadedObject = GameObject.Instantiate(loadedObject);
                             mMomentos[i].ApplyMomentoData(loadedObject);
 
+                            if(loadedObject.GetComponent<Player>() != null)
+                            {
+                                GameManager.Instance.Player = loadedObject.GetComponent<Player>();
+                            }
+
                             yield return null;
                         }
 

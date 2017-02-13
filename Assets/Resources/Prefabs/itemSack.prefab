@@ -265,6 +265,7 @@ GameObject:
   - 23: {fileID: 23000011182986672}
   - 136: {fileID: 136000013725012792}
   - 114: {fileID: 114000012414413720}
+  - 114: {fileID: 114000011595136450}
   m_Layer: 0
   m_Name: itemSack
   m_TagString: Untagged
@@ -1392,6 +1393,31 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 1
+--- !u!114 &114000011595136450
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012012829598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7a5df1dd71962446b6aaa3bddf4a4fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mItemInteractions:
+  - {fileID: 114000013725207116}
+  - {fileID: 114000014052972478}
+  - {fileID: 114000012895951902}
+  - {fileID: 114000011172559152}
+  - {fileID: 114000011646940616}
+  - {fileID: 114000012281690652}
+  - {fileID: 114000010663532068}
+  - {fileID: 114000012839543412}
+  - {fileID: 114000013398185476}
+  - {fileID: 114000010070887800}
+  - {fileID: 114000014140305800}
+  - {fileID: 114000011490806952}
+  mSackTop: {fileID: 1000014135826376}
 --- !u!114 &114000011646940616
 MonoBehaviour:
   m_ObjectHideFlags: 1
