@@ -3,8 +3,10 @@ using System.Collections;
 using System;
 using VRTK;
 
-public class ItemSlotInteraction : MonoBehaviour
+public class ItemInteraction : MonoBehaviour
 {
+    [SerializeField]
+    private int mArrow;
     [SerializeField]
     private int mSlotNumber;
     [SerializeField]
@@ -18,16 +20,21 @@ public class ItemSlotInteraction : MonoBehaviour
     private bool mIsSlotBeingHovered = false;
     private ushort bagHapticVibration = 1000;
 
-    void Awake()
+    void OnEnable()
     {
         HVRControllerManager.Instance.RightEvents.TriggerReleased += DoTriggerReleasedRight;
         HVRControllerManager.Instance.LeftEvents.TriggerReleased += DoTriggerReleasedLeft;
     }
 
-    void OnDestroy()
+    void OnDisable()
     {
         HVRControllerManager.Instance.RightEvents.TriggerReleased -= DoTriggerReleasedRight;
         HVRControllerManager.Instance.LeftEvents.TriggerReleased -= DoTriggerReleasedLeft;
+    }
+
+    void OnDestroy()
+    {
+        OnDisable();
     }
 
     void OnTriggerEnter(Collider other)
@@ -47,7 +54,14 @@ public class ItemSlotInteraction : MonoBehaviour
         {
             if (mIsSlotBeingHovered)
             {
-                GameManager.Instance.Player.BackPack.FocusOnSlot(mSlotNumber, true);
+                if (mArrow > 0)
+                {
+                    GameManager.Instance.Player.BackPack.ChangePage(mArrow);
+                }
+                else
+                {
+                    GameManager.Instance.Player.BackPack.FocusOnSlot(mSlotNumber, true);
+                }
             }
         }
     }
@@ -58,7 +72,14 @@ public class ItemSlotInteraction : MonoBehaviour
         {
             if (mIsSlotBeingHovered)
             {
-                GameManager.Instance.Player.BackPack.FocusOnSlot(mSlotNumber, true);
+                if (mArrow > 0)
+                {
+                    GameManager.Instance.Player.BackPack.ChangePage(mArrow);
+                }
+                else
+                {
+                    GameManager.Instance.Player.BackPack.FocusOnSlot(mSlotNumber, true);
+                }
             }
         }
     }

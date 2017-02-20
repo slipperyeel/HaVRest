@@ -30,14 +30,24 @@ public class Backpack : MonoBehaviour
     public Material mRimLight;
     private Material[] mPreviousMaterials;
     private int mFocusedSlot = 0;
+    private int mFocusedPage = 0;
     private GameObject mTopObject;
     private bool mIsLeft;
+    private int[] mCurrentPageNumbers;
+    private int mCurrentPouchIndex = 1;
+    private int mLastFilteredInventoryCount = 1;
 
     void Start()
     {
         HVRControllerManager.Instance.DeviceConnected += OnDeviceConnected;
         BagInteraction.OnEntered += OnBagTriggerEntered;
         BagInteraction.OnExited += OnBagTriggerExited;
+
+        mCurrentPageNumbers = new int[mPouches.Count];
+        for (int i = 0; i < mCurrentPageNumbers.Length; i++)
+        {
+            mCurrentPageNumbers[i] = 1;
+        }
     }
 
     void OnBagTriggerEntered(Collider other)
@@ -128,6 +138,14 @@ public class Backpack : MonoBehaviour
         }
         if (quantity == 0)
         {
+            mFocusedSlot = (mFocusedSlot == 0) ? 0 : mFocusedSlot - 1;
+
+            // Checking to see if we need to decrement the page count
+            if (mLastFilteredInventoryCount - 1 == (mCurrentPageNumbers[mCurrentPouchIndex] - 1) * 12)
+            {
+                mCurrentPageNumbers[mCurrentPouchIndex]--;
+            }
+
             DestroyInventoryUI();
             SpawnInventoryUI();
         }
@@ -153,10 +171,24 @@ public class Backpack : MonoBehaviour
         //mTopObject.layer = 5;
     }
 
+    public void ChangePage(int leftRight)
+    {
+        if (leftRight == 1)
+        {
+            mCurrentPageNumbers[mCurrentPouchIndex]--;
+        }
+        else
+        {
+            mCurrentPageNumbers[mCurrentPouchIndex]++;
+        }
+        DestroyInventoryUI();
+        SpawnInventoryUI(true);
+    }
+
     public void FocusOnSlot(int slot, bool isRefresh = false)
     {
         // Reset the material for the now unfocused slot
-        if ((mPreviousMaterials != null) && (slot != mFocusedSlot))
+        if ((mPreviousMaterials != null) && (slot != mFocusedSlot) && (mFocusedPage == mCurrentPageNumbers[mCurrentPouchIndex]))
         {
             mInventorySlotItems[mFocusedSlot].GetComponent<MeshRenderer>().materials = mPreviousMaterials;
         }
@@ -172,6 +204,7 @@ public class Backpack : MonoBehaviour
         }
         SpawnTopObject(mInventorySlotItems[slot].GetComponent<ItemFactoryData>().ItemEnum);
         mFocusedSlot = slot;
+        mFocusedPage = mCurrentPageNumbers[mCurrentPouchIndex];
     }
 
     void FilterInventory(List<InventoryItem> inventoryItems)
@@ -186,10 +219,10 @@ public class Backpack : MonoBehaviour
         }
     }
 
-    public void SpawnInventoryUI(bool modeSwitch = false)
+    public void SpawnInventoryUI(bool destroyTopObject = false)
     {
         mItemSackObject.GetComponent<BagInteraction>().mIsBagOnLeft = mIsLeft;
-        if (modeSwitch)
+        if (destroyTopObject)
         {
             HVRControllerManager.DestroyObject(mTopObject);
         }
@@ -198,8 +231,9 @@ public class Backpack : MonoBehaviour
         List<InventoryItem> filteredInventoryItems = new List<InventoryItem>(inventoryItems);
         mInventorySlotItems = new List<GameObject>();
         FilterInventory(filteredInventoryItems);
+        mLastFilteredInventoryCount = filteredInventoryItems.Count;
         mSlotContainer = mItemSackObject.transform.GetChild(0).GetChild(1);
-        for (int i = 0; i < 12; i++)
+        for (int i = 12 * (mCurrentPageNumbers[mCurrentPouchIndex] - 1); i < 12 * mCurrentPageNumbers[mCurrentPouchIndex]; i++)
         {
             if (filteredInventoryItems.Count > i)
             {
@@ -213,23 +247,38 @@ public class Backpack : MonoBehaviour
                 Destroy(instantiatedObj.GetComponent<Rigidbody>());
                 Destroy(instantiatedObj.GetComponent<VRTK_InteractableObject>());
                 Destroy(instantiatedObj.GetComponent<Collider>());
-                instantiatedObj.transform.SetParent(mSlotContainer.GetChild(i));
+                instantiatedObj.transform.SetParent(mSlotContainer.GetChild(i%12));
                 instantiatedObj.transform.localPosition = Vector3.zero;
                 instantiatedObj.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
                 Animator itemFloatController = instantiatedObj.AddComponent<Animator>() as Animator;
                 instantiatedObj.GetComponent<Animator>().runtimeAnimatorController = mItemFloatController;
-                mSlotContainer.GetChild(i).GetComponent<Collider>().enabled = true;
+                mSlotContainer.GetChild(i%12).GetComponent<Collider>().enabled = true;
                 //itemFloatController.runtimeAnimatorController = mItemFloatController;
-                mSlotContainer.GetChild(i).GetChild(0).gameObject.SetActive(true);
-                mSlotContainer.GetChild(i).GetChild(0).gameObject.GetComponent<Text>().text = filteredInventoryItems[i].Quantity.ToString();
+                mSlotContainer.GetChild(i%12).GetChild(0).gameObject.SetActive(true);
+                mSlotContainer.GetChild(i%12).GetChild(0).gameObject.GetComponent<Text>().text = filteredInventoryItems[i].Quantity.ToString();
             }
             else
             {
-                mSlotContainer.GetChild(i).GetChild(0).gameObject.SetActive(false);
-                mSlotContainer.GetChild(i).GetComponent<Collider>().enabled = false;
+                mSlotContainer.GetChild(i%12).GetChild(0).gameObject.SetActive(false);
+                mSlotContainer.GetChild(i%12).GetComponent<Collider>().enabled = false;
             }
         }
-        mFocusedSlot = (mFocusedSlot == 0) ? 0 : mFocusedSlot - 1;
+        if (mCurrentPageNumbers[mCurrentPouchIndex] > 1)
+        {
+            mItemSackObject.transform.GetChild(0).GetChild(2).gameObject.SetActive(true);
+        }
+        else
+        {
+            mItemSackObject.transform.GetChild(0).GetChild(2).gameObject.SetActive(false);
+        }
+        if (filteredInventoryItems.Count > 12 * mCurrentPageNumbers[mCurrentPouchIndex])
+        {
+            mItemSackObject.transform.GetChild(0).GetChild(3).gameObject.SetActive(true);
+        }
+        else
+        {
+            mItemSackObject.transform.GetChild(0).GetChild(3).gameObject.SetActive(false);
+        }
         if (filteredInventoryItems.Count > 0)
         {
             FocusOnSlot(mFocusedSlot);

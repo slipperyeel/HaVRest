@@ -5,8 +5,8 @@ using System.Collections.Generic;
 public class ItemSack : MonoBehaviour
 {
     [SerializeField]
-    private List<ItemSlotInteraction> mItemInteractions;
-    public List<ItemSlotInteraction> Items
+    private List<ItemInteraction> mItemInteractions;
+    public List<ItemInteraction> Items
     {
         get { return mItemInteractions; }
         set { mItemInteractions = value; }

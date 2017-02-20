@@ -2579,21 +2579,21 @@ MonoBehaviour:
   - Id: 12
     Quantity: 1
   - Id: 13
-    Quantity: 0
+    Quantity: 1
   - Id: 14
-    Quantity: 0
+    Quantity: 1
   - Id: 15
-    Quantity: 0
+    Quantity: 1
   - Id: 16
-    Quantity: 0
+    Quantity: 1
   - Id: 17
-    Quantity: 0
+    Quantity: 1
   - Id: 18
-    Quantity: 0
+    Quantity: 1
   - Id: 19
-    Quantity: 0
+    Quantity: 1
   - Id: 20
-    Quantity: 0
+    Quantity: 1
 --- !u!114 &114000013612494272
 MonoBehaviour:
   m_ObjectHideFlags: 1
