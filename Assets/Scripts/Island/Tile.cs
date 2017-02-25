@@ -64,66 +64,66 @@ public class Tile : MonoBehaviour
 	}
 
 	//void OnCollisionEnter(Collision other)
-    void OnTriggerEnter(Collider other)
-	{
-        // this is for tools right now
-        // if it's on the business end layer, do this stuff below
-        // if it's on another layer, we need another check for plantable things like seeds to do the tilled stuff
-        if (other.gameObject.layer != LayerMask.NameToLayer("BusinessEnd")) return;
+ //   void OnTriggerEnter(Collider other)
+	//{
+ //       // this is for tools right now
+ //       // if it's on the business end layer, do this stuff below
+ //       // if it's on another layer, we need another check for plantable things like seeds to do the tilled stuff
+ //       if (other.gameObject.layer != LayerMask.NameToLayer("BusinessEnd")) return;
 
-        // this needs a better way of happening. Checking every tool for it's parent layer is weird unless every tool conforms to this
-        Transform parentTool = other.transform.parent;
-        HVRInteractableObject interactable = parentTool.GetComponent<HVRInteractableObject>();
-        if (interactable != null && interactable.IsGrabbed())
-        {
-            PhysicalItem item = parentTool.GetComponent<PhysicalItem>();
-            if (item == null) return;
+ //       // this needs a better way of happening. Checking every tool for it's parent layer is weird unless every tool conforms to this
+ //       Transform parentTool = other.transform.parent;
+ //       HVRInteractableObject interactable = parentTool.GetComponent<HVRInteractableObject>();
+ //       if (interactable != null && interactable.IsGrabbed())
+ //       {
+ //           PhysicalItem item = parentTool.GetComponent<PhysicalItem>();
+ //           if (item == null) return;
 
-            eImpactType impact = item.ImpactType;
-            switch (_state)
-            {
-                case eTileState.Invalid:
-                    // do nothing
-                    break;
+ //           eImpactType impact = item.ImpactType;
+ //           switch (_state)
+ //           {
+ //               case eTileState.Invalid:
+ //                   // do nothing
+ //                   break;
 
-                case eTileState.Normal:
-                    if (impact == eImpactType.Pierce)
-                    {
-                        SetState(eTileState.Dug);
-                    }
-                    else if (impact == eImpactType.Sharp)
-                    {
-                        SetState(eTileState.Tilled);
-                    }
-                    break;
+ //               case eTileState.Normal:
+ //                   if (impact == eImpactType.Pierce)
+ //                   {
+ //                       SetState(eTileState.Dug);
+ //                   }
+ //                   else if (impact == eImpactType.Sharp)
+ //                   {
+ //                       SetState(eTileState.Tilled);
+ //                   }
+ //                   break;
 
-                case eTileState.Dug:
-                case eTileState.Tilled:
-                    if (impact == eImpactType.Blunt)
-                    {
-                        SetState(eTileState.Normal);
-                        break;
-                    }
+ //               case eTileState.Dug:
+ //               case eTileState.Tilled:
+ //                   if (impact == eImpactType.Blunt)
+ //                   {
+ //                       SetState(eTileState.Normal);
+ //                       break;
+ //                   }
 
-                    // this stuff is for when a plantable object is dropped on, TODO mikes
-                    // right now this only checks for held tools
+ //                   // this stuff is for when a plantable object is dropped on, TODO mikes
+ //                   // right now this only checks for held tools
 
-                    //ResourceObject obj = other.gameObject.GetComponent<ResourceObject>();
-                    //if (obj == null) return;
+ //                   //ResourceObject obj = other.gameObject.GetComponent<ResourceObject>();
+ //                   //if (obj == null) return;
 
-                    //Resource r = obj.Resource;
-                    //if (r.IsPlantable)
-                    //{
-                    //    SetState(eTileState.Planted);
-                    //}
-                    break;
+ //                   //Resource r = obj.Resource;
+ //                   //if (r.IsPlantable)
+ //                   //{
+ //                   //    SetState(eTileState.Planted);
+ //                   //}
+ //                   break;
 
-                case eTileState.Planted:
-                    // TODO decide if you can return to a previous state if planted
-                    break;
-            }
+ //               case eTileState.Planted:
+ //                   // TODO decide if you can return to a previous state if planted
+ //                   break;
+ //           }
 
-            Debug.LogErrorFormat("Collided with {0}, impact type: {1}, tile state is now {2}", other.gameObject.name, impact.ToString(), _state.ToString());
-        }
-    }
+ //           Debug.LogErrorFormat("Collided with {0}, impact type: {1}, tile state is now {2}", other.gameObject.name, impact.ToString(), _state.ToString());
+ //       }
+ //   }
 }

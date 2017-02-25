@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using VRTK;
 
 public class HVRControllerManager : SteamVR_ControllerManager
 {
@@ -20,16 +21,16 @@ public class HVRControllerManager : SteamVR_ControllerManager
     private VRTK.VRTK_ControllerEvents m_leftEvents;
     public VRTK.VRTK_ControllerEvents LeftEvents { get { return m_leftEvents; } }
 
-    public int RightIndex { get { return m_rightEvents.ControllerIndex; } }
-    public int LeftIndex { get { return m_leftEvents.ControllerIndex; } }
+    public int RightIndex { get { return (int)VRTK_DeviceFinder.GetControllerIndex(Right); } }
+    public int LeftIndex { get { return (int)VRTK_DeviceFinder.GetControllerIndex(Left); } }
 
-    protected override void Awake()
+    public override void Awake()
     {
         Instance = this;
         base.Awake();
     }
 
-    protected override void OnEnable()
+    public override void OnEnable()
     {
         base.OnEnable();
         SetControllers();
@@ -42,22 +43,54 @@ public class HVRControllerManager : SteamVR_ControllerManager
 
         if (m_controllerLeft != null)
         {
-            m_leftEvents = m_controllerLeft.GetComponent<VRTK.VRTK_ControllerEvents>();
+            m_leftEvents = GetLeftController().GetComponent<VRTK.VRTK_ControllerEvents>();
         }
 
         if (m_controllerRight != null)
         {
-            m_rightEvents = m_controllerRight.GetComponent<VRTK.VRTK_ControllerEvents>();
+            m_rightEvents = GetRightController().GetComponent<VRTK.VRTK_ControllerEvents>();
         }
     }
 
-    protected override void OnDeviceConnected(params object[] args)
+    public GameObject GetRightController()
     {
-        base.OnDeviceConnected(args);
+        return VRTK_DeviceFinder.GetControllerRightHand(false);
+    }
 
+    public GameObject GetLeftController()
+    {
+        return VRTK_DeviceFinder.GetControllerLeftHand(false);
+    }
+
+    public GameObject GetControllerByGameObject(GameObject gameObject)
+    {
+        GameObject obj = null;
+        if(gameObject != null)
+        {
+            int index = -1;
+            index = (int)VRTK_DeviceFinder.GetControllerIndex(gameObject);
+
+            if(index > -1)
+            {
+                obj = VRTK_DeviceFinder.GetControllerByIndex((uint)index, false);
+            }
+            else
+            {
+                Debug.LogError("Index is -1");
+            }
+        }
+        else
+        {
+            Debug.LogError("Trying to get a controller from a go that has a null gameobject");
+        }
+        return obj;
+    }
+
+    public override void OnDeviceConnected(int index, bool connected)
+    {
         // if a controller turns on, we need to refresh the references
-        int connectedControllerIndex = (int)args[0];
-        bool connected = (bool)args[1];
+        int connectedControllerIndex = index;
+
         if (connected)
         {
             SetControllers();
@@ -70,6 +103,7 @@ public class HVRControllerManager : SteamVR_ControllerManager
             deviceArgs.IsConnected = connected;
             DeviceConnected(this, deviceArgs);
         }
+        base.OnDeviceConnected(index, connected);
     }
 
     public GameObject GetControllerByIndex(int index)

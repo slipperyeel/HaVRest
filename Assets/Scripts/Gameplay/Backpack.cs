@@ -80,11 +80,11 @@ public class Backpack : MonoBehaviour
         bool isConnected = dca.IsConnected;
         if ((index == HVRControllerManager.Instance.LeftIndex) && (isConnected))
         {
-            HVRControllerManager.Instance.LeftEvents.ApplicationMenuPressed += DoApplicationMenuPressedLeft;
+            HVRControllerManager.Instance.LeftEvents.ButtonOnePressed += DoApplicationMenuPressedLeft;
         }
         if ((index == HVRControllerManager.Instance.RightIndex) && (isConnected))
         {
-            HVRControllerManager.Instance.RightEvents.ApplicationMenuPressed += DoApplicationMenuPressedRight;
+            HVRControllerManager.Instance.RightEvents.ButtonOnePressed += DoApplicationMenuPressedRight;
         }
     }
 
@@ -94,9 +94,9 @@ public class Backpack : MonoBehaviour
         {
             //mTopObject.GetComponent<Rigidbody>().useGravity = true;
             //mTopObject.transform.parent = null;
-            SubtractItemFromInventory(mTopObject.GetComponent<ItemFactoryData>().ItemEnum);
             e.target.transform.parent = null;
             e.target.transform.gameObject.GetComponent<Collider>().isTrigger = false;
+            SubtractItemFromInventory(mTopObject.GetComponent<ItemFactoryData>().ItemEnum);
             //e.target.layer = 0;
         }
     }
@@ -232,6 +232,10 @@ public class Backpack : MonoBehaviour
         mInventorySlotItems = new List<GameObject>();
         FilterInventory(filteredInventoryItems);
         mLastFilteredInventoryCount = filteredInventoryItems.Count;
+        if (mLastFilteredInventoryCount - (12 * (mCurrentPageNumbers[mCurrentPouchIndex] - 1)) <= mFocusedSlot)
+        {
+            mFocusedSlot = 0;
+        }
         mSlotContainer = mItemSackObject.transform.GetChild(0).GetChild(1);
         for (int i = 12 * (mCurrentPageNumbers[mCurrentPouchIndex] - 1); i < 12 * mCurrentPageNumbers[mCurrentPouchIndex]; i++)
         {
@@ -286,11 +290,11 @@ public class Backpack : MonoBehaviour
 
         if (mIsLeft)
         {
-            HVRControllerManager.Instance.right.transform.GetComponent<VRTK_InteractGrab>().ControllerGrabInteractableObject += new ObjectInteractEventHandler(DoControllerGrabInteractableObject);
+            HVRControllerManager.Instance.GetRightController().GetComponent<VRTK_InteractGrab>().ControllerGrabInteractableObject += new ObjectInteractEventHandler(DoControllerGrabInteractableObject);
         }
         else
         {
-            HVRControllerManager.Instance.left.transform.GetComponent<VRTK_InteractGrab>().ControllerGrabInteractableObject += new ObjectInteractEventHandler(DoControllerGrabInteractableObject);
+            HVRControllerManager.Instance.GetLeftController().GetComponent<VRTK_InteractGrab>().ControllerGrabInteractableObject += new ObjectInteractEventHandler(DoControllerGrabInteractableObject);
         }
     }
 
@@ -309,11 +313,11 @@ public class Backpack : MonoBehaviour
         // We don't actually need to remove this, just stop from doing it more than once
         if (mIsLeft)
         {
-            HVRControllerManager.Instance.right.transform.GetComponent<VRTK_InteractGrab>().ControllerGrabInteractableObject -= new ObjectInteractEventHandler(DoControllerGrabInteractableObject);
+            HVRControllerManager.Instance.GetRightController().GetComponent<VRTK_InteractGrab>().ControllerGrabInteractableObject -= new ObjectInteractEventHandler(DoControllerGrabInteractableObject);
         }
         else
         {
-            HVRControllerManager.Instance.left.transform.GetComponent<VRTK_InteractGrab>().ControllerGrabInteractableObject -= new ObjectInteractEventHandler(DoControllerGrabInteractableObject);
+            HVRControllerManager.Instance.GetLeftController().GetComponent<VRTK_InteractGrab>().ControllerGrabInteractableObject -= new ObjectInteractEventHandler(DoControllerGrabInteractableObject);
         }
     }
 

@@ -35,26 +35,38 @@ public class BagInteraction : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
+        if(other.gameObject != null)
         {
-            mWasTriggerEnteredSkipped = false;
-            if (OnEntered != null)
+            VRTK_InteractableObject obj = other.gameObject.GetComponent<VRTK_InteractableObject>();
+            if(obj != null)
             {
-                OnEntered(other);
+                if (obj.IsGrabbed())
+                {
+                    mWasTriggerEnteredSkipped = false;
+                    if (OnEntered != null)
+                    {
+                        OnEntered(other);
+                    }
+
+                    mIsItemOverBag = true;
+                    mItemOverBagCollider = other;
+
+                    oldMaterial = other.gameObject.GetComponent<MeshRenderer>().materials[0];
+                    Material[] newMaterials = new Material[other.gameObject.GetComponent<MeshRenderer>().materials.Length];
+                    newMaterials[0] = mRimLight;
+                    other.gameObject.GetComponent<MeshRenderer>().materials = newMaterials;
+                }
+                else
+                {
+                    mWasTriggerEnteredSkipped = true;
+                }
             }
-
-            mIsItemOverBag = true;
-            mItemOverBagCollider = other;
-
-            oldMaterial = other.gameObject.GetComponent<MeshRenderer>().materials[0];
-            Material[] newMaterials = new Material[other.gameObject.GetComponent<MeshRenderer>().materials.Length];
-            newMaterials[0] = mRimLight;
-            other.gameObject.GetComponent<MeshRenderer>().materials = newMaterials;
+            else
+            {
+                Debug.LogError("BRODY DOESN'T LIKE ERROR CHECKING BUT HERE IS A MESSAGE");
+            }
         }
-        else
-        {
-            mWasTriggerEnteredSkipped = true;
-        }
+
     }
 
     void OnTriggerExit(Collider other)
