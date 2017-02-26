@@ -40,7 +40,7 @@ Material:
       data:
         first:
           name: _Smoothness
-        second: 0.909
+        second: 0.848
       data:
         first:
           name: _Metallic

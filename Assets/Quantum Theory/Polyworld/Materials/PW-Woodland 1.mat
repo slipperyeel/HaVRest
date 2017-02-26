@@ -7,10 +7,10 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: PW-Woodland 1
-  m_Shader: {fileID: 4800000, guid: 09a6d952561d01c41a298ab924e2f299, type: 3}
+  m_Shader: {fileID: 4800000, guid: bf29ee44209c59c4092a8f492722daa9, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2000
   stringTagMap: {}
   m_SavedProperties:
     serializedVersion: 2
@@ -31,43 +31,27 @@ Material:
           m_Offset: {x: 0, y: 0}
       data:
         first:
-          name: _Illum
+          name: _ReflectionCube
         second:
-          m_Texture: {fileID: 8900000, guid: dff352cf164f4c74592b71cf6d9248da, type: 2}
+          m_Texture: {fileID: 0}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
       data:
         first:
-          name: _ReflectionCube
+          name: _Illum
         second:
-          m_Texture: {fileID: 0}
+          m_Texture: {fileID: 8900000, guid: dff352cf164f4c74592b71cf6d9248da, type: 2}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
     m_Floats:
       data:
         first:
           name: _Cutoff
-        second: .5
+        second: 0.5
       data:
         first:
           name: _IBLBrightness
-        second: 1.18918908
-      data:
-        first:
-          name: _Emission
-        second: 1
-      data:
-        first:
-          name: _CubeIntensity
-        second: 1.30999994
-      data:
-        first:
-          name: _PowVal
-        second: 1
-      data:
-        first:
-          name: _Alpha
-        second: 1
+        second: 1.1891891
       data:
         first:
           name: _CubeMipLevel
@@ -76,16 +60,32 @@ Material:
         first:
           name: _ReflectionAmount
         second: 1
+      data:
+        first:
+          name: _CubeIntensity
+        second: 1.31
+      data:
+        first:
+          name: _Emission
+        second: 1
+      data:
+        first:
+          name: _PowVal
+        second: 1
+      data:
+        first:
+          name: _Alpha
+        second: 1
     m_Colors:
       data:
         first:
           name: _Color
-        second: {r: .90196085, g: .90196085, b: .90196085, a: 1}
-      data:
-        first:
-          name: _AmbientTint
-        second: {r: 1, g: 1, b: 1, a: 1}
+        second: {r: 0.90196085, g: 0.90196085, b: 0.90196085, a: 1}
       data:
         first:
           name: _ReflectionTint
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _AmbientTint
         second: {r: 1, g: 1, b: 1, a: 1}

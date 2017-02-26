@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: SceneTerrain-Water-BaseMeshMat
-  m_Shader: {fileID: 4800000, guid: 65a3c962d695cf9439f18a58d45dc905, type: 3}
+  m_Shader: {fileID: 4800000, guid: 4e0b3c18cc0161f45bab8f4f2b431043, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
   m_CustomRenderQueue: 2000
@@ -21,6 +21,13 @@ Material:
         second:
           m_Texture: {fileID: 0}
           m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _OffsetMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 37e5c43b46ad5324496ec4703c783c35, type: 3}
+          m_Scale: {x: 8, y: 8}
           m_Offset: {x: 0, y: 0}
       data:
         first:
@@ -50,11 +57,26 @@ Material:
           m_Texture: {fileID: 8900000, guid: 8897a0a0f3cc8de47a3fc4667d210179, type: 2}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _Normal
+        second:
+          m_Texture: {fileID: 2800000, guid: b6c87bddaf1a65b4483c8e148c6199c9, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
     m_Floats:
       data:
         first:
           name: _Smoothness
-        second: 1
+        second: 0.938
+      data:
+        first:
+          name: _Speed
+        second: 0.045
+      data:
+        first:
+          name: _Intensity
+        second: 0.032
       data:
         first:
           name: _Metallic
@@ -79,6 +101,18 @@ Material:
         first:
           name: _ReflectionAmount
         second: 0.319
+      data:
+        first:
+          name: _node_9876
+        second: 10
+      data:
+        first:
+          name: _Tiling
+        second: 1
+      data:
+        first:
+          name: _NormalStrength
+        second: 0
     m_Colors:
       data:
         first:

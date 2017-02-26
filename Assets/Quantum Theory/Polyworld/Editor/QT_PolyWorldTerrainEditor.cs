@@ -9,10 +9,6 @@ public class QT_PolyWorldTerrainEditor : Editor {
 
     private QT_PolyWorldTerrain PWT;
 
-   // private bool terrainGOEnabled = true;
-   // private bool PWTGOEnabled = true;
-    
-  //  private GUIStyle styleRed = new GUIStyle();
     private GUIStyle boxStyle;
     Texture WorldIcon;
     Texture UpdateImg;
@@ -33,8 +29,9 @@ public class QT_PolyWorldTerrainEditor : Editor {
         GUILayout.BeginVertical(GUI.skin.box);
         GUILayout.Label("Terrain Visibility:");
         GUILayout.BeginHorizontal();
-        PWT.terrainGOEnabled = GUILayout.Toggle(PWT.terrainGOEnabled, "Source Terrain",GUI.skin.button,GUILayout.Height(30));
-        PWT.gameObject.GetComponent<Terrain>().enabled = PWT.terrainGOEnabled;
+        PWT.terrainGOEnabled = GUILayout.Toggle(PWT.terrainGOEnabled, "Source Terrain",GUI.skin.button,GUILayout.Height(30));      
+            
+        PWT.gameObject.GetComponent<Terrain>().drawHeightmap= PWT.terrainGOEnabled;
 
         PWT.PWTGOEnabled = GUILayout.Toggle(PWT.PWTGOEnabled, "PolyWorld Terrain", GUI.skin.button, GUILayout.Height(30));
         GUILayout.EndVertical();
@@ -108,7 +105,7 @@ public class QT_PolyWorldTerrainEditor : Editor {
                 PWTParent.transform.position = PWT.gameObject.transform.position;
                 PWTParent.transform.parent = PWT.gameObject.transform;
 
-
+                
 
                 if (PWT.GenerateLODs)
                 {
@@ -123,6 +120,19 @@ public class QT_PolyWorldTerrainEditor : Editor {
                 }
                 else
                     everyLODSet.Add(PWT.GeneratePolyWorldTerrain(PWTParent, 0));
+
+                if (PWT.GenerateMeshColliders)
+                {
+                    PWT.gameObject.GetComponent<TerrainCollider>().enabled = false;
+
+                    for (int x = 0; x < everyLODSet.Count; x++)
+                    {
+                        foreach (GameObject g in everyLODSet[x])
+                            g.AddComponent<MeshCollider>();
+                    }
+                }
+                else
+                    PWT.gameObject.GetComponent<TerrainCollider>().enabled = true; 
 
                 //save the meshes to disk. associate them with the right gameobject.
                 //WriteAllContent(PWTParent, everyLODSet);
@@ -238,6 +248,9 @@ public class QT_PolyWorldTerrainEditor : Editor {
             GUI.color = new Color(1f, 0f, 0f);
         else
             GUI.color = new Color(1f, 1f, 1f);
+        PWT.GenerateMeshColliders = GUILayout.Toggle(PWT.GenerateMeshColliders, "Generate Mesh Colliders");
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.BeginHorizontal();
         PWT.GenerateLODs = GUILayout.Toggle(PWT.GenerateLODs, "Generate LODs");
         //PWT.Average = EditorGUILayout.Toggle("Average Vertices", PWT.Average);
         GUI.color = new Color(1f, 1f, 1f);
@@ -284,8 +297,6 @@ public class QT_PolyWorldTerrainEditor : Editor {
         for (int x = 0; x < PWT.terrainData.splatPrototypes.Length; x++)
             SetTextureImporterFormat(true, PWT.terrainData.splatPrototypes[x].texture);
     }
-
-   
 
     private void WriteAllContent(GameObject PWTParent, List<GameObject[]> everyLODSet)
     {
@@ -390,7 +401,7 @@ public class QT_PolyWorldTerrainEditor : Editor {
    
     public void OnEnable()
     {
-        WorldIcon = (Texture)Resources.Load("PW_LogoWide");//(Texture)AssetDatabase.LoadAssetAtPath("Assets/Quantum Theory/Polyworld/Editor/QT_PolyWorld-icon.png", typeof(Texture));
+        WorldIcon = (Texture)Resources.Load("PW_LogoWide");
         UpdateImg = (Texture)Resources.Load("PW_BtnUpdateTerrain");
         UpdateColor = (Texture)Resources.Load("PW_BtnUpdateColor");
         PWT = (QT_PolyWorldTerrain)target;

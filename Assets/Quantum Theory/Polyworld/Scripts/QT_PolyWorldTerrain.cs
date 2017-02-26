@@ -64,6 +64,8 @@ public class QT_PolyWorldTerrain : MonoBehaviour
     public float[] LODSizes = new float[] { 0.7f, 0.1f};//.4f, .02f }; //.015f, .03f, .06f, .08f, .15f };
     [HideInInspector]
     public bool Average = true;
+    [HideInInspector]
+    public bool GenerateMeshColliders = false;
 
     private Texture2D GenerateBaseMap(int matAmount, Texture2D[] splatDiffuses, float[, ,] splatData)
     {

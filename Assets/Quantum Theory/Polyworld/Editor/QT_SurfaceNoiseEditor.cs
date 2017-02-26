@@ -35,10 +35,7 @@ public class QT_SurfaceNoiseEditor : Editor {
             else if (isMM == false && SN.enableMultiMesh == true)
                 EditorGUILayout.HelpBox("No Varied Meshes or PolyWorld Terrain detected.\n\nMutiMesh flag could be disabled for performance increase.", MessageType.Info);
 
-            SN.TargetCamera = (Camera)EditorGUILayout.ObjectField("Target Camera:", SN.TargetCamera, typeof(Camera), true);
-            if (!SN.TargetCamera)
-                EditorGUILayout.HelpBox("No Camera Specified! SurfaceNoise can't run.", MessageType.Error);
-            SN.useOverride = EditorGUILayout.Toggle("Preset Override", SN.useOverride);
+            SN.useOverride = true;// EditorGUILayout.Toggle("Preset Override", SN.useOverride);
             if (SN.useOverride == false)
             {
                 is2mPlane = CheckPlaneSize(Selection.gameObjects[0]);
@@ -50,7 +47,7 @@ public class QT_SurfaceNoiseEditor : Editor {
                 SN.waveScale = SetWaveScale();
             }
             else            
-                SN.waveScale = EditorGUILayout.Slider("Wave Shape", SN.waveScale, 0.1f, 50);
+                SN.waveScale = EditorGUILayout.Slider("Wave Shape", SN.waveScale, 0.1f, 1f);
            
            // SN.enableDebug = EditorGUILayout.Toggle("enable debug", SN.enableDebug);
            // SN.scaleMultiplier = EditorGUILayout.IntSlider(SN.scaleMultiplier, 1, 20);
@@ -68,8 +65,9 @@ public class QT_SurfaceNoiseEditor : Editor {
             SN.enableLOD = EditorGUILayout.Toggle("Enable LOD", SN.enableLOD);
             if (SN.enableLOD)
 			{
+                SN.TargetCamera = (Camera)EditorGUILayout.ObjectField("Camera: ", SN.TargetCamera, typeof(Camera), true, null);
 				if(!SN.TargetCamera)
-					EditorGUILayout.HelpBox("No Camera Specified! LOD can't run.",MessageType.Error);
+					EditorGUILayout.HelpBox("No Camera Assigned! LOD can't run.",MessageType.Error);
                 SN.LODDistance = EditorGUILayout.IntSlider("Distance:", SN.LODDistance,5,100);
 				SN.showDebugSphere = EditorGUILayout.Toggle("Visualize Distance:",SN.showDebugSphere);
 				if(SN.showDebugSphere)

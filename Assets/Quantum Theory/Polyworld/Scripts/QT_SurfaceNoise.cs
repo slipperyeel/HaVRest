@@ -76,8 +76,7 @@ public class QT_SurfaceNoise : MonoBehaviour
             newVerts = new Vector3[baseHeight.Length];
         }
 
-		if(TargetCamera==null)		
-			Debug.LogWarning("No Camera Chosen. SurfaceNoise LOD will not run on GameObject: "+this.gameObject.name);
+		
 		for (int x = 0; x < mfs.Length; x++)
 		{
 			if(mfs[x].gameObject.isStatic)
@@ -92,19 +91,21 @@ public class QT_SurfaceNoise : MonoBehaviour
 	{
 		if(isStatic==false)
 		    {
-                if (TargetCamera != null)
-		        {
                     if (enableLOD)
                     {
-                        //be nice to have a lerp to enabled/disabled instead of a pop.
-                        if (Vector3.Distance(this.transform.position, TargetCamera.transform.position) < LODDistance)
-                            RunWave();
+                if (TargetCamera)
+                {
+                    //be nice to have a lerp to enabled/disabled instead of a pop.
+                    if (Vector3.Distance(this.transform.position, TargetCamera.transform.position) < LODDistance)
+                        RunWave();
+                }
+                else
+                    Debug.LogError("SurfaceNoise LOD is enabled but no Camera is specified. SurfaceNoise LOD will not run on GameObject: " + this.gameObject.name);
+
                     }
                     else
                         RunWave();
-		        }
-		    else		
-			    Debug.LogError("No camera is found for SurfaceNoise.");		
+		   
 		    }
 		else		
 			Debug.LogError("One or more meshes in "+this.gameObject.name+"'s hierarchy is tagged static. SurfaceNoise requires all objects to be not tagged static.");
