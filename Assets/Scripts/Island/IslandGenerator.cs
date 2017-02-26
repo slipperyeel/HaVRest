@@ -27,6 +27,7 @@ public class IslandGenerator : MonoBehaviour
 		{ eBiome.Tundra, eBiome.Tundra, eBiome.Plains, eBiome.Plains, eBiome.Plains   }  // cold
 	};
 
+    private GameObject _tileContainer = null;
     private float _maxTextureSlope = 35f;
     private float _maxVegetationSlope = 25f;
 
@@ -50,7 +51,7 @@ public class IslandGenerator : MonoBehaviour
         _currentTerrain.transform.position = posWithOffset;
 
         IslandData data = new IslandData(_id, realSize, posWithOffset, ref tData);
-        PopulateTiles(ref data, posWithOffset, moistureNoise, tempNoise, heights, realSize, ref tData);
+        //PopulateTiles(ref data, posWithOffset, moistureNoise, tempNoise, heights, realSize, ref tData);
         //DebugDrawGrid(posWithOffset, realSize, heights);
 
         PlaceDetails(heights, realSize, ref data, seed);
@@ -275,6 +276,77 @@ public class IslandGenerator : MonoBehaviour
     {
         tX = (int)(terrainPos.x + x);
         tY = (int)(terrainPos.z + y);
+    }
+
+    public void PlaceTile(float x, float z, ref IslandData data, Vector3 terrainPos)
+    {
+        TerrainData tData = data.Data;
+        float[,] heights = tData.GetHeights(0, 0, data.Size, data.Size);
+        int tilesPerMeter = 3;
+        float subTileOffset = 1 / (float)tilesPerMeter;
+        Vector3 offsetPosition = new Vector3(0f, 0.05f, 0f);
+        int i = Mathf.RoundToInt(x);
+        int j = Mathf.RoundToInt(z);
+
+        if (_tileContainer == null)
+        {
+            _tileContainer = new GameObject("Tile Container");
+            _tileContainer.transform.SetParent(_currentTerrain.transform);
+            _tileContainer.transform.localPosition = Vector3.zero;
+        }
+
+        float height = heights[j, i];
+        GameObject tileObject = null;
+        Tile t = null;
+
+        // don't put tiles on the bottom most layer
+        if (height > 0f)
+        {
+            int terrainX, terrainY;
+            GetWorldTerrainPosition(terrainPos, i, j, out terrainX, out terrainY);
+
+            // TODO this will need to be removed and only 1 tile be placed; not all 9
+
+            //for multiple tiles per meter
+            for (int k = 0; k < tilesPerMeter; ++k)
+            {
+                for (int l = 0; l < tilesPerMeter; ++l)
+                {
+                    // create physical tile
+                    offsetPosition.x = (subTileOffset / 2f) + subTileOffset * k;
+                    offsetPosition.z = (subTileOffset / 2f) + subTileOffset * l;
+
+                    tileObject = (GameObject)Instantiate(_tilePrefab);
+                    tileObject.name = string.Format("Sub Tile[{0},{1}]", k, l);
+                    t = tileObject.AddComponent<Tile>();
+                    t.Init(i, j, height, terrainX + offsetPosition.z, terrainY + offsetPosition.x);
+                    tileObject.transform.position = t.WorldPosition;
+
+                    // add to parent container for a neat hierarchy
+                    tileObject.transform.SetParent(_tileContainer.transform);
+                }
+            }
+
+            // determine biome
+            eMoisture moist = eMoisture.Wet;//GetMoistureEnumFromValue(moisture[i][j]);
+            eTemperature temp = eTemperature.Normal;//GetTempEnumFromValue(temps[i][j]);
+            eBiome biome = _biomeTable[(int)moist, (int)temp];
+
+            t.SetBiomeFields(moist, temp, biome);
+
+            // set terrain texture
+            //int textureIndex = offsets[(int)biome] + (int)eTileType.Grass;
+            //splatData[j, i, textureIndex] = 1;
+        }
+        else
+        {
+            // just dirt if height is zero
+            //int textureIndex = offsets[(int)eBiome.Jungle] + (int)eTileType.Dirt;
+            //splatData[j, i, textureIndex] = 1;
+        }
+
+        // need to fill the island data with values, even if no tile is actually created
+        data.AddTile(t, i, j);
     }
 
     private void PopulateTiles(ref IslandData data, Vector3 terrainPos, float[][] moisture, float[][] temps, float[,] heights, int size, ref TerrainData tData)
@@ -521,6 +593,10 @@ public class IslandGenerator : MonoBehaviour
                             }
 
                             detailObj.transform.SetParent(detailContainer.transform);
+
+                            // need to place a tile here
+                            PlaceTile(i, j, ref data, _currentTerrain.transform.position);
+
                             data.AddObjectToTile(detailObj, i, j);
                         }
                     }

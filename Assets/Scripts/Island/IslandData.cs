@@ -5,17 +5,16 @@ using System.Collections.Generic;
 [System.Serializable]
 public class IslandData
 {
-	[SerializeField]
-	private int _id;
+	[SerializeField] private int _id;
 	public int ID { get { return _id; } }
 
-	[SerializeField]
-	private Tile[,] _tiles;
+	[SerializeField] private Tile[,] _tiles;
 
 	private TerrainData _data;
 	public TerrainData Data { get { return _data; } }
 
 	private int _size;
+    public int Size { get { return _size; } }
 
 	private Vector3 _worldPosition;
 	public Vector3 WorldPosition { get { return _worldPosition; } }
