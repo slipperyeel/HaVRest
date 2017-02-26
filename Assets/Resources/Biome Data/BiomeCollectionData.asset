@@ -44,11 +44,11 @@ MonoBehaviour:
     - {fileID: 2800000, guid: c365db2cd4cc8ec4bb726383fcb91577, type: 3}
     - {fileID: 2800000, guid: dcb2a69bc1fb7944aaceb33e1a72160b, type: 3}
   - DetailObjects:
-    - {fileID: 1000012499361184, guid: d0bc91e35722a5b488191dbbd760e98a, type: 2}
+    - {fileID: 1000010092762474, guid: 1fdbd736d73662649a9c32d67142dd98, type: 2}
     - {fileID: 1000012078886538, guid: 85b3f5ee0389b02429b38a7310715922, type: 2}
     - {fileID: 1000012410176476, guid: 0b43fead00abb0b468e18cd3000768a2, type: 2}
-    - {fileID: 1000014077639280, guid: 6cd1bcd667e06424ca0ff75b72d78653, type: 2}
-    - {fileID: 1000011978275172, guid: 097858c84f2c0b54297673faee57cff6, type: 2}
+    - {fileID: 100000, guid: c38c77e3b947a084c90a418e9d0f3a19, type: 3}
+    - {fileID: 1000013039312038, guid: c652dc2639e51b14ea5dcb3f3b6e3081, type: 2}
     Textures:
     - {fileID: 2800000, guid: c697d0924c8f9674aae6ff840af6e7eb, type: 3}
     - {fileID: 2800000, guid: 2488b98c6dd1fe14bb6c758ac6a55b70, type: 3}
