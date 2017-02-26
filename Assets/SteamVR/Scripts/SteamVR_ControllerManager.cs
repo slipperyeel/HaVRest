@@ -48,7 +48,7 @@ public class SteamVR_ControllerManager : MonoBehaviour
 		UpdateTargets();
 		inputFocusAction = SteamVR_Events.InputFocusAction(OnInputFocus);
 		deviceConnectedAction = SteamVR_Events.DeviceConnectedAction(OnDeviceConnected);
-		trackedDeviceRoleChangedAction = SteamVR_Events.SystemAction("TrackedDeviceRoleChanged", OnTrackedDeviceRoleChanged);
+		trackedDeviceRoleChangedAction = SteamVR_Events.SystemAction(EVREventType.VREvent_TrackedDeviceRoleChanged, OnTrackedDeviceRoleChanged);
 	}
 
 	public virtual void OnEnable()
@@ -71,7 +71,7 @@ public class SteamVR_ControllerManager : MonoBehaviour
 		trackedDeviceRoleChangedAction.enabled = true;
 	}
 
-	public virtual void OnDisable()
+	void OnDisable()
 	{
 		inputFocusAction.enabled = false;
 		deviceConnectedAction.enabled = false;

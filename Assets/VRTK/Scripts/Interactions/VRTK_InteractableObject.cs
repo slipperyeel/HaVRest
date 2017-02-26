@@ -428,7 +428,7 @@ namespace VRTK
         /// <summary>
         /// The SaveCurrentState method stores the existing object parent and the object's rigidbody kinematic setting.
         /// </summary>
-        public void SaveCurrentState()
+        public virtual void SaveCurrentState()
         {
             if (!IsGrabbed() && !snappedInSnapDropZone)
             {

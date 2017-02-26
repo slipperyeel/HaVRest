@@ -92,7 +92,6 @@ public class DataManager : Singleton<DataManager>
 	            // Add it to the momento list
 	            object mObj = Activator.CreateInstance(typeof(M));
 	            M momento = (M)Convert.ChangeType(mObj, typeof(M));
-                Debug.Log(momento);
 				momento.UpdateMomentoData(spawnObj, prefab.name);
 	            mMomentos.Add(momento);
                 mDataDictionary.Add(spawnObj, momento);
